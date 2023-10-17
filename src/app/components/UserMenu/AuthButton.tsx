@@ -3,10 +3,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 const AuthButton = () => {
     const { data: session } = useSession();
 
-    if (session) {
+    if (session?.user) {
         return (
             <>
-                {session?.user?.name} <br />
                 <button className="auth-btn" onClick={() => signOut()}>
                     Sign out
                     <div className="arrow-wrapper" >

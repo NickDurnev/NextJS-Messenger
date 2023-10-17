@@ -1,9 +1,10 @@
 import stringAvatar from '@/services/avatarFormatter';
 import Image from 'next/image';
+import { IUser } from '@/helpers/interfaces';
 
 interface IProps {
-    image?: string | null;
-    name: string;
+    image?: IUser['image'] | null;
+    name: IUser['name'];
     size: number;
 }
 

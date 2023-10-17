@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import AuthButton from "./AuthButton";
 import UserAvatar from "./UserAvatar";
+import { IUser } from "@/helpers/interfaces";
 
 const listVariants = {
   open: {
@@ -40,12 +41,12 @@ const UserList = () => {
           variants={itemVariants}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="mb-5 flex items-center justify-center cursor-pointer"
+          className="mb-20 flex items-center justify-center cursor-pointer"
         >
           <UserAvatar
             image={session.user.image}
             name={session.user.name}
-            size={50}
+            size={100}
           />
         </motion.li>
       )}
