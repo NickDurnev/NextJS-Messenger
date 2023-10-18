@@ -9,6 +9,9 @@ interface IProps {
 }
 
 const UserAvatar = ({ image, name, size }: IProps) => {
+    if (!name) {
+        return '';
+    }
     return (
         <>
             {image ? (
@@ -20,20 +23,7 @@ const UserAvatar = ({ image, name, size }: IProps) => {
                     style={{ borderRadius: '50%' }}
                 />
             ) : (
-                <div className='w-10 h-10 rounded-full bg-slate-400'>{stringAvatar(name)}</div>
-                // <Avatar
-                //     {...stringAvatar(`${name}`)}
-                //     sx={{
-                //         width: size,
-                //         height: size,
-                //         fontSize: 25,
-                //         lineHeight: '25px',
-                //         letterSpacing: '0.05em',
-                //         backgroundColor: 'transparent',
-                //         color: '#fff',
-                //         border: '1px solid #fff',
-                //     }}
-                // />
+                <div className='flex items-center justify-center w-24 h-24 rounded-full bg-purple text-gray-50 border border-gray-50 text-4xl'>{stringAvatar(name)}</div>
             )}
         </>
     );
