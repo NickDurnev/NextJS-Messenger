@@ -14,8 +14,18 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      textColor: {
+        skin: {
+          base: "var(--color-text-base)",
+        },
+      },
       colors: {
-        purple: "#bbb2cf",
+        blue: {
+          950: "#0e0f26",
+        },
+        purple: {
+          500: "#bbb2cf",
+        },
       },
     },
   },

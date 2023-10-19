@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import ThemeSwitcher from '../components/ThemeSwitcher';
 
 const ProtectedRoute = async () => {
     const session = await getServerSession();
@@ -7,7 +8,10 @@ const ProtectedRoute = async () => {
         redirect("api/auth/signin")
     }
     return (
-        <h2>Protected route</h2>
+        <>
+            <h2>Protected route</h2>
+            <ThemeSwitcher />
+        </>
     )
 }
 

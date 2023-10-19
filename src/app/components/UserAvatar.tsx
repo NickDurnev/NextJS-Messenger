@@ -23,7 +23,7 @@ const UserAvatar = ({ image, name, size }: IProps) => {
                     style={{ borderRadius: '50%' }}
                 />
             ) : (
-                <div className='flex items-center justify-center w-24 h-24 rounded-full bg-purple text-gray-50 border border-gray-50 text-4xl'>{stringAvatar(name)}</div>
+                <div className='flex items-center justify-center w-24 h-24 rounded-full bg-purple-500 text-gray-50 border border-gray-50 text-4xl'>{stringAvatar(name)}</div>
             )}
         </>
     );
