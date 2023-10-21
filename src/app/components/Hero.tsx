@@ -12,7 +12,7 @@ const Hero = () => {
             <Spline
                 onLoad={() => setLoading(false)}
                 scene="https://prod.spline.design/2yU41Or1eP8d7JHb/scene.splinecode"
-                style={{ width: '100vw', height: '90vh' }}
+                style={{ width: '100vw', height: '92vh' }}
             />
         </>
     )
