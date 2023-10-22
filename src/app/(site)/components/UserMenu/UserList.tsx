@@ -2,7 +2,7 @@ import * as React from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import AuthButton from "./AuthButton";
-import UserAvatar from "../UserAvatar";
+import UserAvatar from "../../../components/UserAvatar";
 import { IUser } from "@/helpers/interfaces";
 
 const listVariants = {

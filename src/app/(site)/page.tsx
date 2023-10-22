@@ -1,5 +1,5 @@
 import Hero from '../components/Hero';
-import UserMenu from '../components/UserMenu/UserMenu';
+import UserMenu from './components/UserMenu/UserMenu';
 
 export default function Home() {
   return (

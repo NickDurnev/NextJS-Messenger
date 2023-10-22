@@ -3,11 +3,11 @@
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-type Props = {
-    children?: React.ReactNode;
+interface AuthContextProps {
+    children: React.ReactNode;
     session: Session | null;
-};
+}
 
-export const NextAuthProvider = ({ children }: Props) => {
+export default function AuthContext({ children }: AuthContextProps) {
     return <SessionProvider>{children}</SessionProvider>;
-};
+}
