@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --color-text-base: #ffffff;
+    --color-text-base: #262323;
     --color-text-mutated: #c7d2fe;
     --color-text-inverted: #4f46e5;
-    --color-fill: #4338ca;
+    --color-fill: #c9c8cd;
     --color-button-accent: #ffffff;
     --color-button-accent-hover: #eef2ff;
     --color-button-muted: #6366f1;
@@ -17,7 +17,7 @@
     --color-text-base: #ffffff;
     --color-text-mutated: #c7d2fe;
     --color-text-inverted: #4f46e5;
-    --color-fill: #4338ca;
+    --color-fill: #000000;
     --color-button-accent: #ffffff;
     --color-button-accent-hover: #eef2ff;
     --color-button-muted: #6366f1;
