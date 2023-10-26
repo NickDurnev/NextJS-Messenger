@@ -24,7 +24,7 @@ const AuthForm = () => {
         if (session?.status === "authenticated") {
             router.push("/users");
         }
-    }, [session?.status, router])
+    }, [session?.status, router]);
 
     const toggleVariant = useCallback(() => {
         if (variant === "LOGIN") {
@@ -52,7 +52,7 @@ const AuthForm = () => {
         if (variant === "REGISTER") {
             axios
                 .post("/api/register", data)
-                .then(() => signIn('credentials', data))
+                .then(() => signIn("credentials", data))
                 .catch(() => toast.error("Something went wrong!"))
                 .finally(() => setIsLoading(false));
         }

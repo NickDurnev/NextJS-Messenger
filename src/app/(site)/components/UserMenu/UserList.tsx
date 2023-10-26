@@ -1,9 +1,6 @@
 import * as React from "react";
-import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import AuthButton from "./AuthButton";
-import UserAvatar from "../../../components/UserAvatar";
-import { IUser } from "@/helpers/interfaces";
 
 const listVariants = {
   open: {
@@ -32,24 +29,8 @@ const itemVariants = {
 };
 
 const UserList = () => {
-  const { data: session } = useSession();
-
   return (
     <motion.ul variants={listVariants} className="p-6 absolute top-24 w-80">
-      {session?.user?.name && (
-        <motion.li
-          variants={itemVariants}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="mb-20 flex items-center justify-center cursor-pointer"
-        >
-          <UserAvatar
-            image={session.user.image}
-            name={session.user.name}
-            size={100}
-          />
-        </motion.li>
-      )}
       <motion.li
         variants={itemVariants}
         whileHover={{ scale: 1.1 }}

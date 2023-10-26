@@ -13,13 +13,17 @@ const config: Config = {
         skin: {
           base: "var(--color-text-base)",
           mutated: "var(--color-text-mutated)",
+          "mutated-hover": "var(--color-text-mutated-hover)",
+          active: "var(--color-text-active)",
           inverted: "var(--color-text-inverted)",
         },
       },
       backgroundColor: {
         skin: {
-          fill: "var(--color-fill)",
-          "button-accent": "var(--color-button-accent)",
+          main: "var(--color-bg-main)",
+          additional: "var(--color-bg-additional)",
+          hover: "var(--color-bg-hover)",
+          active: "var(--color-bg-active)",
           "button-accent-hover": "var(--color-button-accent-hover)",
           "button-muted": "var(--color-button-muted)",
         },
