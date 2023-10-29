@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --color-text-base: #262323;
+    --color-text-additional: #969595;
     --color-text-mutated: #6d86ea;
     --color-text-mutated-hover: #3a51ab;
     --color-text-active: #2cb149;
@@ -13,6 +14,7 @@
     --color-bg-additional: #ffffff;
     --color-bg-hover: #9ba2b4;
     --color-bg-active: #97bc9b;
+    --color-border-main: #1a191b;
     --color-button-accent-hover: #eef2ff;
     --color-button-muted: #10101a;
   }

@@ -1,5 +1,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+
 import AuthButton from "./AuthButton";
 
 const listVariants = {
@@ -29,8 +31,17 @@ const itemVariants = {
 };
 
 const UserList = () => {
+  const { data: session } = useSession();
   return (
     <motion.ul variants={listVariants} className="p-6 absolute top-24 w-80">
+      {session?.user?.name && (
+        <motion.li
+          variants={itemVariants}
+          className="mb-10 flex items-center justify-center"
+        >
+          <p className="text-xl font-bold text-white">{session.user.name}</p>
+        </motion.li>
+      )}
       <motion.li
         variants={itemVariants}
         whileHover={{ scale: 1.1 }}

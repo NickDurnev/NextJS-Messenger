@@ -29,7 +29,7 @@ const Desktopitem: FC<DesktopItemprops> = ({
             <Link
                 href={href}
                 className={clsx(
-                    `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover`,
+                    `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover transition`,
                     active && "bg-skin-active text-skin-active"
                 )}
             >

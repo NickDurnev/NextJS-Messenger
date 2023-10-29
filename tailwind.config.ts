@@ -12,6 +12,7 @@ const config: Config = {
       textColor: {
         skin: {
           base: "var(--color-text-base)",
+          additional: "var(--color-text-additional)",
           mutated: "var(--color-text-mutated)",
           "mutated-hover": "var(--color-text-mutated-hover)",
           active: "var(--color-text-active)",
@@ -26,6 +27,14 @@ const config: Config = {
           active: "var(--color-bg-active)",
           "button-accent-hover": "var(--color-button-accent-hover)",
           "button-muted": "var(--color-button-muted)",
+        },
+      },
+      borderColor: {
+        skin: {
+          main: "var(--color-border-main)",
+          // additional: "var(--color-bg-additional)",
+          // hover: "var(--color-bg-hover)",
+          // active: "var(--color-bg-active)",
         },
       },
       colors: {

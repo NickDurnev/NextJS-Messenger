@@ -1,5 +1,9 @@
 const stringAvatar = (name: string): string => {
-  return `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`;
+  const splitted = name.split(" ");
+  if (splitted.length === 1) {
+    return splitted[0][0];
+  }
+  return `${splitted[0][0]}${splitted[1][0]}`;
 };
 
 export default stringAvatar;
