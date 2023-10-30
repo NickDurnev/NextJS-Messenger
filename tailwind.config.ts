@@ -17,6 +17,7 @@ const config: Config = {
           "mutated-hover": "var(--color-text-mutated-hover)",
           active: "var(--color-text-active)",
           inverted: "var(--color-text-inverted)",
+          "button-text": "var(--color-text-button)",
         },
       },
       backgroundColor: {
@@ -25,8 +26,8 @@ const config: Config = {
           additional: "var(--color-bg-additional)",
           hover: "var(--color-bg-hover)",
           active: "var(--color-bg-active)",
-          "button-accent-hover": "var(--color-button-accent-hover)",
-          "button-muted": "var(--color-button-muted)",
+          "button-accent": "var(--color-bg-button)",
+          "button-accent-hover": "var(--color-bg-button-hover)",
         },
       },
       borderColor: {

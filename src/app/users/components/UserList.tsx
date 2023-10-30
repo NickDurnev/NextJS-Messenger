@@ -10,7 +10,7 @@ interface UserListProps {
 
 const UserList: FC<UserListProps> = ({ items }) => {
     return (
-        <aside className="fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-auto border-r border-skin-main block w-full left-0">
+        <aside className="fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-auto border-r border-skin-main block w-full left-0 bg-skin-main">
             <div className="px-5">
                 <div className="flex-col">
                     <div className="text-2xl font-bold text-skin-base py-4">People</div>
