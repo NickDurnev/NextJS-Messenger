@@ -26,8 +26,8 @@ const config: Config = {
           additional: "var(--color-bg-additional)",
           hover: "var(--color-bg-hover)",
           active: "var(--color-bg-active)",
-          "button-accent": "var(--color-bg-button)",
-          "button-accent-hover": "var(--color-bg-button-hover)",
+          "bg-accent": "var(--color-bg-button)",
+          "bg-accent-hover": "var(--color-bg-button-hover)",
         },
       },
       borderColor: {
