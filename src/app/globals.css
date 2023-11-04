@@ -6,6 +6,7 @@
   :root {
     --color-text-base: #262323;
     --color-text-additional: #969595;
+    --color-text-additional-hover: #6a6969;
     --color-text-mutated: #6d86ea;
     --color-text-mutated-hover: #3a51ab;
     --color-text-active: #2cb149;

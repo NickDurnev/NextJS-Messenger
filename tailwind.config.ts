@@ -13,6 +13,7 @@ const config: Config = {
         skin: {
           base: "var(--color-text-base)",
           additional: "var(--color-text-additional)",
+          "additional-hover": "var(--color-text-additional-hover)",
           mutated: "var(--color-text-mutated)",
           "mutated-hover": "var(--color-text-mutated-hover)",
           active: "var(--color-text-active)",
@@ -36,6 +37,11 @@ const config: Config = {
           // additional: "var(--color-bg-additional)",
           // hover: "var(--color-bg-hover)",
           // active: "var(--color-bg-active)",
+        },
+      },
+      ringColor: {
+        skin: {
+          main: "var(--color-bg-accent)",
         },
       },
       colors: {
