@@ -5,9 +5,11 @@ import { Conversation, User } from "@prisma/client";
 import { format } from "date-fns";
 import { Dialog, Transition } from "@headlessui/react";
 import { IoClose, IoTrash } from "react-icons/io5";
+
 import useOtherUser from "@/app/hooks/useOtherUser";
 import Avatar from "@/app/components/Avatar";
-import Modal from "@/app/components/Modal";
+import ConfirmModal from "./ConfirmModal";
+import AvatarGroup from "@/app/components/AvatarGroup";
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -39,11 +41,10 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
 
     return (
         <>
-            <Modal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)}>
-                <div className="bg-skin-main p-5">
-                    <p></p>
-                </div>
-            </Modal>
+            <ConfirmModal
+                isOpen={confirmOpen}
+                onClose={() => setConfirmOpen(false)}
+            />
             <Transition.Root show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-50" onClose={onClose}>
                     <Transition.Child
@@ -87,7 +88,11 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                             <div className="relative mt-6 flex-1 px-4 sm:px-6 ">
                                                 <div className="flex flex-col items-center">
                                                     <div className="mb-2">
-                                                        <Avatar user={otherUser} />
+                                                        {data.isGroup ? (
+                                                            <AvatarGroup users={data.users} />
+                                                        ) : (
+                                                            <Avatar user={otherUser} />
+                                                        )}
                                                     </div>
                                                     <div>{title}</div>
                                                     <div className="text-sm text-skin-additional">
@@ -112,6 +117,16 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                                     </div>
                                                     <div className="w-full pb-5 pt-5 sm:px-0 sm:pt-0">
                                                         <dl className="space-y-8 px-4 sm:space-y-6 sm:px-6">
+                                                            {data.isGroup && (
+                                                                <div>
+                                                                    <dt className="text-sm font-medium text-skin-additional sm:w-40 sm:flex-shrink-0">
+                                                                        Emails
+                                                                    </dt>
+                                                                    <dd className="mt-1 text-sm text-skin-base sm:col-span-2">
+                                                                        {data.users.map((user) => user.email).join(', ')}
+                                                                    </dd>
+                                                                </div>
+                                                            )}
                                                             {!data.isGroup && (
                                                                 <div>
                                                                     <dt className="text-sm font-medium text-skin-additional sm:w-40 sm:flex-shrink-0">

@@ -27,15 +27,19 @@ const Form = () => {
   };
 
   const handleUpload = (result: any) => {
-    axios.post('/api/messages', {
+    axios.post("/api/messages", {
       image: result?.info?.secure_url,
-      conversationId
+      conversationId,
     });
   };
 
   return (
     <div className="py-4 px-4 bg-skin-main border-t flex items-center gap-2 lg:gap-4 w-full">
-      <CldUploadButton options={{ maxFiles: 1 }} onUpload={handleUpload} uploadPreset="kqj1yrdh">
+      <CldUploadButton
+        options={{ maxFiles: 1 }}
+        onUpload={handleUpload}
+        uploadPreset="kqj1yrdh"
+      >
         <HiPhoto size={30} className="text-skin-mutated" />
       </CldUploadButton>
       <form
