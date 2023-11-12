@@ -1,13 +1,16 @@
 import stringAvatar from "@/services/avatarFormatter";
 import Image from "next/image";
 import { User } from "@prisma/client";
+import useActiveList from "../hooks/useActiveList";
 
 interface IProps {
   user?: User;
 }
 
 const Avatar = ({ user }: IProps) => {
-  console.log(user);
+  const { members } = useActiveList();
+  const isActive = members.indexOf(user?.email!) !== -1;
+
   if (!user?.name) {
     return "";
   }
@@ -32,7 +35,9 @@ const Avatar = ({ user }: IProps) => {
           </div>
         )}
       </div>
-      <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 right-0 h-2 w-2 md:h-3 md:w-3" />
+      {isActive && (
+        <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 right-0 h-2 w-2 md:h-3 md:w-3" />
+      )}
     </div>
   );
 };

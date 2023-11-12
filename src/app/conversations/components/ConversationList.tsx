@@ -2,21 +2,28 @@
 
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 import { FullConversationType } from "@/app/types";
 import useConversation from "@/app/hooks/useConversation";
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
+import { pusherClient } from "@/app/libs/pusher";
+import { find } from "lodash";
 
 interface ConversationListProps {
     initialItems: FullConversationType[];
     users: User[];
 }
 
-const ConversationList: FC<ConversationListProps> = ({ initialItems, users }) => {
+const ConversationList: FC<ConversationListProps> = ({
+    initialItems,
+    users,
+}) => {
+    const session = useSession();
     const [items, setItems] = useState(initialItems);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -24,9 +31,75 @@ const ConversationList: FC<ConversationListProps> = ({ initialItems, users }) =>
 
     const { conversationId, isOpen } = useConversation();
 
+    const pusherKey = useMemo(() => {
+        return session.data?.user?.email;
+    }, [session.data?.user?.email]);
+
+    useEffect(() => {
+        if (!pusherKey) {
+            return;
+        }
+
+        pusherClient.subscribe(pusherKey);
+
+        const newHandler = (conversation: FullConversationType) => {
+            setItems((current) => {
+                if (find(current, { id: conversation.id })) {
+                    return current;
+                }
+
+                return [conversation, ...current];
+            });
+        };
+
+        const updateHandler = (conversation: FullConversationType) => {
+            setItems((current) =>
+                current.map((currentConversation) => {
+                    if (currentConversation.id === conversation.id) {
+                        return {
+                            ...currentConversation,
+                            messages: conversation.messages,
+                        };
+                    }
+
+                    return currentConversation;
+                })
+            );
+        };
+
+        const removeHandler = (conversation: FullConversationType) => {
+            setItems((current) => {
+                return [
+                    ...current.filter(
+                        (currentConversation) => currentConversation.id !== conversation.id
+                    ),
+                ];
+            });
+
+            if (conversation.id === conversationId) {
+                router.push("/conversations");
+            }
+        };
+
+        pusherClient.bind("conversation:new", newHandler);
+        pusherClient.bind("conversation:update", updateHandler);
+        pusherClient.bind("conversation:remove", removeHandler);
+
+        return () => {
+            pusherClient.unsubscribe(pusherKey);
+            pusherClient.unbind("conversation:new", newHandler);
+            pusherClient.unbind("conversation:update", updateHandler);
+            pusherClient.unbind("conversation:remove", removeHandler);
+        };
+    }, [pusherKey, conversationId, router]);
+
     return (
         <>
-            <GroupChatModal users={users} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <GroupChatModal
+                users={users}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
             <aside
                 className={clsx(
                     `fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto border-skin-main`,
@@ -36,12 +109,19 @@ const ConversationList: FC<ConversationListProps> = ({ initialItems, users }) =>
                 <div className="px-5">
                     <div className="flex justify-between mb-4 pt-4">
                         <div className="text-2xl font-bold text-skin-base">Messages</div>
-                        <div onClick={() => setIsModalOpen(true)} className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover transition cursor-pointer">
+                        <div
+                            onClick={() => setIsModalOpen(true)}
+                            className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover transition cursor-pointer"
+                        >
                             <MdOutlineGroupAdd size={20} />
                         </div>
                     </div>
                     {items.map((item) => (
-                        <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+                        <ConversationBox
+                            key={item.id}
+                            data={item}
+                            selected={conversationId === item.id}
+                        />
                     ))}
                 </div>
             </aside>

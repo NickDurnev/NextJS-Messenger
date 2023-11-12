@@ -10,6 +10,7 @@ import useOtherUser from "@/app/hooks/useOtherUser";
 import Avatar from "@/app/components/Avatar";
 import ConfirmModal from "./ConfirmModal";
 import AvatarGroup from "@/app/components/AvatarGroup";
+import useActiveList from "@/app/hooks/useActiveList";
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -22,6 +23,8 @@ interface ProfileDrawerProps {
 const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     const otherUser = useOtherUser(data);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const { members } = useActiveList();
+    const isActive = members.indexOf(otherUser?.email!) !== -1;
 
     const joinDate = useMemo(() => {
         return format(new Date(otherUser.createdAt), "PP");
@@ -36,8 +39,8 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
             return `${data.users.length} members`;
         }
 
-        return "Active";
-    }, [data]);
+        return isActive ? "Active" : "Offline";
+    }, [data, isActive]);
 
     return (
         <>
@@ -123,7 +126,9 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                                                         Emails
                                                                     </dt>
                                                                     <dd className="mt-1 text-sm text-skin-base sm:col-span-2">
-                                                                        {data.users.map((user) => user.email).join(', ')}
+                                                                        {data.users
+                                                                            .map((user) => user.email)
+                                                                            .join(", ")}
                                                                     </dd>
                                                                 </div>
                                                             )}
