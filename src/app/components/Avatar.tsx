@@ -11,9 +11,10 @@ const Avatar = ({ user }: IProps) => {
   const { members } = useActiveList();
   const isActive = members.indexOf(user?.email!) !== -1;
 
-  if (!user?.name) {
+  if (!user) {
     return "";
   }
+
   const { image, name } = user;
   return (
     <div className="relative">
@@ -31,7 +32,7 @@ const Avatar = ({ user }: IProps) => {
           <Image src={image} alt="Avatar" fill />
         ) : (
           <div className="h-full w-full flex items-center justify-center bg-purple-500 text-gray-50 text-2xl border-0">
-            {stringAvatar(name)}
+            {stringAvatar(name!)}
           </div>
         )}
       </div>

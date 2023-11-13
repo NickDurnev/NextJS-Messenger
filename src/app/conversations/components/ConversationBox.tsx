@@ -61,6 +61,8 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
         return "Started a conversation";
     }, [lastMessage]);
 
+    console.log('OTHER_USER', otherUser);
+
     return (
         <div
             onClick={handleClick}
@@ -69,12 +71,16 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
                 selected ? "bg-skin-active" : "bg-skin-base"
             )}
         >
-            {data.isGroup ? (<AvatarGroup users={data.users} />) : (<Avatar user={otherUser} />)}
+            {data.isGroup ? (
+                <AvatarGroup users={data.users} />
+            ) : (
+                <Avatar user={otherUser} />
+            )}
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center mb-1">
                         <p className="text-md font-medium text-skin-base">
-                            {data.name || otherUser.name}
+                            {data.name ?? otherUser?.name}
                         </p>
                         {lastMessage?.createdAt && (
                             <p className="text-xs text-skin-additional font-light">

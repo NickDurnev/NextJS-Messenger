@@ -31,7 +31,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     }, [otherUser.createdAt]);
 
     const title = useMemo(() => {
-        return data.name || otherUser.name;
+        return data.name ?? otherUser.name;
     }, [data.name, otherUser.name]);
 
     const statusText = useMemo(() => {
