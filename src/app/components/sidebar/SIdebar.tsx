@@ -1,15 +1,13 @@
-import DesktopSidebar from "./DesktopSidebar";
-import MobileFooter from "./MobileFooter";
 
+import SidebarContainer from "./SIdebarContainer";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 const Sidebar = async ({ children }: { children: React.ReactNode }) => {
+
     const currentUser = await getCurrentUser();
     return (
         <div className="h-screen">
-            <DesktopSidebar currentUser={currentUser!} />
-            <MobileFooter />
-            <main className="lg:pl-20 h-screen">{children}</main>
+            <SidebarContainer currentUser={currentUser!} />            <main className="lg:pl-20 h-screen">{children}</main>
         </div>
     );
 };

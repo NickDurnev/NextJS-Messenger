@@ -2,26 +2,29 @@
 
 import { FC, useState } from "react";
 import { redirect } from "next/navigation";
+
 import useRoutes from "@/app/hooks/useRoutes";
 import { User } from "@prisma/client";
 import Desktopitem from "./DesktopItem";
 import Avatar from "../Avatar";
-import SettingsModal from "./SettingsModal";
+import ProfileSettingsModal from "./ProfileSettingsModal";
 
 interface DesktopSidebarProps {
     currentUser: User;
+    setIsModalOpen: (value: boolean) => void;
 }
 
-const DesktopSidebar: FC<DesktopSidebarProps> = ({ currentUser }) => {
+const DesktopSidebar: FC<DesktopSidebarProps> = ({ currentUser, setIsModalOpen }) => {
     const routes = useRoutes();
     const [isOpen, setIsOpen] = useState(false);
 
     if (!currentUser) {
         redirect("/auth");
     }
+
     return (
         <>
-            <SettingsModal
+            <ProfileSettingsModal
                 currentUser={currentUser}
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
@@ -36,7 +39,7 @@ const DesktopSidebar: FC<DesktopSidebarProps> = ({ currentUser }) => {
                                 label={label}
                                 icon={icon}
                                 active={active}
-                                onClick={onClick}
+                                onClick={onClick ? () => setIsModalOpen(true) : undefined}
                             />
                         ))}
                     </ul>

@@ -12,7 +12,7 @@ const useOtherUser = (
     const currentUserEmail = session?.data?.user?.email;
 
     if (!currentUserEmail) {
-      return conversation.users[1];
+      return null;
     }
 
     const otherUser = conversation.users.filter(

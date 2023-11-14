@@ -27,12 +27,14 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     const isActive = members.indexOf(otherUser?.email!) !== -1;
 
     const joinDate = useMemo(() => {
-        return format(new Date(otherUser.createdAt), "PP");
-    }, [otherUser.createdAt]);
+        if (otherUser?.createdAt) {
+            return format(new Date(otherUser.createdAt), "PP");
+        }
+    }, [otherUser?.createdAt]);
 
     const title = useMemo(() => {
-        return data.name ?? otherUser.name;
-    }, [data.name, otherUser.name]);
+        return data.name ?? otherUser?.name;
+    }, [data.name, otherUser?.name]);
 
     const statusText = useMemo(() => {
         if (data.isGroup) {
@@ -94,7 +96,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                                         {data.isGroup ? (
                                                             <AvatarGroup users={data.users} />
                                                         ) : (
-                                                            <Avatar user={otherUser} />
+                                                            <Avatar user={otherUser!} />
                                                         )}
                                                     </div>
                                                     <div>{title}</div>
@@ -138,7 +140,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                                                         Email
                                                                     </dt>
                                                                     <dd className="mt-1 text-sm text-skin-base sm:col-span-2">
-                                                                        {otherUser.email}
+                                                                        {otherUser?.email}
                                                                     </dd>
                                                                 </div>
                                                             )}

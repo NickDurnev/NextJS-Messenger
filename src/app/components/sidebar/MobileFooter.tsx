@@ -4,7 +4,11 @@ import useConversation from "@/app/hooks/useConversation";
 import useRoutes from "@/app/hooks/useRoutes";
 import MobileItem from "./MobileItem";
 
-const MobileFooter = () => {
+interface MobileFooterProps {
+    setIsModalOpen: (value: boolean) => void;
+}
+
+const MobileFooter = ({ setIsModalOpen }: MobileFooterProps) => {
     const routes = useRoutes();
     const { isOpen } = useConversation();
 
@@ -20,7 +24,7 @@ const MobileFooter = () => {
                     href={href}
                     icon={icon}
                     active={active}
-                    onClick={onClick}
+                    onClick={onClick ? () => setIsModalOpen(true) : undefined}
                 />
             ))}
         </div>

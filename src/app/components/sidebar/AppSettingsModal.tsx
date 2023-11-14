@@ -1,29 +1,27 @@
 "use client";
 
 import { FC, useState } from "react";
-import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Image from "next/image";
-import { CldUploadButton } from "next-cloudinary";
 
 import Modal from "../Modal";
 import Input from "../inputs/Input";
 import Button from "../Button";
-import stringAvatar from "@/services/avatarFormatter";
+import Select from "@/app/components/inputs/Select";
 
-interface SettingsModalProps {
+
+interface AppSettingsModalProps {
     isOpen?: boolean;
     onClose: () => void;
-    currentUser: User | null;
 }
 
-const SettingsModal: FC<SettingsModalProps> = ({
+const themeKeys = ["Light", "Dark"];
+
+const AppSettingsModal: FC<AppSettingsModalProps> = ({
     isOpen,
     onClose,
-    currentUser,
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
@@ -36,18 +34,11 @@ const SettingsModal: FC<SettingsModalProps> = ({
         formState: { errors },
     } = useForm<FieldValues>({
         defaultValues: {
-            name: currentUser?.name,
-            image: currentUser?.image,
+            themes: [],
         },
     });
 
-    const image = watch("image");
-
-    const handleUpload = (result: any) => {
-        setValue("image", result?.info?.secure_url, {
-            shouldValidate: true,
-        });
-    };
+    const themes = watch("themes");
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
@@ -73,42 +64,26 @@ const SettingsModal: FC<SettingsModalProps> = ({
                             Edit your information.
                         </p>
                         <div className="mt-10 flex flex-col gap-y-8">
-                            <Input
+                            {/* <Input
                                 disabled={isLoading}
                                 label="Name"
-                                id="name"
+                                id="theme"
                                 errors={errors}
                                 required
                                 register={register}
+                            /> */}
+                            <Select
+                                disabled={isLoading}
+                                label="Themes"
+                                options={themeKeys.map((theme) => ({
+                                    value: theme,
+                                    label: theme,
+                                }))}
+                                onChange={(value) =>
+                                    setValue("themes", value, { shouldValidate: true })
+                                }
+                                value={themes}
                             />
-                        </div>
-                        <label className="block text-sm font-medium leading-6 text-skin-base">
-                            Photo
-                        </label>
-                        <div className="mt-2 flex items-center gap-x-3">
-                            {image && (
-                                <Image
-                                    width="48"
-                                    height="48"
-                                    className="rounded-full"
-                                    src={image || currentUser?.image}
-                                    alt="Avatar"
-                                />
-                            )}
-                            {!image && currentUser?.name && (
-                                <div className="h-12 w-12 rounded-full flex items-center justify-center bg-purple-500 text-gray-50 text-2xl border-0">
-                                    {stringAvatar(currentUser.name)}
-                                </div>
-                            )}
-                            <CldUploadButton
-                                options={{ maxFiles: 1 }}
-                                onUpload={handleUpload}
-                                uploadPreset="kqj1yrdh"
-                            >
-                                <Button disabled={isLoading} secondary type="button">
-                                    Change
-                                </Button>
-                            </CldUploadButton>
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -125,4 +100,4 @@ const SettingsModal: FC<SettingsModalProps> = ({
     );
 };
 
-export default SettingsModal;
+export default AppSettingsModal;

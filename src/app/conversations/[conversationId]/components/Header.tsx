@@ -46,7 +46,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                     {conversation.isGroup ? (
                         <AvatarGroup users={conversation.users} />
                     ) : (
-                        <Avatar user={otherUser} />
+                        <Avatar user={otherUser!} />
                     )}
                     <div className="flex flex-col">
                         <div>{conversation.name ?? otherUser?.name}</div>

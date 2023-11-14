@@ -10,6 +10,7 @@ import { FullConversationType } from "@/app/types";
 import useOtherUser from "@/app/hooks/useOtherUser";
 import Avatar from "@/app/components/Avatar";
 import AvatarGroup from "@/app/components/AvatarGroup";
+import ConversetionSkeleton from "./ConversationSkeleton";
 
 interface ConversationBoxProps {
     data: FullConversationType;
@@ -61,7 +62,9 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
         return "Started a conversation";
     }, [lastMessage]);
 
-    console.log('OTHER_USER', otherUser);
+    if (!data.isGroup && !otherUser) {
+        return <ConversetionSkeleton />;
+    }
 
     return (
         <div
@@ -74,7 +77,7 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
             {data.isGroup ? (
                 <AvatarGroup users={data.users} />
             ) : (
-                <Avatar user={otherUser} />
+                <Avatar user={otherUser!} />
             )}
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
