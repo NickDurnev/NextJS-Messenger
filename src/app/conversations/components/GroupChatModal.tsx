@@ -88,6 +88,7 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
                                     setValue("members", value, { shouldValidate: true })
                                 }
                                 value={members}
+                                isMulti
                             />
                         </div>
                     </div>

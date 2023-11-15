@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import ToasterContext from './context/ToasterContext';
 import AuthContext from './context/AuthContext';
 import ActiveStatus from './components/ActiveStatus';
+import AppContainer from './components/AppContainer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,7 +27,9 @@ export default async function RootLayout({
         <AuthContext session={session}>
           <ToasterContext />
           <ActiveStatus />
-          {children}
+          <AppContainer>
+            {children}
+          </AppContainer>
         </AuthContext>
       </body>
     </html>
