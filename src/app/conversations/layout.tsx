@@ -8,7 +8,7 @@ const ConversationsLayout = async ({ children }: { children: React.ReactNode }) 
     const users = await getUsers();
     return (
         <Sidebar>
-            <div className="h-screen">
+            <div className="h-full">
                 <ConversationList users={users} initialItems={conversations} />
                 {children}
             </div>

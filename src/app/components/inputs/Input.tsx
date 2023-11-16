@@ -25,7 +25,7 @@ const Input: FC<InputProps> = ({
     return (
         <div>
             <label
-                className="block test-sm font-medium leading-6 text-gray-900"
+                className="block test-sm font-medium leading-6 text-skin-additional"
                 htmlFor={id}
             >
                 {label}
@@ -44,12 +44,13 @@ const Input: FC<InputProps> = ({
             rounded-md 
             border-0 
             py-1.5 
-            text-gray-900 
+            text-skin-additional 
             shadow-sm 
             ring-1 
             ring-inset 
-            ring-gray-300 
-            placeholder:text-gray-400 
+            ring-skin-additional
+            placeholder:text-skin-additional
+            bg-skin-main 
             focus:ring-2 
             focus:ring-inset 
             focus:ring-sky-600 

@@ -2,7 +2,9 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment } from "react";
+import clsx from "clsx";
 import { IoClose } from "react-icons/io5";
+import useTheme from "../hooks/useTheme";
 
 interface ModalProps {
     isOpen?: boolean;
@@ -11,6 +13,7 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+    const { theme } = useTheme();
     return (
         <Transition.Root show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -25,7 +28,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 >
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </Transition.Child>
-                <div className="fixed inset-0 z-10 overflow-y-auto">
+                <div className={clsx("fixed inset-0 z-10 overflow-y-auto", theme === 'dark' ? 'theme-dark' : '')}>
                     <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                         <Transition.Child
                             as={Fragment}
@@ -36,12 +39,12 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-skin-main px-4 pb-4 text-left shadow-xsl transition-all w-full sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                                <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block z-10">
+                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg px-4 pb-4 text-left shadow-xsl transition-all w-full sm:my-8 sm:w-full sm:max-w-lg sm:p-6 bg-skin-main">
+                                <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block z-10 bg-skin-main">
                                     <button
                                         type="button"
                                         onClick={onClose}
-                                        className="rounded-xl bg-skin-main text-skin-additional hover:text-skin-additional-hover focus:outline-none focus:ring-2 focus:ring-skin-main focus:ring-offset-2"
+                                        className="rounded-xl bg-skin-main text-skin-additional hover:text-skin-additional-hover focus:outline-none"
                                     >
                                         <span className="sr-only">Close</span>
                                         <IoClose className="h-6 w-6" />

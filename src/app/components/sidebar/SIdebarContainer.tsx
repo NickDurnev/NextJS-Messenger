@@ -21,7 +21,7 @@ const SidebarContainer = ({ currentUser }: SidebarContainerProps) => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
-            <div className="h-screen">
+            <div>
                 <DesktopSidebar
                     currentUser={currentUser!}
                     setIsModalOpen={setIsModalOpen}

@@ -22,7 +22,7 @@
   }
 
   .theme-dark {
-    --color-text-base: #262323;
+    --color-text-base: #c0b9b9;
     --color-text-additional: #969595;
     --color-text-additional-hover: #6a6969;
     --color-text-mutated: #6d86ea;
@@ -30,13 +30,13 @@
     --color-text-active: #2cb149;
     --color-text-inverted: #4f46e5;
     --color-bg-main: #2c2a2a;
-    --color-bg-additional: #37373a;
+    --color-bg-additional: #4f4f51;
     --color-bg-hover: #9ba2b4;
     --color-bg-active: #97bc9b;
     --color-bg-accent: #6d86ea;
     --color-bg-accent-hover: #4c4ca8;
     --color-text-button: #ffffff;
-    --color-border-main: #1a191b;
+    --color-border-main: #5a575d;
   }
 }
 
@@ -211,76 +211,4 @@ li {
 
 .auth-btn:hover .arrow:before {
   right: 0;
-}
-
-/* ThemeSwitcher styles */
-#theme-toggle-button {
-  font-size: 17px;
-  position: relative;
-  display: inline-block;
-  width: 7em;
-  cursor: pointer;
-}
-
-/* Hide default HTML checkbox */
-#toggle {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-#container,
-#patches,
-#stars,
-#button,
-#sun,
-#moon,
-#cloud {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 0.25s;
-}
-
-/* night sky background */
-#toggle:checked + svg #container {
-  fill: #2b4360;
-}
-
-/* move button to right when checked */
-#toggle:checked + svg #button {
-  transform: translate(28px, 2.333px);
-}
-
-/* show/hide sun and moon based on checkbox state */
-#sun {
-  opacity: 1;
-}
-
-#toggle:checked + svg #sun {
-  opacity: 0;
-}
-
-#moon {
-  opacity: 0;
-}
-
-#toggle:checked + svg #moon {
-  opacity: 1;
-}
-
-/* show or hide background items on checkbox state */
-#cloud {
-  opacity: 1;
-}
-
-#toggle:checked + svg #cloud {
-  opacity: 0;
-}
-
-#stars {
-  opacity: 0;
-}
-
-#toggle:checked + svg #stars {
-  opacity: 1;
 }

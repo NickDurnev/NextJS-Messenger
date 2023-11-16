@@ -34,7 +34,7 @@ const config: Config = {
       borderColor: {
         skin: {
           main: "var(--color-border-main)",
-          // additional: "var(--color-bg-additional)",
+          additional: "var(--color-border-main)",
           // hover: "var(--color-bg-hover)",
           // active: "var(--color-bg-active)",
         },
@@ -42,6 +42,7 @@ const config: Config = {
       ringColor: {
         skin: {
           main: "var(--color-bg-accent)",
+          additional: "var(--color-border-main)",
         },
       },
       colors: {

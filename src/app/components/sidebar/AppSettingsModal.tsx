@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -24,14 +23,13 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {
-        register,
         handleSubmit,
         setValue,
         watch,
-        formState: { errors },
+        reset,
     } = useForm<FieldValues>({
         defaultValues: {
-            theme: [{ label: savedTheme, value: savedTheme }],
+            theme: { label: savedTheme, value: savedTheme },
         },
     });
 
@@ -45,6 +43,11 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
         onClose();
         setIsLoading(false);
         toast.success("Settings updated");
+    };
+
+    const handleCancel = () => {
+        onClose();
+        reset({ theme: { label: savedTheme, value: savedTheme } }); // Step 2
     };
 
     return (
@@ -73,7 +76,7 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
-                        <Button disabled={isLoading} secondary onClick={onClose}>
+                        <Button disabled={isLoading} secondary onClick={handleCancel} type="button">
                             Cancel
                         </Button>
                         <Button disabled={isLoading} type="submit">

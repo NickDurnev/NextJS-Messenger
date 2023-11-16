@@ -1,5 +1,4 @@
 import EmptyState from "../components/EmptyState";
-import ThemeSwitcher from "../components/ThemeSwitcher";
 
 const Users = async () => {
     return (

@@ -35,6 +35,8 @@ const Select: FC<SelectProps> = ({
                     menuPortalTarget={document.body}
                     styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999, textTransform: "capitalize" }),
+                        control: (base) => ({ ...base, background: 'var(--bg-skin-main)', borderColor: 'var(--color-border-main)' }), // Change background color here
+                        option: (base) => ({ ...base, backgroundColor: 'var(--bg-skin-main)' }), // Change background color here
                     }}
                     classNames={{ control: () => "text-sm" }}
                 />

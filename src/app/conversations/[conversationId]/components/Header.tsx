@@ -35,7 +35,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                 isOpen={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
             />
-            <div className="bg-skin-main w-full flex border-b-[1px] sm:px-4 py-3 px-4 lg:px-6 justify-between shadow-sm">
+            <div className="bg-skin-main w-full flex border-b-[1px] sm:px-4 py-3 px-4 lg:px-6 justify-between shadow-sm border-skin-main">
                 <div className="flex gap-3 items-center">
                     <Link
                         href="/conversations"
@@ -49,7 +49,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                         <Avatar user={otherUser!} />
                     )}
                     <div className="flex flex-col">
-                        <div>{conversation.name ?? otherUser?.name}</div>
+                        <div className="text-skin-base">{conversation.name ?? otherUser?.name}</div>
                         <div className="text-sm font-light text-skin-additional">
                             {statusText}
                         </div>
