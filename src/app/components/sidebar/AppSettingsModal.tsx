@@ -23,6 +23,7 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {
+        formState: { isDirty },
         handleSubmit,
         setValue,
         watch,
@@ -42,7 +43,9 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
         set(theme.value);
         onClose();
         setIsLoading(false);
-        toast.success("Settings updated");
+        if (isDirty || theme.value !== savedTheme) {
+            toast.success("Settings updated");
+        }
     };
 
     const handleCancel = () => {
@@ -76,7 +79,12 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
-                        <Button disabled={isLoading} secondary onClick={handleCancel} type="button">
+                        <Button
+                            disabled={isLoading}
+                            secondary
+                            onClick={handleCancel}
+                            type="button"
+                        >
                             Cancel
                         </Button>
                         <Button disabled={isLoading} type="submit">
