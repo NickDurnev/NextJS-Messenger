@@ -1,5 +1,6 @@
 "use client";
 
+import useTheme from "@/app/hooks/useTheme";
 import { FC } from "react";
 import ReactSelect from "react-select";
 
@@ -18,8 +19,10 @@ const Select: FC<SelectProps> = ({
     onChange,
     options,
     disabled,
-    isMulti = false
+    isMulti = false,
 }) => {
+    const { theme } = useTheme();
+
     return (
         <div className="z-[100]">
             <label className="block text-sm font-medium leading-6 text-skin-additional">
@@ -34,11 +37,55 @@ const Select: FC<SelectProps> = ({
                     options={options}
                     menuPortalTarget={document.body}
                     styles={{
-                        menuPortal: (base) => ({ ...base, zIndex: 9999, textTransform: "capitalize" }),
-                        control: (base) => ({ ...base, background: 'var(--bg-skin-main)', borderColor: 'var(--color-border-main)' }), // Change background color here
-                        option: (base) => ({ ...base, backgroundColor: 'var(--bg-skin-main)' }), // Change background color here
+                        menuPortal: (base: object) => ({
+                            ...base,
+                            zIndex: 9999,
+                            textTransform: "capitalize",
+                        }),
+                        control: (base: object) => ({
+                            ...base,
+                            background: theme === 'dark' ? '#2c2a2a' : '#ffffff',
+                            borderColor: theme === 'dark' ? '#605f5e' : '#1a191b',
+                        }),
+                        menuList: (base: object) => ({
+                            ...base,
+                            background: theme === 'dark' ? '#2c2a2a' : '#ffffff',
+                        }),
+                        option: (base: object) => ({
+                            ...base,
+                            background: theme === 'dark' ? '#2c2a2a' : '#ffffff',
+                            color: theme === 'dark' ? '#605f5e' : '#262323',
+                            "&:hover": {
+                                color: theme === 'dark' ? '#d4d6dd' : '#a7a5a5'
+                            }
+                        }),
+                        multiValueLabel: (base: object) => ({
+                            ...base,
+                            color: theme === 'dark' ? '#605f5e' : '#262323',
+                        }),
+                        dropdownIndicator: (base: object) => ({
+                            ...base,
+                            color: theme === 'dark' ? '#605f5e' : '#262323',
+                            "&:hover": {
+                                color: theme === 'dark' ? '#d4d6dd' : '#a7a5a5'
+                            }
+                        }),
+                        indicatorSeparator: (base: object) => ({
+                            ...base,
+                            backgroundColor: "var(--color-border-main)",
+                        }),
+                        group: (base: object) => ({
+                            ...base,
+                            color: theme === 'dark' ? '#605f5e' : '#262323',
+                        }),
+                        singleValue: (base: object) => ({
+                            ...base,
+                            color: theme === 'dark' ? '#605f5e' : '#262323',
+                        }),
                     }}
-                    classNames={{ control: () => "text-sm" }}
+                    classNames={{
+                        control: () => "text-sm",
+                    }}
                 />
             </div>
         </div>

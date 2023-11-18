@@ -14,7 +14,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return <div className='theme-dark h-screen w-screen bg-skin-main'>{children}</div>;
+    return <div className={clsx('h-screen w-screen bg-skin-main', theme === 'dark' ? 'theme-dark' : '')}>{children}</div>;
 };
 
 export default AppContainer;
