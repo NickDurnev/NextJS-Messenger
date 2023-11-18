@@ -25,15 +25,16 @@ const Desktopitem: FC<DesktopItemprops> = ({
         }
     };
     return (
-        <li onClick={handleClick}>
+        <li>
             <Link
+                onClick={handleClick}
                 href={href}
                 className={clsx(
-                    `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover transition`,
-                    active && "bg-skin-active text-skin-active"
+                    `group flex gap-x-3 p-3 text-sm leading-6 font-semibold rounded-full text-skin-mutated hover:text-skin-mutated-hover hover:scale-75 hover:bg-skin-hover transition`,
+                    active && "bg-skin-active"
                 )}
             >
-                <Icon className="h-6 w-6 shrink-0" />
+                <Icon className={clsx("h-6 w-6 shrink-0", active && "text-skin-active")} />
                 <span className="sr-only">{label}</span>
             </Link>
         </li>

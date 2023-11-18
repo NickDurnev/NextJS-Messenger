@@ -35,6 +35,8 @@ const ConversationList: FC<ConversationListProps> = ({
         return session.data?.user?.email;
     }, [session.data?.user?.email]);
 
+    useEffect(() => { }, []);
+
     useEffect(() => {
         if (!pusherKey) {
             return;
@@ -111,17 +113,13 @@ const ConversationList: FC<ConversationListProps> = ({
                         <div className="text-2xl font-bold text-skin-base">Messages</div>
                         <div
                             onClick={() => setIsModalOpen(true)}
-                            className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover transition cursor-pointer"
+                            className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover hover:scale-125 transition cursor-pointer"
                         >
                             <MdOutlineGroupAdd size={20} />
                         </div>
                     </div>
                     {items.map((item) => (
-                        <ConversationBox
-                            key={item.id}
-                            data={item}
-                            selected={conversationId === item.id}
-                        />
+                        <ConversationBox key={item.id} data={item} />
                     ))}
                 </div>
             </aside>

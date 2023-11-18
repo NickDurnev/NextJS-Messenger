@@ -32,9 +32,9 @@ const MessageBox: FC<MessageBoxProps> = ({ data, isLast }) => {
     const body = clsx("flex flex-col gap-2", isOwn && "items-end");
 
     const message = clsx(
-        "text-sm w-fit overflow-hidden",
+        "max-w-[200px] xs:max-w-[70vw] lg:max-w-[50vw] text-sm break-words",
         isOwn ? "bg-skin-additional text-skin-base" : "bg-skin-accent text-skin-base",
-        data.image ? "rounded-md p-0 bg-transparent" : "rounded-full py-2 px-3"
+        data.image ? "rounded-md p-0 bg-transparent" : "rounded-2xl py-2 px-3"
     );
 
     return (

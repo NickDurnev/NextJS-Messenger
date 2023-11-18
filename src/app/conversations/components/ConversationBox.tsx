@@ -14,10 +14,9 @@ import ConversetionSkeleton from "./ConversationSkeleton";
 
 interface ConversationBoxProps {
     data: FullConversationType;
-    selected?: boolean;
 }
 
-const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
+const ConversationBox: FC<ConversationBoxProps> = ({ data }) => {
     const otherUser = useOtherUser(data);
     const session = useSession();
     const router = useRouter();
@@ -69,10 +68,7 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, selected }) => {
     return (
         <div
             onClick={handleClick}
-            className={clsx(
-                `w-full relative flex items-center p-3 space-x-3 hover:bg-skin-hover rounded-lg transition cursor-pointer`,
-                selected ? "bg-skin-active" : "bg-skin-base"
-            )}
+            className='w-full relative flex items-center p-3 space-x-3 hover:scale-110 rounded-lg transition cursor-pointer'
         >
             {data.isGroup ? (
                 <AvatarGroup users={data.users} />

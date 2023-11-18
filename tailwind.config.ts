@@ -53,6 +53,9 @@ const config: Config = {
           500: "#bbb2cf",
         },
       },
+      screens: {
+        xs: "400px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")({ strategy: "class" })],

@@ -14,7 +14,10 @@ interface DesktopSidebarProps {
     setIsModalOpen: (value: boolean) => void;
 }
 
-const DesktopSidebar: FC<DesktopSidebarProps> = ({ currentUser, setIsModalOpen }) => {
+const DesktopSidebar: FC<DesktopSidebarProps> = ({
+    currentUser,
+    setIsModalOpen,
+}) => {
     const routes = useRoutes();
     const [isOpen, setIsOpen] = useState(false);
 

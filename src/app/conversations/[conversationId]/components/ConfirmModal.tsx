@@ -6,6 +6,7 @@ import { FC, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { FiAlertTriangle } from "react-icons/fi";
 import { Dialog } from "@headlessui/react";
+
 import useConversation from "@/app/hooks/useConversation";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
@@ -35,14 +36,14 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <div className="sm:flex sm:items-start">
+            <div className="sm:flex sm:items-start ">
                 <div className="mx-auto flex h-12 w-12 flex-shrink items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                     <FiAlertTriangle className="h-6 w-6 text-red-600" />
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title
                         as="h3"
-                        className="text-base font-semibold leading-6 text-skin-main"
+                        className="text-base font-semibold leading-6 text-skin-base"
                     >
                         Delete conversation
                     </Dialog.Title>
@@ -55,7 +56,7 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
                 <Button disabled={isLoading} danger onClick={onDelete}>Delete</Button>
                 <Button disabled={isLoading} secondary onClick={onClose}>Cancel</Button>
             </div>
-        </Modal>
+        </Modal >
     );
 };
 

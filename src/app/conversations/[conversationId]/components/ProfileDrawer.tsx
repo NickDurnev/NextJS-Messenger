@@ -11,6 +11,8 @@ import Avatar from "@/app/components/Avatar";
 import ConfirmModal from "./ConfirmModal";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import useActiveList from "@/app/hooks/useActiveList";
+import useTheme from "@/app/hooks/useTheme";
+import clsx from "clsx";
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -25,6 +27,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const { members } = useActiveList();
     const isActive = members.indexOf(otherUser?.email!) !== -1;
+    const { theme } = useTheme();
 
     const joinDate = useMemo(() => {
         if (otherUser?.createdAt) {
@@ -75,14 +78,14 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                     leaveTo="translate-x-full"
                                 >
                                     <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                                        <div className="flex h-full flex-col overflow-y-scroll bg-skin-main py-6 shadow-xl">
+                                        <div className={clsx("flex h-full flex-col overflow-y-scroll bg-skin-main py-6 shadow-xl", theme === 'dark' ? 'theme-dark' : '')}>
                                             <div className="px-4 sm:px-6">
                                                 <div className="flex items-start justify-end">
                                                     <div className="ml-3 flex h-7 items-center">
                                                         <button
                                                             onClick={onClose}
                                                             type="button"
-                                                            className="rounded-xl bg-skin-main text-skin-additional hover:text-skin-additional-hover focus:outline-none focus:ring-2 focus:ring-skin-main focus:ring-offset-2"
+                                                            className="rounded-xl bg-skin-main text-skin-additional hover:text-skin-additional-hover focus:outline-none"
                                                         >
                                                             <span className="sr-only">Close panel</span>
                                                             <IoClose size={24} />
@@ -99,7 +102,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
                                                             <Avatar user={otherUser!} />
                                                         )}
                                                     </div>
-                                                    <div>{title}</div>
+                                                    <div className="text-skin-additional">{title}</div>
                                                     <div className="text-sm text-skin-additional">
                                                         {statusText}
                                                     </div>

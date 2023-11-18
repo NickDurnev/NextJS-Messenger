@@ -15,7 +15,7 @@ interface MessageInputProps {
 const MessageInput: FC<MessageInputProps> = ({ placeholder, id, type, required, register, errors }) => {
     return (
         <div className="relative w-full">
-            <input id={id} type={type} autoComplete={id} {...register(id, { required })} placeholder={placeholder} className="text-skin-base font-light py-2 px-4 bg-skin-additional w-full rounded-full focus:outline-none" />
+            <input id={id} type={type} autoComplete='off' {...register(id, { required })} placeholder={placeholder} className="text-skin-base font-light py-2 px-4 bg-skin-additional w-full rounded-full focus:outline-none" />
         </div>
     )
 };

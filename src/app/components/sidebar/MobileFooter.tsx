@@ -17,16 +17,18 @@ const MobileFooter = ({ setIsModalOpen }: MobileFooterProps) => {
     }
 
     return (
-        <div className="fixed justify-between w-full bottom-0 z-40 flex items-center bg-skin-main border-t-[1px] lg:hidden">
-            {routes.map(({ label, href, icon, active, onClick }) => (
-                <MobileItem
-                    key={label}
-                    href={href}
-                    icon={icon}
-                    active={active}
-                    onClick={onClick ? () => setIsModalOpen(true) : undefined}
-                />
-            ))}
+        <div className="py-2 fixed w-full bottom-0 z-40 bg-skin-main border-t-[1px] lg:hidden">
+            <div className="max-w-lg mx-auto flex justify-between items-center px-5">
+                {routes.map(({ label, href, icon, active, onClick }) => (
+                    <MobileItem
+                        key={label}
+                        href={href}
+                        icon={icon}
+                        active={active}
+                        onClick={onClick ? () => setIsModalOpen(true) : undefined}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
