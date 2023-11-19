@@ -2,18 +2,22 @@
 
 import axios from "axios";
 import useConversation from "@/app/hooks/useConversation";
+import { useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { EmojiClickData } from "emoji-picker-react";
 import { GrEmoji } from "react-icons/gr";
 import { HiPhoto, HiPaperAirplane } from "react-icons/hi2";
-import MessageInput from "../components/MessageInput";
 import { CldUploadButton } from "next-cloudinary";
-import { useState } from "react";
+
+import { Theme } from "emoji-picker-react";
+import MessageInput from "../components/MessageInput";
 import EmojiPicker from "./EmojiPicker";
+import useTheme from "@/app/hooks/useTheme";
 
 const Form = () => {
   const { conversationId } = useConversation();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const { theme } = useTheme();
 
   const {
     register,
@@ -46,16 +50,14 @@ const Form = () => {
   };
 
   const handleEmojiBtnClick = () => {
-    //TODO FIX OPEN-CLOSE
-    console.log(isEmojiPickerOpen);
-    isEmojiPickerOpen ? setIsEmojiPickerOpen(false) : setIsEmojiPickerOpen(true);
-    console.log(isEmojiPickerOpen);
-  }
-
-  console.log(isEmojiPickerOpen);
+    if (isEmojiPickerOpen) {
+      return;
+    }
+    setIsEmojiPickerOpen(true);
+  };
 
   return (
-    <div className="relative py-4 px-4 bg-skin-main border-t flex items-center gap-2 lg:gap-4 w-full border-skin-main">
+    <div className="h-fitrelative py-4 px-4 bg-skin-main border-t flex items-center gap-2 lg:gap-4 w-full border-skin-main">
       <CldUploadButton
         options={{ maxFiles: 1 }}
         onUpload={handleUpload}
@@ -63,13 +65,16 @@ const Form = () => {
       >
         <HiPhoto size={30} className="text-skin-mutated" />
       </CldUploadButton>
-      <button
-        className="cursor-pointer"
-        onClick={handleEmojiBtnClick}
-      >
+      <button className="cursor-pointer" onClick={handleEmojiBtnClick}>
         <GrEmoji size={30} className="text-skin-mutated" />
       </button>
-      <EmojiPicker onEmojiClick={handleEmojiClick} isOpen={isEmojiPickerOpen} onClose={() => setIsEmojiPickerOpen(false)} className="absolute bottom-[520px] sm:bottom-[600px] left-0 lg:left-[100%]" />
+      <EmojiPicker
+        onEmojiClick={handleEmojiClick}
+        isOpen={isEmojiPickerOpen}
+        onClose={() => setIsEmojiPickerOpen(false)}
+        theme={theme === "dark" ? Theme.DARK : Theme.LIGHT}
+        className="bottom-[525px] left-0 lg:left-[115%]"
+      />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex items-center gap-2 lg:gap-4 w-full"
@@ -77,7 +82,7 @@ const Form = () => {
         <MessageInput
           id="message"
           register={register}
-          errors={errors}
+          handleSubmit={handleSubmit(onSubmit)}
           required
           placeholder="Write a message"
         />
@@ -88,7 +93,7 @@ const Form = () => {
           <HiPaperAirplane size={18} className="text-skin-button-text" />
         </button>
       </form>
-    </div >
+    </div>
   );
 };
 
