@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
-
+import { customAlphabet } from "nanoid";
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
+import sendVerifyEmail from "@/app/actions/sendEmail";
 
 export async function POST(request: Request) {
   try {
@@ -12,13 +13,18 @@ export async function POST(request: Request) {
       return new NextResponse("Missing info", { status: 400 });
     }
 
+    const nanoid = customAlphabet("1234567890abcdef", 16);
+    const verificationToken = nanoid();
     const hashedPassword = await bcrypt.hash(password, 12);
+
+    sendVerifyEmail(email, verificationToken);
 
     const user = await prisma.user.create({
       data: {
         email,
         name,
         hashedPassword,
+        verificationToken,
       },
     });
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRef } from "react";
 import { motion, useCycle } from "framer-motion";
-import { useDimensions } from "@/hooks/use-dimensions";
+import { useDimensions } from "@/app/hooks/UseDimensions";
 import { userMenuSidebar } from "@/helpers/framer_variants";
 import MenuToggle from "./MenuToggle";
 import UserList from "./UserList";
