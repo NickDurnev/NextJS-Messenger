@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useParams, useRouter } from "next/navigation";
 import { BsGithub, BsGoogle, BsFillArrowLeftCircleFill } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
+
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
@@ -17,8 +18,11 @@ type Variant = "LOGIN" | "REGISTER";
 const AuthForm = () => {
     const session = useSession();
     const router = useRouter();
+    const params = useParams();
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
+
+    console.log("PARAMS", params);
 
     useEffect(() => {
         if (session?.status === "authenticated") {
@@ -53,7 +57,7 @@ const AuthForm = () => {
             axios
                 .post("/api/register", data)
                 .then(() => signIn("credentials", data))
-                .catch(() => toast.error("Something went wrong!"))
+                .catch((error) => { console.log(error); toast.error("Something went wrong!") })
                 .finally(() => setIsLoading(false));
         }
 
@@ -102,10 +106,11 @@ const AuthForm = () => {
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div
                     className="
-        bg-white
+        bg-skin-main
           px-4
           py-8
-          shadow
+          border-[1px]
+          border-skin-main
           sm:rounded-lg
           sm:px-10
         "
@@ -156,10 +161,10 @@ const AuthForm = () => {
                 items-center
               "
                             >
-                                <div className="w-full border-t border-gray-300" />
+                                <div className="w-full border-t border-skin-main" />
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-white px-2 text-gray-500">
+                                <span className="bg-skin-main px-2 text-skin-base">
                                     Or continue with
                                 </span>
                             </div>
@@ -184,7 +189,7 @@ const AuthForm = () => {
             text-sm 
             mt-6 
             px-2 
-            text-gray-500
+            text-skin-additional
           "
                     >
                         <div>

@@ -4,12 +4,11 @@ import axios from "axios";
 import useConversation from "@/app/hooks/useConversation";
 import { useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
-import { EmojiClickData } from "emoji-picker-react";
+import { EmojiClickData, Theme } from "emoji-picker-react";
 import { GrEmoji } from "react-icons/gr";
 import { HiPhoto, HiPaperAirplane } from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 
-import { Theme } from "emoji-picker-react";
 import MessageInput from "../components/MessageInput";
 import EmojiPicker from "./EmojiPicker";
 import useTheme from "@/app/hooks/useTheme";
@@ -55,6 +54,8 @@ const Form = () => {
     }
     setIsEmojiPickerOpen(true);
   };
+
+  console.log(errors);
 
   return (
     <div className="h-fitrelative py-4 px-4 bg-skin-main border-t flex items-center gap-2 lg:gap-4 w-full border-skin-main">

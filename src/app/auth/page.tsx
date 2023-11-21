@@ -12,7 +12,7 @@ const Auth = () => {
         py-12 
         sm:px-6 
         lg:px-8 
-        bg-gray-100
+        bg-skin-main
       "
         >
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -30,7 +30,7 @@ const Auth = () => {
             text-3xl 
             font-bold 
             tracking-tight 
-            text-gray-900
+            text-skin-base
           "
                 >
                     Sign in to your account

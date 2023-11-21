@@ -19,15 +19,15 @@ const AuthSocialButton: FC<AuthSocialButtonprops> = ({
         w-full 
         justify-center 
         rounded-md 
-        bg-white 
+        bg-skin-additional
         px-4 
         py-2 
-        text-gray-500 
+        text-skin-base
         shadow-sm 
         ring-1 
         ring-inset 
-        ring-gray-300 
-        hover:bg-gray-50 
+        ring-skin-additional 
+        hover:bg-skin-hover 
         focus:outline-offset-0
       "
         >
