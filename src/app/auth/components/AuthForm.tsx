@@ -7,8 +7,10 @@ import { BsGithub, BsGoogle, BsFillArrowLeftCircleFill } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
-
 import Link from "next/link";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import formSchema from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
@@ -48,6 +50,8 @@ const AuthForm = () => {
             email: "",
             password: "",
         },
+        mode: "onTouched",
+        resolver: yupResolver<FieldValues>(formSchema),
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -57,7 +61,10 @@ const AuthForm = () => {
             axios
                 .post("/api/register", data)
                 .then(() => signIn("credentials", data))
-                .catch((error) => { console.log(error); toast.error("Something went wrong!") })
+                .catch((error) => {
+                    console.log(error);
+                    toast.error("Something went wrong!");
+                })
                 .finally(() => setIsLoading(false));
         }
 
@@ -133,7 +140,6 @@ const AuthForm = () => {
                             required
                             id="email"
                             label="Email address"
-                            type="email"
                         />
                         <Input
                             disabled={isLoading}
@@ -144,6 +150,17 @@ const AuthForm = () => {
                             label="Password"
                             type="password"
                         />
+                        {variant === "REGISTER" && (
+                            <Input
+                                disabled={isLoading}
+                                register={register}
+                                errors={errors}
+                                required
+                                id="cpassword"
+                                label="Confirm password"
+                                type="password"
+                            />
+                        )}
                         <div>
                             <Button disabled={isLoading} fullWidth type="submit">
                                 {variant === "LOGIN" ? "Sign in" : "Register"}

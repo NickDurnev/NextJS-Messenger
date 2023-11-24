@@ -1,7 +1,7 @@
 import sgMail from "@sendgrid/mail";
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
-const APP_BASE_URL = process.env.APP_BASE_URL;
+const APP_BASE_URL = process.env.BASE_APP_URL;
 const TEMPLATE_ID = process.env.TEMPLATE_ID;
 
 const sendVerifyEmail = async (email: string, verToken: string) => {
@@ -17,6 +17,7 @@ const sendVerifyEmail = async (email: string, verToken: string) => {
     },
   };
   try {
+    console.log("MESSAGE", msg);
     await sgMail.send(msg);
     console.log("Email sent");
   } catch (error) {

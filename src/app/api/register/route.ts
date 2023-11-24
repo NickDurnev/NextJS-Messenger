@@ -17,12 +17,7 @@ export async function POST(request: Request) {
     const verificationToken = nanoid();
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    console.log("11111111111");
-
     await sendVerifyEmail(email, verificationToken);
-
-    console.log("EMAIL", email);
-    console.log(verificationToken);
 
     const user = await prisma.user.create({
       data: {
