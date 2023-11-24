@@ -1,7 +1,8 @@
 "use client";
 import clsx from "clsx";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { CiLock, CiUnlock } from "react-icons/ci";
 
 interface InputProps {
     label: string;
@@ -22,17 +23,18 @@ const Input: FC<InputProps> = ({
     errors,
     disabled,
 }) => {
+    const [isShown, setIsShown] = useState(false);
     return (
         <div>
             <label
-                className="block test-sm font-medium leading-6 text-skin-additional"
+                className="relative block text-sm font-medium leading-6 text-skin-additional"
                 htmlFor={id}
             >
                 {label}
                 <div className="mt-2">
                     <input
                         id={id}
-                        type={type}
+                        type={isShown ? "text" : "password"}
                         autoComplete="off"
                         disabled={disabled}
                         {...register(id, { required })}
@@ -59,11 +61,20 @@ const Input: FC<InputProps> = ({
                             disabled && "opacity-50 cursor-default"
                         )}
                     />{" "}
+                    {(id === "password" || id === "cpassword") && (
+                        <button onClick={() => setIsShown(!isShown)} className="absolute right-3 top-[73%] -translate-y-1/2">
+                            {isShown ? (
+                                <CiUnlock className={clsx("w-7 h-7", errors[id] ? "fill-rose-500 hover:fill-rose-600" : "fill-sky-500 hover:fill-sky-600")} />
+                            ) : (
+                                <CiLock className={clsx("w-7 h-7", errors[id] ? "fill-rose-500 hover:fill-rose-600" : "fill-sky-500 hover:fill-sky-600")} />
+                            )}
+                        </button>
+                    )}
                 </div>
-                {errors[id] && (
-                    <p className="mt-1 text-rose-500 text-sm">{`${errors[id]?.message}`}</p>
-                )}
             </label>
+            {errors[id] && (
+                <p className="mt-1 text-rose-500 text-sm">{`${errors[id]?.message}`}</p>
+            )}
         </div>
     );
 };

@@ -50,7 +50,7 @@ const AuthForm = () => {
             email: "",
             password: "",
         },
-        mode: "onTouched",
+        mode: "onChange",
         resolver: yupResolver<FieldValues>(formSchema),
     });
 

@@ -9,6 +9,10 @@ const formSchema = Yup.object().shape({
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
     .max(16, "Password cannot exceed more than 16 characters"),
+  // .matches(
+  //   /^.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].**$/,
+  //   "Need one special character"
+  // ),
   cpassword: Yup.string()
     .required("Confirm Password is required")
     .min(4, "Password length should be at least 4 characters")
