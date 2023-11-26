@@ -16,8 +16,8 @@ interface BodyProps {
 const Body: FC<BodyProps> = ({ initialMessages }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
-
   const { conversationId } = useConversation();
+  const currentDate = new Date();
 
   useEffect(() => {
     axios.post(`/api/conversations/${conversationId}/seen`);
@@ -68,6 +68,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
           isLast={i === messages.length - 1}
           key={message.id}
           data={message}
+          currentDate={currentDate}
         />
       ))}
       <div ref={bottomRef} className="pt-4" />

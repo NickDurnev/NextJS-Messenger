@@ -35,7 +35,7 @@ const ConversationList: FC<ConversationListProps> = ({
         return session.data?.user?.email;
     }, [session.data?.user?.email]);
 
-    useEffect(() => { }, []);
+    const currentDate = new Date();
 
     useEffect(() => {
         if (!pusherKey) {
@@ -119,7 +119,7 @@ const ConversationList: FC<ConversationListProps> = ({
                         </div>
                     </div>
                     {items.map((item) => (
-                        <ConversationBox key={item.id} data={item} />
+                        <ConversationBox key={item.id} data={item} currentDate={currentDate} />
                     ))}
                 </div>
             </aside>

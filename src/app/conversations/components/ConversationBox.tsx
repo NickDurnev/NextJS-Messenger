@@ -2,7 +2,7 @@
 
 import { FC, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns";
+import { formatRelative } from "date-fns";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
 
@@ -14,9 +14,10 @@ import ConversetionSkeleton from "./ConversationSkeleton";
 
 interface ConversationBoxProps {
     data: FullConversationType;
+    currentDate: Date;
 }
 
-const ConversationBox: FC<ConversationBoxProps> = ({ data }) => {
+const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
     const otherUser = useOtherUser(data);
     const session = useSession();
     const router = useRouter();
@@ -68,7 +69,7 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data }) => {
     return (
         <div
             onClick={handleClick}
-            className='w-full relative flex items-center p-3 space-x-3 hover:scale-110 rounded-lg transition cursor-pointer'
+            className="w-full relative flex items-center p-3 space-x-3 hover:scale-110 rounded-lg transition cursor-pointer"
         >
             {data.isGroup ? (
                 <AvatarGroup users={data.users} />
@@ -83,7 +84,7 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data }) => {
                         </p>
                         {lastMessage?.createdAt && (
                             <p className="text-xs text-skin-additional font-light">
-                                {format(new Date(lastMessage.createdAt), "p")}
+                                {formatRelative(new Date(data.createdAt), currentDate)}
                             </p>
                         )}
                     </div>
