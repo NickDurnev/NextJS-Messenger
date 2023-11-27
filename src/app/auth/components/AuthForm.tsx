@@ -10,7 +10,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import formSchema from "../validation";
+import { LoginformSchema, RegisterformSchema } from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
@@ -23,8 +23,6 @@ const AuthForm = () => {
     const params = useParams();
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
-
-    console.log("PARAMS", params);
 
     useEffect(() => {
         if (session?.status === "authenticated") {
@@ -51,7 +49,7 @@ const AuthForm = () => {
             password: "",
         },
         mode: "onChange",
-        resolver: yupResolver<FieldValues>(formSchema),
+        resolver: yupResolver<FieldValues>(variant === "LOGIN" ? LoginformSchema : RegisterformSchema),
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
