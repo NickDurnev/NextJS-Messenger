@@ -24,6 +24,14 @@ const Input: FC<InputProps> = ({
     disabled,
 }) => {
     const [isShown, setIsShown] = useState(false);
+
+    const setInputType = (type?: string) => {
+        if (type !== "password") {
+            return "text";
+        }
+        return isShown ? "text" : "password";
+    };
+
     return (
         <div>
             <label
@@ -34,7 +42,7 @@ const Input: FC<InputProps> = ({
                 <div className="mt-2">
                     <input
                         id={id}
-                        type={isShown ? "text" : "password"}
+                        type={setInputType(type)}
                         autoComplete="off"
                         disabled={disabled}
                         {...register(id, { required })}
@@ -62,11 +70,28 @@ const Input: FC<InputProps> = ({
                         )}
                     />{" "}
                     {(id === "password" || id === "cpassword") && (
-                        <button onClick={() => setIsShown(!isShown)} className="absolute right-3 top-[73%] -translate-y-1/2">
+                        <button
+                            onClick={() => setIsShown(!isShown)}
+                            className="absolute right-3 top-[73%] -translate-y-1/2"
+                        >
                             {isShown ? (
-                                <CiUnlock className={clsx("w-7 h-7", errors[id] ? "fill-rose-500 hover:fill-rose-600" : "fill-sky-500 hover:fill-sky-600")} />
+                                <CiUnlock
+                                    className={clsx(
+                                        "w-7 h-7",
+                                        errors[id]
+                                            ? "fill-rose-500 hover:fill-rose-600"
+                                            : "fill-sky-500 hover:fill-sky-600"
+                                    )}
+                                />
                             ) : (
-                                <CiLock className={clsx("w-7 h-7", errors[id] ? "fill-rose-500 hover:fill-rose-600" : "fill-sky-500 hover:fill-sky-600")} />
+                                <CiLock
+                                    className={clsx(
+                                        "w-7 h-7",
+                                        errors[id]
+                                            ? "fill-rose-500 hover:fill-rose-600"
+                                            : "fill-sky-500 hover:fill-sky-600"
+                                    )}
+                                />
                             )}
                         </button>
                     )}
