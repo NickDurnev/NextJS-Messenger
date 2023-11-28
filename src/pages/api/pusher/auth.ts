@@ -14,8 +14,8 @@ export default async function handler(
     return response.status(401);
   }
 
-  const socketId = request.body.socket?.id;
-  const channel = request.body.channel?.name;
+  const socketId = request.body.socket_id;
+  const channel = request.body.channel_name;
   const data = {
     user_id: session.user.email,
   };

@@ -4,11 +4,11 @@ export const LoginformSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
-    .max(16, "Password cannot exceed more than 16 characters"),
-  // .matches(
-  //   /^.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].**$/,
-  //   "Need one special character"
-  // ),
+    .max(16, "Password cannot exceed more than 16 characters")
+    .matches(
+      /^.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*$/,
+      "Need one special character"
+    ),
   email: Yup.string().email().required("Email is required"),
 });
 
@@ -20,11 +20,11 @@ export const RegisterformSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
-    .max(16, "Password cannot exceed more than 16 characters"),
-  // .matches(
-  //   /^.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].**$/,
-  //   "Need one special character"
-  // ),
+    .max(16, "Password cannot exceed more than 16 characters")
+    .matches(
+      /^.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*$/,
+      "Need one special character"
+    ),
   cpassword: Yup.string()
     .required("Confirm Password is required")
     .min(4, "Password length should be at least 4 characters")
