@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Channel, Members } from "pusher-js";
+import PusherClient from "pusher-js";
 import useActiveList from "./useActiveList";
-import { pusherClient } from "../libs/pusher";
 
-const useActiveChannel = () => {
+const useActiveChannel = (pusherClient: PusherClient | null) => {
   const { set, add, remove } = useActiveList();
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
     let channel = activeChannel;
+
+    if (!pusherClient) {
+      return;
+    }
 
     if (!channel) {
       channel = pusherClient.subscribe("presence-messenger");
@@ -34,7 +38,7 @@ const useActiveChannel = () => {
 
     return () => {
       if (activeChannel) {
-        pusherClient.unsubscribe("presence-messenger");
+        pusherClient?.unsubscribe("presence-messenger");
         setActiveChannel(null);
       }
     };

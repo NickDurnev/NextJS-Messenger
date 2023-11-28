@@ -27,7 +27,7 @@ const config: Config = {
           additional: "var(--color-bg-additional)",
           hover: "var(--color-bg-hover)",
           active: "var(--color-bg-active)",
-          "bg-accent": "var(--color-bg-button)",
+          "bg-accent": "var(--color-bg-accent)",
           "bg-accent-hover": "var(--color-bg-button-hover)",
         },
       },

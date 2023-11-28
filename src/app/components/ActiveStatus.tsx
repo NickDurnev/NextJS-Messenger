@@ -1,9 +1,11 @@
 'use client';
 
 import useActiveChannel from "../hooks/useActiveChannel";
+import usePusherClient from "../hooks/usePusherClient";
 
 const ActiveStatus = () => {
-    useActiveChannel();
+    const { pusherClient } = usePusherClient();
+    useActiveChannel(pusherClient);
 
     return null;
 };
