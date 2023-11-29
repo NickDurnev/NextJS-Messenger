@@ -7,6 +7,7 @@ import useTheme from "../hooks/useTheme";
 import { pusherClient } from "../libs/pusher";
 import usePusherClient from "../hooks/usePusherClient";
 import Loader from "./Loader";
+import ActiveStatus from "./ActiveStatus";
 
 const AppContainer = ({ children }: { children: React.ReactNode }) => {
     const [savedTheme, setSavedTheme] = useLocalStorage("theme");
@@ -17,6 +18,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     //TODO Too much rerenders
     useEffect(() => {
         savedTheme ? set(savedTheme) : setSavedTheme(theme);
+        console.log("APP", pusherClient);
         setPusherClient(pusherClient);
         setIsLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,6 +36,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
                 theme === "dark" ? "theme-dark" : ""
             )}
         >
+            <ActiveStatus />
             {children}
         </div>
     );

@@ -29,7 +29,7 @@ const Avatar = ({ user }: IProps) => {
         md:w-11"
       >
         {image ? (
-          <Image src={image} alt="Avatar" fill />
+          <Image src={image} alt="Avatar" sizes="50%" fill />
         ) : (
           <div className="h-full w-full flex items-center justify-center bg-purple-500 text-gray-50 text-2xl border-0">
             {stringAvatar(name!)}

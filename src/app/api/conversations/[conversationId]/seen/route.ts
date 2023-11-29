@@ -38,44 +38,53 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     //Find last message
     const lastMessage = conversation.messages[conversation.messages.length - 1];
 
-    if (!lastMessage) {
+    //Find not seen messages
+    const notSeenMessages = conversation.messages.filter(
+      ({ seen }) => seen.length === 1
+    );
+
+    if (!notSeenMessages) {
       return NextResponse.json(conversation);
     }
 
-    //Update seen of last message
-    const updatedMessage = await prisma.message.update({
-      where: {
-        id: lastMessage.id,
-      },
-      include: {
-        sender: true,
-        seen: true,
-      },
-      data: {
-        seen: {
-          connect: {
-            id: currentUser.id,
+    //Update seen of messages
+    const updatedMessages = await Promise.all(
+      notSeenMessages.map(async (message) => {
+        const updatedMessage = await prisma.message.update({
+          where: {
+            id: message.id,
           },
-        },
-      },
-    });
+          include: {
+            sender: true,
+            seen: true,
+          },
+          data: {
+            seen: {
+              connect: {
+                id: currentUser.id,
+              },
+            },
+          },
+        });
+
+        await pusherServer.trigger(
+          conversationId!,
+          "message:update",
+          updatedMessage
+        );
+      })
+    );
 
     await pusherServer.trigger(currentUser.email, "conversation:update", {
       id: conversationId,
-      messages: [updatedMessage],
+      messages: [updatedMessages],
     });
 
     if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
       return NextResponse.json(conversation);
     }
 
-    await pusherServer.trigger(
-      conversationId!,
-      "message:update",
-      updatedMessage
-    );
-
-    return NextResponse.json(updatedMessage);
+    return NextResponse.json(updatedMessages);
   } catch (error: any) {
     console.log(error, "ERROR_MESSAGES_SEEN");
     return new NextResponse("Internal Server Error", { status: 500 });

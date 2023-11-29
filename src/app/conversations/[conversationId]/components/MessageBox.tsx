@@ -14,10 +14,9 @@ import ImageModal from "./ImageModal";
 interface MessageBoxProps {
     data: FullMessageType;
     currentDate: Date;
-    isLast?: boolean;
 }
 
-const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isLast }) => {
+const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
     const session = useSession();
     const [imageModalOpen, setImageModalOpen] = useState(false);
 
@@ -40,6 +39,8 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isLast }) => {
             : "bg-skin-bg-accent text-skin-base",
         data.image ? "rounded-md p-0 bg-transparent" : "rounded-2xl py-2 px-3"
     );
+
+    console.log(data);
 
     return (
         <div className={container}>
@@ -70,7 +71,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isLast }) => {
                                 <div className="italic ml-auto text-xs text-skin-additional first-letter:capitalize">
                                     {formatRelative(new Date(data.createdAt), currentDate)}
                                 </div>
-                                {isLast && isOwn && seenList.length > 0 && (
+                                {isOwn && seenList.length > 0 && (
                                     <div className="text-skin-mutated"><IoCheckmarkDone /></div>
                                 )}
                                 {isOwn && seenList.length === 0 && (

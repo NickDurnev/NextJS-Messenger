@@ -50,6 +50,8 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
 
         return currentMessage;
       }))
+
+      bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     }
 
     pusherClient?.bind("messages:new", messageHandler);
@@ -60,13 +62,13 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
       pusherClient?.unbind("messages:new", messageHandler);
       pusherClient?.unbind("message:update", updateMessageHandler);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
   return (
     <div className="flex-1 overflow-y-auto bg-skin-main">
       {messages.map((message, i) => (
         <MessageBox
-          isLast={i === messages.length - 1}
           key={message.id}
           data={message}
           currentDate={currentDate}
