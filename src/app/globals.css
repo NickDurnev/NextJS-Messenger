@@ -19,6 +19,8 @@
     --color-bg-accent-hover: #4c4ca8;
     --color-text-button: #ffffff;
     --color-border-main: #1a191b;
+    --color-danger: #d62f1c;
+    --color-danger-hover: #b42a1b;
   }
 
   .theme-dark {
@@ -37,6 +39,8 @@
     --color-bg-accent-hover: #4c4ca8;
     --color-text-button: #ffffff;
     --color-border-main: #605f5e;
+    --color-danger: #d62f1c;
+    --color-danger-hover: #b42a1b;
   }
 }
 

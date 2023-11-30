@@ -19,6 +19,8 @@ const config: Config = {
           active: "var(--color-text-active)",
           inverted: "var(--color-text-inverted)",
           "button-text": "var(--color-text-button)",
+          danger: "var(--color-danger)",
+          "danger-hover": "var(--color-danger-hover)",
         },
       },
       backgroundColor: {
@@ -27,6 +29,8 @@ const config: Config = {
           additional: "var(--color-bg-additional)",
           hover: "var(--color-bg-hover)",
           active: "var(--color-bg-active)",
+          danger: "var(--color-danger)",
+          "danger-hover": "var(--color-danger-hover)",
           "bg-accent": "var(--color-bg-accent)",
           "bg-accent-hover": "var(--color-bg-button-hover)",
         },
@@ -35,6 +39,7 @@ const config: Config = {
         skin: {
           main: "var(--color-border-main)",
           additional: "var(--color-border-main)",
+          danger: "var(--color-danger)",
           // hover: "var(--color-bg-hover)",
           // active: "var(--color-bg-active)",
         },
@@ -43,6 +48,12 @@ const config: Config = {
         skin: {
           main: "var(--color-bg-accent)",
           additional: "var(--color-border-main)",
+        },
+      },
+      outlineColor: {
+        skin: {
+          danger: "var(--color-danger)",
+          "danger-hover": "var(--color-danger-hover)",
         },
       },
       colors: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, MouseEvent, TouchEvent } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
@@ -10,6 +10,8 @@ import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 import { FullMessageType } from "@/app/types";
 import Avatar from "@/app/components/Avatar";
 import ImageModal from "./ImageModal";
+import MessageMenu from "./MessageMenu/MessageMenu";
+import useTheme from "@/app/hooks/useTheme";
 
 interface MessageBoxProps {
     data: FullMessageType;
@@ -18,7 +20,9 @@ interface MessageBoxProps {
 
 const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
     const session = useSession();
+    const { theme } = useTheme();
     const [imageModalOpen, setImageModalOpen] = useState(false);
+    const [messageMenuOpen, setMessageMenuOpen] = useState(false);
 
     const isOwn = session?.data?.user?.email === data?.sender?.email;
     const seenList = (data.seen || [])
@@ -40,7 +44,18 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
         data.image ? "rounded-md p-0 bg-transparent" : "rounded-2xl py-2 px-3"
     );
 
-    console.log(data);
+    const showMessageMenu = (e: MouseEvent | TouchEvent) => {
+        e.preventDefault();
+        const touchduration = 500;
+        if (e.type === "touchstart") {
+            setTimeout(() => {
+                setMessageMenuOpen(true);
+            }, touchduration);
+            return;
+        }
+        setMessageMenuOpen(true);
+    }
+
 
     return (
         <div className={container}>
@@ -65,7 +80,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
                             className="object-hover cursor-pointer hover:scale-110 transition translate"
                         />
                     ) : (
-                        <>
+                        <div className="relative" onContextMenu={showMessageMenu} onTouchStart={showMessageMenu}>
                             <div>{data.body}</div>
                             <div className="flex justify-end items-end mt-1 gap-2">
                                 <div className="italic ml-auto text-xs text-skin-additional first-letter:capitalize">
@@ -77,12 +92,15 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
                                 {isOwn && seenList.length === 0 && (
                                     <div className="text-skin-additional pb-0.5"><IoCheckmark /></div>
                                 )}
+                                {messageMenuOpen && <MessageMenu isOpen={messageMenuOpen}
+                                    onClose={() => setMessageMenuOpen(false)} theme={theme}
+                                />}
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

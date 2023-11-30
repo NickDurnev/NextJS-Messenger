@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface DesktopItemprops {
     label: string;
-    icon: any;
+    icon: React.ReactNode;
     href: string;
     onClick?: () => void;
     active?: boolean;
