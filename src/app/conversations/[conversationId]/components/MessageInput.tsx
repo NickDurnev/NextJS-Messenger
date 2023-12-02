@@ -20,7 +20,6 @@ const MessageInput: FC<MessageInputProps> = ({
 }) => {
     const [rows, setRows] = useState(1);
     const handleKeyDown = (e: KeyboardEvent) => {
-        console.log(e);
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleSubmit();

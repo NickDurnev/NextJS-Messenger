@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { formatRelative } from "date-fns";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
+import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import { FullConversationType } from "@/app/types";
 import useOtherUser from "@/app/hooks/useOtherUser";
@@ -36,19 +37,22 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
         return session.data?.user?.email;
     }, [session.data?.user?.email]);
 
-    const hasSeen = useMemo(() => {
-        if (!lastMessage) {
+    const isOwn = useMemo(() => {
+        if (!lastMessage || !userEmail) {
             return false;
         }
 
         const seenArray = lastMessage.seen || [];
+        const userID = seenArray.find(({ email }) => email === userEmail)?.id;
 
-        if (!userEmail) {
+        if (!userID) {
             return false;
         }
 
-        return seenArray.filter((user) => user.email === userEmail).length !== 0;
+        return userID === lastMessage.senderId
     }, [userEmail, lastMessage]);
+
+    console.log('LAST MESSAGE', lastMessage);
 
     const lastMessageText = useMemo(() => {
         if (lastMessage?.image) {
@@ -88,14 +92,22 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                             </p>
                         )}
                     </div>
-                    <p
-                        className={clsx(
-                            `truncate text-sm`,
-                            hasSeen ? "text-skin-mutated" : "text-skin-base font-medium"
+                    <div className="flex items-center justify-between px-1">
+                        <p
+                            className={clsx(
+                                `truncate text-sm`,
+                                isOwn ? "text-skin-mutated" : "text-skin-base font-medium"
+                            )}
+                        >
+                            {lastMessageText}
+                        </p>
+                        {isOwn && lastMessage.seenIds.length > 1 && (
+                            <div className="text-skin-mutated"><IoCheckmarkDone /></div>
                         )}
-                    >
-                        {lastMessageText}
-                    </p>
+                        {isOwn && lastMessage.seenIds.length === 1 && (
+                            <div className="text-skin-additional pb-0.5"><IoCheckmark /></div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

@@ -35,9 +35,6 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       return new NextResponse("Invalid ID", { status: 400 });
     }
 
-    //Find last message
-    const lastMessage = conversation.messages[conversation.messages.length - 1];
-
     //Find not seen messages
     const notSeenMessages = conversation.messages.filter(
       ({ seen }) => seen.length === 1
@@ -72,12 +69,21 @@ export async function POST(request: Request, { params }: { params: IParams }) {
           "message:update",
           updatedMessage
         );
+
+        return updatedMessage;
       })
     );
 
+    //Find last message
+    const lastMessage =
+      updatedMessages[updatedMessages.length - 1] ??
+      conversation.messages[conversation.messages.length - 1];
+
+    console.log("LAST MESSAGE", lastMessage);
+
     await pusherServer.trigger(currentUser.email, "conversation:update", {
       id: conversationId,
-      messages: [updatedMessages],
+      messages: [lastMessage],
     });
 
     if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
