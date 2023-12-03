@@ -103,7 +103,9 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
                     </div>
                   )}
                   <MessageMenu
+                    data={data}
                     isOpen={messageMenuOpen}
+                    onClose={() => setMessageMenuOpen(false)}
                     theme={theme}
                     messageRef={messageRef}
                   />

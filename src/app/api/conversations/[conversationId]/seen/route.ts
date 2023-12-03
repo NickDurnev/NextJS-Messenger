@@ -79,8 +79,6 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       updatedMessages[updatedMessages.length - 1] ??
       conversation.messages[conversation.messages.length - 1];
 
-    console.log("LAST MESSAGE", lastMessage);
-
     await pusherServer.trigger(currentUser.email, "conversation:update", {
       id: conversationId,
       messages: [lastMessage],

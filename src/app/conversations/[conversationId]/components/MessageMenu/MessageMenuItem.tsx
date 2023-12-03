@@ -27,7 +27,7 @@ const MessageMenuItem: FC<ButtonProps> = ({
         danger
           ? "text-skin-danger hover:text-skin-danger-hover"
           : "text-skin-additional hover:text-skin-additional-hover",
-        "py-1 border-b border-skin-border flex items-center justify-center gap-1 text-[16px] cursor-pointer hover:opacity-75 transition bg-transparent"
+        "py-1 border-b border-skin-border flex items-center justify-start gap-1 text-[16px] cursor-pointer hover:opacity-75 transition bg-transparent"
       )}
     >
       <motion.span

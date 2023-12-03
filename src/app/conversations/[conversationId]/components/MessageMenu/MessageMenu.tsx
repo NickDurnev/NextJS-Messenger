@@ -3,16 +3,22 @@
 import { FC, useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import axios from "axios";
 import { MdDeleteOutline } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
+
 import MessageMenuItem from "./MessageMenuItem";
+import { FullMessageType } from "@/app/types";
 
 interface MessageMenuProps {
+  data: FullMessageType;
   isOpen?: boolean;
+  onClose: () => void;
   theme: string;
   messageRef?: React.RefObject<HTMLDivElement>;
 }
 
-const MessageMenu: FC<MessageMenuProps> = ({ isOpen, theme, messageRef }) => {
+const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, onClose, theme, messageRef }) => {
   const menuRef = useRef<HTMLUListElement>(null);
   const [isUpLifted, setIsUpLifted] = useState(false);
 
@@ -30,6 +36,11 @@ const MessageMenu: FC<MessageMenuProps> = ({ isOpen, theme, messageRef }) => {
     }
   }, [isOpen, messageRef]);
 
+  const deleteMessage = () => {
+    axios.delete(`/api/messages/${data.id}`);
+    onClose();
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -45,9 +56,15 @@ const MessageMenu: FC<MessageMenuProps> = ({ isOpen, theme, messageRef }) => {
           exit={{ opacity: 0, scale: 0.7 }}
         >
           <MessageMenuItem
+            icon={<CiEdit size={25} />}
+            onClick={() => console.log("EDIT")}
+          >
+            Edit
+          </MessageMenuItem>
+          <MessageMenuItem
             icon={<MdDeleteOutline size={25} />}
             danger
-            onClick={() => console.log("DELETE")}
+            onClick={deleteMessage}
           >
             Delete
           </MessageMenuItem>

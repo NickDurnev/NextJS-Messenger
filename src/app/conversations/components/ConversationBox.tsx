@@ -52,8 +52,6 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
         return userID === lastMessage.senderId
     }, [userEmail, lastMessage]);
 
-    console.log('LAST MESSAGE', lastMessage);
-
     const lastMessageText = useMemo(() => {
         if (lastMessage?.image) {
             return "Sent an image";

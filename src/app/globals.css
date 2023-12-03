@@ -25,8 +25,8 @@
 
   .theme-dark {
     --color-text-base: #c0b9b9;
-    --color-text-additional: #969595;
-    --color-text-additional-hover: #6a6969;
+    --color-text-additional: #c4c2c2;
+    --color-text-additional-hover: #969595;
     --color-text-mutated: #6d86ea;
     --color-text-mutated-hover: #3a51ab;
     --color-text-active: #2cb149;

@@ -86,12 +86,14 @@ const ConversationList: FC<ConversationListProps> = ({
 
         pusherClient?.bind("conversation:new", newHandler);
         pusherClient?.bind("conversation:update", updateHandler);
+        pusherClient?.bind("conversation:deleteMessage", updateHandler);
         pusherClient?.bind("conversation:remove", removeHandler);
 
         return () => {
             pusherClient?.unsubscribe(pusherKey);
             pusherClient?.unbind("conversation:new", newHandler);
             pusherClient?.unbind("conversation:update", updateHandler);
+            pusherClient?.unbind("conversation:deleteMessage", updateHandler);
             pusherClient?.unbind("conversation:remove", removeHandler);
         };
     }, [pusherKey, conversationId, router]);
@@ -120,7 +122,11 @@ const ConversationList: FC<ConversationListProps> = ({
                         </div>
                     </div>
                     {items.map((item) => (
-                        <ConversationBox key={item.id} data={item} currentDate={currentDate} />
+                        <ConversationBox
+                            key={item.id}
+                            data={item}
+                            currentDate={currentDate}
+                        />
                     ))}
                 </div>
             </aside>

@@ -43,24 +43,35 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
     };
 
     const updateMessageHandler = (newMessage: FullMessageType) => {
-      setMessages((current) => current.map((currentMessage) => {
-        if (currentMessage.id === newMessage.id) {
-          return newMessage;
-        }
+      setMessages((current) =>
+        current.map((currentMessage) => {
+          if (currentMessage.id === newMessage.id) {
+            return newMessage;
+          }
 
-        return currentMessage;
-      }))
+          return currentMessage;
+        })
+      );
 
       bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
-    }
+    };
+
+    //TODO TEST
+    const deleteMessageHandler = (deletedMessage: FullMessageType) => {
+      setMessages((current) =>
+        [...current].filter(({ id }) => id !== deletedMessage.id)
+      );
+      // bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     pusherClient?.bind("messages:new", messageHandler);
     pusherClient?.bind("message:update", updateMessageHandler);
-
+    pusherClient?.bind("message:delete", updateMessageHandler);
     return () => {
       pusherClient?.unsubscribe(conversationId);
       pusherClient?.unbind("messages:new", messageHandler);
       pusherClient?.unbind("message:update", updateMessageHandler);
+      pusherClient?.unbind("message:delete", deleteMessageHandler);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
@@ -68,11 +79,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
   return (
     <div className="flex-1 overflow-y-auto bg-skin-main">
       {messages.map((message) => (
-        <MessageBox
-          key={message.id}
-          data={message}
-          currentDate={currentDate}
-        />
+        <MessageBox key={message.id} data={message} currentDate={currentDate} />
       ))}
       <div ref={bottomRef} className="pt-4" />
     </div>
