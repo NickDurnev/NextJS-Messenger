@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   danger?: boolean;
 }
+
 const MessageMenuItem: FC<ButtonProps> = ({
   icon,
   children,
@@ -15,11 +16,11 @@ const MessageMenuItem: FC<ButtonProps> = ({
   danger,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  console.log('object', isHovered);
+
   return (
     <motion.li
       onHoverStart={() => setIsHovered(true)}
-      // onHoverEnd={() => setIsHovered(false)}
+      onHoverEnd={() => setIsHovered(false)}
       whileHover={{ scale: 1.1 }}
       onClick={onClick}
       className={clsx(
@@ -30,9 +31,9 @@ const MessageMenuItem: FC<ButtonProps> = ({
       )}
     >
       <motion.span
-        initial={{ "--rotate": "0deg" } as any}
-        animate={{ "--rotate": "90deg" } as any}
-        transition={{ duration: 2}}
+        initial={{ rotate: 0 }}
+        animate={{ rotate: isHovered ? [30, 0, -30, 0] : 0 }}
+        transition={{ duration: 0.3 }}
       >
         {icon}
       </motion.span>
