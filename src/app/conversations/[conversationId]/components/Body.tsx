@@ -56,17 +56,15 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
       bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    //TODO TEST
     const deleteMessageHandler = (deletedMessage: FullMessageType) => {
       setMessages((current) =>
         [...current].filter(({ id }) => id !== deletedMessage.id)
       );
-      // bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     pusherClient?.bind("messages:new", messageHandler);
     pusherClient?.bind("message:update", updateMessageHandler);
-    pusherClient?.bind("message:delete", updateMessageHandler);
+    pusherClient?.bind("message:delete", deleteMessageHandler);
     return () => {
       pusherClient?.unsubscribe(conversationId);
       pusherClient?.unbind("messages:new", messageHandler);

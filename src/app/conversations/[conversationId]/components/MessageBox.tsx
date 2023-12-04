@@ -65,7 +65,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
           <Avatar user={data.sender} />
         </div>
         <div className={body}>
-          <div className="text-sm text-skin-additional">{data.sender.name}</div>
+          <div className="text-sm text-skin-additional">{data?.sender?.name}</div>
           <div className={message}>
             <ImageModal
               src={data.image}

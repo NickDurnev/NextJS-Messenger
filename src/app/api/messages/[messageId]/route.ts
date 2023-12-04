@@ -49,8 +49,6 @@ export async function DELETE(
       return new NextResponse("Conversation not found", { status: 404 });
     }
 
-    console.log("DELETED", deletedMessage);
-
     await pusherServer.trigger(
       existingConversation.id,
       "message:delete",
@@ -67,6 +65,14 @@ export async function DELETE(
     if (isLastMessage) {
       const messages = await getMessages(existingConversation.id);
       const lastMessage = messages[messages.length - 1];
+      await prisma.conversation.update({
+        where: {
+          id: existingConversation.id,
+        },
+        data: {
+          lastMessageAt: lastMessage.createdAt,
+        },
+      });
       existingConversation.users.forEach((user) => {
         if (user.email) {
           pusherServer.trigger(user.email, "conversation:deleteMessage", {
