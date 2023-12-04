@@ -9,6 +9,7 @@ import { CiEdit } from "react-icons/ci";
 
 import MessageMenuItem from "./MessageMenuItem";
 import { FullMessageType } from "@/app/types";
+import { fadeVariant } from "@/helpers/framer_variants";
 
 interface MessageMenuProps {
   data: FullMessageType;
@@ -51,9 +52,10 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, onClose, theme, messa
             "absolute right-2 z-50 drop-shadow-md rounded-lg py-2 px-4 h-[200px]",
             isUpLifted ? "-top-32" : "top-6"
           )}
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.7 }}
+          variants={fadeVariant}
+          initial={'initial'}
+          animate={'open'}
+          exit={'exit'}
         >
           <MessageMenuItem
             icon={<CiEdit size={25} />}

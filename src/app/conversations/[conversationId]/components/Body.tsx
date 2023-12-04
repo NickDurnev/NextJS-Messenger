@@ -3,11 +3,13 @@
 import { FC, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { find } from "lodash";
+import { AnimatePresence } from "framer-motion";
 
 import { FullMessageType } from "@/app/types";
 import useConversation from "@/app/hooks/useConversation";
 import MessageBox from "./MessageBox";
 import usePusherClient from "@/app/hooks/usePusherClient";
+import scrollTo from "@/helpers/scrollTo";
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -26,8 +28,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);
-    bottomRef?.current?.scrollIntoView();
-
+    scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
       axios.post(`/api/conversations/${conversationId}/seen`);
 
@@ -39,7 +40,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
         return [...current, message];
       });
 
-      bottomRef?.current?.scrollIntoView();
+      scrollTo(bottomRef);
     };
 
     const updateMessageHandler = (newMessage: FullMessageType) => {
@@ -53,7 +54,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
         })
       );
 
-      bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
+      scrollTo(bottomRef);
     };
 
     const deleteMessageHandler = (deletedMessage: FullMessageType) => {
@@ -75,12 +76,18 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
   }, [conversationId]);
 
   return (
-    <div className="flex-1 overflow-y-auto bg-skin-main">
-      {messages.map((message) => (
-        <MessageBox key={message.id} data={message} currentDate={currentDate} />
-      ))}
-      <div ref={bottomRef} className="pt-4" />
-    </div>
+    <AnimatePresence>
+      <div className="flex-1 overflow-y-auto bg-skin-main">
+        {messages.map((message) => (
+          <MessageBox
+            key={message.id}
+            data={message}
+            currentDate={currentDate}
+          />
+        ))}
+        <div ref={bottomRef} className="pt-4" />
+      </div>
+    </AnimatePresence>
   );
 };
 

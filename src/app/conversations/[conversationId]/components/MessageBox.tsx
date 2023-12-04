@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useState, useRef, MouseEvent, TouchEvent } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
@@ -12,6 +13,7 @@ import Avatar from "@/app/components/Avatar";
 import ImageModal from "./ImageModal";
 import MessageMenu from "./MessageMenu/MessageMenu";
 import useTheme from "@/app/hooks/useTheme";
+import { fadeVariant } from "@/helpers/framer_variants";
 
 interface MessageBoxProps {
   data: FullMessageType;
@@ -60,12 +62,22 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
 
   return (
     <>
-      <div className={container} ref={messageRef}>
+      <motion.div
+        className={container}
+        ref={messageRef}
+        key={data.id}
+        variants={fadeVariant}
+        initial={"initial"}
+        animate={"open"}
+        exit={"exit"}
+      >
         <div className={avatar}>
           <Avatar user={data.sender} />
         </div>
         <div className={body}>
-          <div className="text-sm text-skin-additional">{data?.sender?.name}</div>
+          <div className="text-sm text-skin-additional">
+            {data?.sender?.name}
+          </div>
           <div className={message}>
             <ImageModal
               src={data.image}
@@ -114,7 +126,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
       {messageMenuOpen && (
         <div
           className="absolute top-0 left-0 z-40 w-full h-full bg-transparent"
