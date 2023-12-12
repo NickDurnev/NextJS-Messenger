@@ -1,28 +1,33 @@
-import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const APP_BASE_URL = process.env.BASE_APP_URL;
-const TEMPLATE_ID = process.env.TEMPLATE_ID;
+const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD;
 
-const sendVerifyEmail = async (email: string, verToken: string) => {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY ?? "");
-  const msg = {
-    to: `${email}`, // Change to your recipient
-    from: `${EMAIL_SENDER}`, // Change to your verified sender
-    templateId: `${TEMPLATE_ID}`, //TEMPLATE_ID,
-    dynamic_template_data: {
-      subject: "Connectify email verification",
-      preheader: "Verify your Connectify account",
-      link: `${APP_BASE_URL}auth/${verToken}`,
+export async function sendVerifyEmail(email: string, verToken: string) {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: EMAIL_SENDER,
+      pass: EMAIL_APP_PASSWORD,
     },
-  };
-  try {
-    console.log("MESSAGE", msg);
-    await sgMail.send(msg);
-    console.log("Email sent");
-  } catch (error) {
-    console.error(error);
-  }
-};
+  });
 
-export default sendVerifyEmail;
+  var mailOptions = {
+    from: EMAIL_SENDER,
+    to: email,
+    subject: "Connectify email verification",
+    text: `${APP_BASE_URL}auth/${verToken}`,
+  };
+
+  await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(mailOptions, (err, response) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}

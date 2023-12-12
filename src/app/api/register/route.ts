@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { customAlphabet } from "nanoid";
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
-import sendVerifyEmail from "@/app/actions/sendEmail";
+import { sendVerifyEmail } from "@/app/actions/sendEmail";
 
 export async function POST(request: Request) {
   try {
