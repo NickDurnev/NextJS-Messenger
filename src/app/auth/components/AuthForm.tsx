@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { BsGithub, BsGoogle, BsFillArrowLeftCircleFill } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -20,7 +20,6 @@ type Variant = "LOGIN" | "REGISTER";
 const AuthForm = () => {
     const session = useSession();
     const router = useRouter();
-    const params = useParams();
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
 
