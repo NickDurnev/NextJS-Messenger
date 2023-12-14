@@ -41,6 +41,7 @@ const AuthForm = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm<FieldValues>({
         defaultValues: {
             name: "",
@@ -48,7 +49,9 @@ const AuthForm = () => {
             password: "",
         },
         mode: "onChange",
-        resolver: yupResolver<FieldValues>(variant === "LOGIN" ? LoginformSchema : RegisterformSchema),
+        resolver: yupResolver<FieldValues>(
+            variant === "LOGIN" ? LoginformSchema : RegisterformSchema
+        ),
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -57,28 +60,35 @@ const AuthForm = () => {
         if (variant === "REGISTER") {
             axios
                 .post("/api/register", data)
-                .then(() => signIn("credentials", data))
+                .then(() => {
+                    reset();
+                    toast.success("Check your email for verification!");
+                })
                 .catch((error) => {
-                    console.log(error);
-                    toast.error("Something went wrong!");
+                    //TODO Create hook for handling errors message
+                    if (error.response?.status === 500) {
+                        toast.error("Something went wrong!");
+                        return;
+                    }
+                    toast.error(error.response.data);
                 })
                 .finally(() => setIsLoading(false));
         }
 
         if (variant === "LOGIN") {
-            signIn("credentials", {
-                ...data,
-                redirect: false,
-            })
-                .then((callback) => {
-                    if (callback?.error) {
-                        toast.error("Invalid credentials");
+            axios
+                .post("/api/login", data)
+                .then(() => {
+                    toast.success("Successfully logged in");
+                    router.push("/users");
+                })
+                .catch((error) => {
+                    //TODO Create hook for handling errors message
+                    if (error.response?.status === 500) {
+                        toast.error("Something went wrong!");
+                        return;
                     }
-
-                    if (callback?.ok && !callback?.error) {
-                        toast.success("Successfully logged in");
-                        router.push("/users");
-                    }
+                    toast.error(error.response.data);
                 })
                 .finally(() => setIsLoading(false));
         }
