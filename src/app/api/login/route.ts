@@ -1,4 +1,5 @@
 import prisma from "@/app/libs/prismadb";
+import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { signIn } from "next-auth/react";
 
@@ -21,6 +22,16 @@ export async function POST(request: Request) {
       return new NextResponse("User not found", { status: 404 });
     }
 
+    const isMatchPassword = await bcrypt.compare(
+      password,
+      user.hashedPassword!
+    );
+
+    if (!isMatchPassword) {
+      return new NextResponse("Password is incorrect", {
+        status: 400,
+      });
+    }
     if (!user.emailVerified) {
       return new NextResponse("Email not verified", { status: 401 });
     }

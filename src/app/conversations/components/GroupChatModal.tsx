@@ -3,12 +3,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 import Modal from "@/app/components/Modal";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import Button from "@/app/components/Button";
+import useToast from "@/app/hooks/useToast";
 
 interface GroupChatModelProps {
     users: User[];
@@ -23,6 +23,8 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    useToast(error);
 
     const {
         register,
@@ -48,13 +50,7 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
                 router.refresh();
                 onClose();
             })
-            .catch((error) => {
-                if (error.response?.status === 400) {
-                    toast.error("Add more than 1 member");
-                    return;
-                }
-                toast.error("Something went wrong!");
-            })
+            .catch((error) => setError(error))
             .finally(() => setIsLoading(false));
     };
     return (

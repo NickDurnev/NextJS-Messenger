@@ -14,6 +14,9 @@ import { LoginformSchema, RegisterformSchema } from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
+import useToast from "@/app/hooks/useToast";
+import Loader from "@/app/components/Loader";
+import scrollTo from "@/helpers/scrollTo";
 
 type Variant = "LOGIN" | "REGISTER";
 
@@ -22,6 +25,8 @@ const AuthForm = () => {
     const router = useRouter();
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    useToast(error);
 
     useEffect(() => {
         if (session?.status === "authenticated") {
@@ -55,6 +60,7 @@ const AuthForm = () => {
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        scrollTo();
         setIsLoading(true);
 
         if (variant === "REGISTER") {
@@ -63,14 +69,10 @@ const AuthForm = () => {
                 .then(() => {
                     reset();
                     toast.success("Check your email for verification!");
+                    setVariant("LOGIN");
                 })
                 .catch((error) => {
-                    //TODO Create hook for handling errors message
-                    if (error.response?.status === 500) {
-                        toast.error("Something went wrong!");
-                        return;
-                    }
-                    toast.error(error.response.data);
+                    setError(error);
                 })
                 .finally(() => setIsLoading(false));
         }
@@ -83,12 +85,7 @@ const AuthForm = () => {
                     router.push("/users");
                 })
                 .catch((error) => {
-                    //TODO Create hook for handling errors message
-                    if (error.response?.status === 500) {
-                        toast.error("Something went wrong!");
-                        return;
-                    }
-                    toast.error(error.response.data);
+                    setError(error);
                 })
                 .finally(() => setIsLoading(false));
         }
@@ -107,11 +104,14 @@ const AuthForm = () => {
                     toast.success("Successfully logged in");
                 }
             })
-            .finally(() => setIsLoading(false));
+            .finally(() => {
+                setIsLoading(false)
+            });
     };
 
     return (
         <>
+            {isLoading && <Loader />}
             <Link href="/">
                 <span className="absolute top-12 left-5">
                     <BsFillArrowLeftCircleFill className="w-12 h-12 fill-sky-500 hover:fill-sky-600" />

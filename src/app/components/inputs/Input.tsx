@@ -71,6 +71,7 @@ const Input: FC<InputProps> = ({
                     />{" "}
                     {(id === "password" || id === "cpassword") && (
                         <button
+                            type="button"
                             onClick={() => setIsShown(!isShown)}
                             className="absolute right-3 top-[73%] -translate-y-1/2"
                         >

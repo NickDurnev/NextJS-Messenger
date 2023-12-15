@@ -9,6 +9,7 @@ const ToasterContext = () => {
     const baseStyles = {
         background: theme === "dark" ? "#4240402a" : "#ffffff",
         color: theme === "dark" ? "#c0b9b9" : "#262323",
+        zIndex: 50,
     };
 
     return (
