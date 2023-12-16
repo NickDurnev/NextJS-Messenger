@@ -64,7 +64,7 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-4">
-                    <div className="border-b border-skin-main pb-12 space-y-4">
+                    <div className="pb-12 space-y-4">
                         <h2 className="text-base font-semibold leading-7 text-skin-base">
                             Settings
                         </h2>
@@ -86,7 +86,9 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({
                         </div>
                         <ul>
                             <li>
-                                <TextButton onClick={openProfileSettings} isMobileOnly>Profile</TextButton>
+                                <TextButton onClick={openProfileSettings} isMobileOnly>
+                                    Profile
+                                </TextButton>
                             </li>
                             <li>
                                 <TextButton onClick={() => signOut()}>Logout</TextButton>

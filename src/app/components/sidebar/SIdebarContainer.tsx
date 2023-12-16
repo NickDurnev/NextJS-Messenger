@@ -21,8 +21,8 @@ const SidebarContainer = ({ currentUser }: SidebarContainerProps) => {
     }
 
     const closeProfileSettings = () => {
-        setIsProfileSettingsOpen(false);
         setIsAppModalOpen(true);
+        setIsProfileSettingsOpen(false);
     }
 
     return (

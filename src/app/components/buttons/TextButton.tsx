@@ -10,9 +10,9 @@ interface TextButtonProps {
 const TextButton: FC<TextButtonProps> = ({ children, onClick, isMobileOnly }) => {
     return (
         <button
-            type="button"
+            type='button'
             onClick={onClick}
-            className={clsx("w-full text-left text-skin-base hover:text-skin-additional hover:border-skin-additional transition font-medium m-0 p-2 border-b border-skin-main cursor-pointer ", isMobileOnly && "lg:hidden")}
+            className={clsx("w-full text-left text-skin-base hover:text-skin-additional hover:border-skin-additional transition font-medium m-0 p-4 border-b border-skin-main cursor-pointer ", isMobileOnly && "lg:hidden")}
         >
             {children}
         </button>

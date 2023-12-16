@@ -33,7 +33,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
     .map((user) => user.name)
     .join(",");
 
-  const container = clsx("flex gap-3 p-4", isOwn && "justify-end");
+  const container = clsx("relative flex gap-3 p-4", isOwn && "justify-end");
 
   const body = clsx("flex flex-col gap-2", isOwn && "items-end");
 
@@ -42,7 +42,10 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
     isOwn
       ? "bg-skin-additional text-skin-base"
       : "bg-skin-bg-accent text-skin-base",
-    data.image ? "rounded-md p-0 bg-transparent" : "rounded-2xl py-2 px-3"
+    data.image
+      ? "rounded-md p-0 bg-transparent"
+      : "rounded-tl-2xl rounded-tr-2xl py-2 px-3",
+    isOwn ? "rounded-bl-2xl" : "rounded-br-2xl"
   );
 
   const showMessageMenu = (e: MouseEvent | TouchEvent) => {
@@ -90,9 +93,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
                 className="object-hover cursor-pointer hover:scale-110 transition translate"
               />
             ) : (
-              <div
-                className="relative"
-              >
+              <div className="relative">
                 <div>{data.body}</div>
                 <div className="flex justify-end items-end mt-1 gap-2">
                   <div className="italic ml-auto text-xs text-skin-additional first-letter:capitalize">

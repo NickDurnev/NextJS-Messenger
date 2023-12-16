@@ -25,7 +25,7 @@ const MessageInput: FC<MessageInputProps> = ({
             handleSubmit();
             return;
         }
-        if (e.key === "Enter" && e.shiftKey) {
+        if (e.key === "Enter" && e.shiftKey && rows < 10) {
             setRows(rows + 1);
         }
         if (e.key === "Backspace" && rows > 1) {
