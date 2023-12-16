@@ -25,7 +25,7 @@ export const RegisterformSchema = Yup.object().shape({
       /^.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*$/,
       "Need one special character"
     ),
-  cpassword: Yup.string()
+  confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .min(4, "Password length should be at least 4 characters")
     .max(16, "Password cannot exceed more than 16 characters")

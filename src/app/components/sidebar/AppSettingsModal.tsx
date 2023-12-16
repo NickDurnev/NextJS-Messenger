@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
+import { signOut } from "next-auth/react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -9,15 +10,21 @@ import Button from "../Button";
 import Select from "@/app/components/inputs/Select";
 import useTheme from "@/app/hooks/useTheme";
 import useLocalStorage from "@/app/hooks/useLocalStorage";
+import TextButton from "../buttons/TextButton";
 
 interface AppSettingsModalProps {
     isOpen?: boolean;
     onClose: () => void;
+    openProfileSettings: () => void;
 }
 
 const themeKeys = ["light", "dark"];
 
-const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
+const AppSettingsModal: FC<AppSettingsModalProps> = ({
+    isOpen,
+    onClose,
+    openProfileSettings,
+}) => {
     const { set } = useTheme();
     const [savedTheme, setSavedTheme] = useLocalStorage("theme");
     const [isLoading, setIsLoading] = useState(false);
@@ -50,14 +57,14 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
 
     const handleCancel = () => {
         onClose();
-        reset({ theme: { label: savedTheme, value: savedTheme } }); // Step 2
+        reset({ theme: { label: savedTheme, value: savedTheme } });
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="space-y-12">
-                    <div className="border-b border-skin-main pb-12">
+                <div className="space-y-4">
+                    <div className="border-b border-skin-main pb-12 space-y-4">
                         <h2 className="text-base font-semibold leading-7 text-skin-base">
                             Settings
                         </h2>
@@ -77,6 +84,14 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
                                 value={theme}
                             />
                         </div>
+                        <ul>
+                            <li>
+                                <TextButton onClick={openProfileSettings} isMobileOnly>Profile</TextButton>
+                            </li>
+                            <li>
+                                <TextButton onClick={() => signOut()}>Logout</TextButton>
+                            </li>
+                        </ul>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                         <Button

@@ -9,7 +9,6 @@ import { formatRelative } from "date-fns";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import { FullMessageType } from "@/app/types";
-import Avatar from "@/app/components/Avatar";
 import ImageModal from "./ImageModal";
 import MessageMenu from "./MessageMenu/MessageMenu";
 import useTheme from "@/app/hooks/useTheme";
@@ -36,8 +35,6 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
 
   const container = clsx("flex gap-3 p-4", isOwn && "justify-end");
 
-  const avatar = clsx(isOwn && "order-2");
-
   const body = clsx("flex flex-col gap-2", isOwn && "items-end");
 
   const message = clsx(
@@ -63,6 +60,8 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
   return (
     <>
       <motion.div
+        onContextMenu={showMessageMenu}
+        onTouchStart={showMessageMenu}
         className={container}
         ref={messageRef}
         key={data.id}
@@ -71,9 +70,6 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
         animate={"open"}
         exit={"exit"}
       >
-        <div className={avatar}>
-          <Avatar user={data.sender} />
-        </div>
         <div className={body}>
           <div className="text-sm text-skin-additional">
             {data?.sender?.name}
@@ -96,8 +92,6 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
             ) : (
               <div
                 className="relative"
-                onContextMenu={showMessageMenu}
-                onTouchStart={showMessageMenu}
               >
                 <div>{data.body}</div>
                 <div className="flex justify-end items-end mt-1 gap-2">

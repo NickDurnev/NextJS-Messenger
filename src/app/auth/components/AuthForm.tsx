@@ -163,7 +163,7 @@ const AuthForm = () => {
                                 register={register}
                                 errors={errors}
                                 required
-                                id="cpassword"
+                                id="confirmPassword"
                                 label="Confirm password"
                                 type="password"
                             />

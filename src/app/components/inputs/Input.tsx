@@ -69,7 +69,7 @@ const Input: FC<InputProps> = ({
                             disabled && "opacity-50 cursor-default"
                         )}
                     />{" "}
-                    {(id === "password" || id === "cpassword") && (
+                    {(id === "password" || id === "confirmPassword") && (
                         <button
                             type="button"
                             onClick={() => setIsShown(!isShown)}

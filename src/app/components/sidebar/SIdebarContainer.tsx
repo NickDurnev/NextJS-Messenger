@@ -5,28 +5,44 @@ import { User } from "@prisma/client";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileFooter from "./MobileFooter";
 import AppSettingsModal from "./AppSettingsModal";
+import ProfileSettingsModal from "./ProfileSettingsModal";
 
 interface SidebarContainerProps {
     currentUser: User;
 }
 
 const SidebarContainer = ({ currentUser }: SidebarContainerProps) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAppModalOpen, setIsAppModalOpen] = useState(false);
+    const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
 
-    console.log(isModalOpen);
+    const openProfileSettings = () => {
+        setIsAppModalOpen(false);
+        setIsProfileSettingsOpen(true);
+    }
+
+    const closeProfileSettings = () => {
+        setIsProfileSettingsOpen(false);
+        setIsAppModalOpen(true);
+    }
 
     return (
         <>
             <AppSettingsModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isAppModalOpen}
+                onClose={() => setIsAppModalOpen(false)}
+                openProfileSettings={openProfileSettings}
+            />
+            <ProfileSettingsModal
+                currentUser={currentUser}
+                isOpen={isProfileSettingsOpen}
+                onClose={closeProfileSettings}
             />
             <div>
                 <DesktopSidebar
-                    currentUser={currentUser!}
-                    setIsModalOpen={setIsModalOpen}
+                    currentUser={currentUser}
+                    setIsModalOpen={setIsAppModalOpen}
                 />
-                <MobileFooter setIsModalOpen={setIsModalOpen} />
+                <MobileFooter setIsModalOpen={setIsAppModalOpen} />
             </div>
         </>
     );

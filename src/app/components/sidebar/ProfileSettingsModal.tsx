@@ -64,14 +64,16 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="space-y-12">
-                    <div className="border-b border-skin-main pb-12">
-                        <h2 className="text-base font-semibold leading-7 text-skin-base">
-                            Profile
-                        </h2>
-                        <p className="mt-1 text-sm leading-6 text-skin-additional">
-                            Edit your information.
-                        </p>
+                <div className="space-y-5">
+                    <div className="border-b border-skin-main pb-8 space-y-5">
+                        <div>
+                            <h2 className="text-base font-semibold leading-7 text-skin-base">
+                                Profile
+                            </h2>
+                            <p className="mt-1 text-sm leading-6 text-skin-additional">
+                                Edit your information.
+                            </p>
+                        </div>
                         <div className="mt-10 flex flex-col gap-y-8">
                             <Input
                                 disabled={isLoading}
@@ -82,33 +84,35 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
                                 register={register}
                             />
                         </div>
-                        <label className="block text-sm font-medium leading-6 text-skin-base">
-                            Photo
-                        </label>
-                        <div className="mt-2 flex items-center gap-x-3">
-                            {image && (
-                                <Image
-                                    width="48"
-                                    height="48"
-                                    className="rounded-full"
-                                    src={image || currentUser?.image}
-                                    alt="Avatar"
-                                />
-                            )}
-                            {!image && currentUser?.name && (
-                                <div className="h-12 w-12 rounded-full flex items-center justify-center bg-purple-500 text-gray-50 text-2xl border-0">
-                                    {stringAvatar(currentUser.name)}
-                                </div>
-                            )}
-                            <CldUploadButton
-                                options={{ maxFiles: 1 }}
-                                onUpload={handleUpload}
-                                uploadPreset="kqj1yrdh"
-                            >
-                                <Button disabled={isLoading} secondary type="button">
-                                    Change
-                                </Button>
-                            </CldUploadButton>
+                        <div>
+                            <label className="block text-sm font-medium leading-6 text-skin-base">
+                                Photo
+                            </label>
+                            <div className="mt-2 flex items-center gap-x-3">
+                                {image && (
+                                    <Image
+                                        width="48"
+                                        height="48"
+                                        className="rounded-full"
+                                        src={image || currentUser?.image}
+                                        alt="Avatar"
+                                    />
+                                )}
+                                {!image && currentUser?.name && (
+                                    <div className="h-12 w-12 rounded-full flex items-center justify-center bg-purple-500 text-gray-50 text-2xl border-0">
+                                        {stringAvatar(currentUser.name)}
+                                    </div>
+                                )}
+                                <CldUploadButton
+                                    options={{ maxFiles: 1 }}
+                                    onUpload={handleUpload}
+                                    uploadPreset="kqj1yrdh"
+                                >
+                                    <Button disabled={isLoading} secondary type="button">
+                                        Change
+                                    </Button>
+                                </CldUploadButton>
+                            </div>
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">

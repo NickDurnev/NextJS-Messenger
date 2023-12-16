@@ -38,7 +38,7 @@ const config: Config = {
       borderColor: {
         skin: {
           main: "var(--color-border-main)",
-          additional: "var(--color-border-main)",
+          additional: "var(--color-text-additional)",
           danger: "var(--color-danger)",
           // hover: "var(--color-bg-hover)",
           // active: "var(--color-bg-active)",
