@@ -76,7 +76,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
 
     //Find last message
     const lastMessage =
-      updatedMessages[updatedMessages.length - 1] ??
+      updatedMessages[updatedMessages.length - 1] ||
       conversation.messages[conversation.messages.length - 1];
 
     await pusherServer.trigger(currentUser.email, "conversation:update", {
