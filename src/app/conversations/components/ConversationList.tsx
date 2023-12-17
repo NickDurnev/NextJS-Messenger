@@ -107,7 +107,7 @@ const ConversationList: FC<ConversationListProps> = ({
             />
             <aside
                 className={clsx(
-                    `fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto bg-skin-main border-skin-main`,
+                    `fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto bg-skin-main border-r border-skin-main`,
                     isOpen ? "hidden" : "block w-full left-0"
                 )}
             >

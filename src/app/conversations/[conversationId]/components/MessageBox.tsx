@@ -33,7 +33,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate }) => {
     .map((user) => user.name)
     .join(",");
 
-  const container = clsx("relative flex gap-3 p-4", isOwn && "justify-end");
+  const container = clsx("relative flex gap-3 py-4 px-6", isOwn && "justify-end");
 
   const body = clsx("flex flex-col gap-2", isOwn && "items-end");
 

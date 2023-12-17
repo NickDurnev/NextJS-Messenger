@@ -12,6 +12,7 @@ import useOtherUser from "@/app/hooks/useOtherUser";
 import Avatar from "@/app/components/Avatar";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import ConversetionSkeleton from "./ConversationSkeleton";
+import useConversationInfo from "@/app/hooks/useConversationInfo";
 
 interface ConversationBoxProps {
     data: FullConversationType;
@@ -20,49 +21,12 @@ interface ConversationBoxProps {
 
 const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
     const otherUser = useOtherUser(data);
-    const session = useSession();
     const router = useRouter();
+    const { newMessages, lastMessage, isOwn, lastMessageText } = useConversationInfo(data);
 
     const handleClick = useCallback(() => {
         router.push(`/conversations/${data.id}`);
     }, [data.id, router]);
-
-    const lastMessage = useMemo(() => {
-        const messages = data.messages || [];
-
-        return messages[messages.length - 1];
-    }, [data.messages]);
-
-    const userEmail = useMemo(() => {
-        return session.data?.user?.email;
-    }, [session.data?.user?.email]);
-
-    const isOwn = useMemo(() => {
-        if (!lastMessage || !userEmail) {
-            return false;
-        }
-
-        const seenArray = lastMessage.seen || [];
-        const userID = seenArray.find(({ email }) => email === userEmail)?.id;
-
-        if (!userID) {
-            return false;
-        }
-
-        return userID === lastMessage.senderId
-    }, [userEmail, lastMessage]);
-
-    const lastMessageText = useMemo(() => {
-        if (lastMessage?.image) {
-            return "Sent an image";
-        }
-
-        if (lastMessage?.body) {
-            return lastMessage.body;
-        }
-
-        return "Started a conversation";
-    }, [lastMessage]);
 
     if (!data.isGroup && !otherUser) {
         return <ConversetionSkeleton />;
@@ -100,10 +64,17 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                             {lastMessageText}
                         </p>
                         {isOwn && lastMessage.seenIds.length > 1 && (
-                            <div className="text-skin-mutated"><IoCheckmarkDone /></div>
+                            <div className="text-skin-mutated">
+                                <IoCheckmarkDone />
+                            </div>
                         )}
                         {isOwn && lastMessage.seenIds.length === 1 && (
-                            <div className="text-skin-additional pb-0.5"><IoCheckmark /></div>
+                            <div className="text-skin-additional pb-0.5">
+                                <IoCheckmark />
+                            </div>
+                        )}
+                        {newMessages.length > 0 && (
+                            <div className="flex justify-center items-center w-6 h-6 p-2 rounded-full text-skin-base bg-skin-bg-accent">{newMessages.length}</div>
                         )}
                     </div>
                 </div>
