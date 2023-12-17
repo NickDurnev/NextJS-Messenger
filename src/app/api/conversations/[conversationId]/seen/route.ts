@@ -75,22 +75,22 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     );
 
     //Find last message
-    const lastMessage =
-      updatedMessages[updatedMessages.length - 1] ||
-      conversation.messages[conversation.messages.length - 1];
+    // const lastMessage =
+    //   updatedMessages[updatedMessages.length - 1] ||
+    //   conversation.messages[conversation.messages.length - 1];
 
-    if (!lastMessage) {
-      return NextResponse.json(conversation);
-    }
+    // if (!lastMessage) {
+    //   return NextResponse.json(conversation);
+    // }
 
-    await pusherServer.trigger(currentUser.email, "conversation:update", {
-      id: conversationId,
-      messages: [lastMessage],
-    });
+    // await pusherServer.trigger(currentUser.email, "conversation:update", {
+    //   id: conversationId,
+    //   messages: [lastMessage],
+    // });
 
-    if (lastMessage?.seenIds.indexOf(currentUser.id) !== -1) {
-      return NextResponse.json(conversation);
-    }
+    // if (lastMessage?.seenIds.indexOf(currentUser.id) !== -1) {
+    //   return NextResponse.json(conversation);
+    // }
 
     return NextResponse.json(updatedMessages);
   } catch (error: any) {

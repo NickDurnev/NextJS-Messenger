@@ -86,29 +86,29 @@ const ConversationList: FC<ConversationListProps> = ({
         };
 
         //TODO Remove if works fine without it in production mode
-        // const updateMessageHandler = (newMessage: FullMessageType) => {
-        //     console.log('NEW MESSAGE', newMessage);
-        //     setItems((current) =>
-        //         current.map((currentConversation) => {
-        //             if (currentConversation.id === newMessage.conversationId) {
-        //                 const messages = currentConversation.messages;
-        //                 messages.pop();
-        //                 return {
-        //                     ...currentConversation,
-        //                     messages: [...messages, newMessage],
-        //                 };
-        //             }
+        const updateMessageHandler = (newMessage: FullMessageType) => {
+            console.log('NEW MESSAGE', newMessage);
+            setItems((current) =>
+                current.map((currentConversation) => {
+                    if (currentConversation.id === newMessage.conversationId) {
+                        const messages = currentConversation.messages;
+                        messages.pop();
+                        return {
+                            ...currentConversation,
+                            messages: [...messages, newMessage],
+                        };
+                    }
 
-        //             return currentConversation;
-        //         })
-        //     );
-        // };
+                    return currentConversation;
+                })
+            );
+        };
 
         pusherClient?.bind("conversation:new", newHandler);
         pusherClient?.bind("conversation:update", updateHandler);
         pusherClient?.bind("conversation:deleteMessage", updateHandler);
         pusherClient?.bind("conversation:remove", removeHandler);
-        // pusherClient?.bind("message:update", updateMessageHandler);
+        pusherClient?.bind("message:update", updateMessageHandler);
 
         return () => {
             pusherClient?.unsubscribe(pusherKey);
@@ -116,7 +116,7 @@ const ConversationList: FC<ConversationListProps> = ({
             pusherClient?.unbind("conversation:update", updateHandler);
             pusherClient?.unbind("conversation:deleteMessage", updateHandler);
             pusherClient?.unbind("conversation:remove", removeHandler);
-            // pusherClient?.unbind("message:update", updateMessageHandler);
+            pusherClient?.unbind("message:update", updateMessageHandler);
         };
     }, [pusherKey, conversationId, router, pusherClient]);
 
