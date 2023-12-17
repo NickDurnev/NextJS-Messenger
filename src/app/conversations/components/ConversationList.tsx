@@ -7,7 +7,7 @@ import { MdOutlineGroupAdd } from "react-icons/md";
 import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
-import { FullConversationType } from "@/app/types";
+import { FullConversationType, FullMessageType } from "@/app/types";
 import useConversation from "@/app/hooks/useConversation";
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
@@ -56,6 +56,7 @@ const ConversationList: FC<ConversationListProps> = ({
         };
 
         const updateHandler = (conversation: FullConversationType) => {
+            console.log("CONVERSATION", conversation);
             setItems((current) =>
                 current.map((currentConversation) => {
                     if (currentConversation.id === conversation.id) {
@@ -84,10 +85,30 @@ const ConversationList: FC<ConversationListProps> = ({
             }
         };
 
+        //TODO Remove if works fine without it in production mode
+        // const updateMessageHandler = (newMessage: FullMessageType) => {
+        //     console.log('NEW MESSAGE', newMessage);
+        //     setItems((current) =>
+        //         current.map((currentConversation) => {
+        //             if (currentConversation.id === newMessage.conversationId) {
+        //                 const messages = currentConversation.messages;
+        //                 messages.pop();
+        //                 return {
+        //                     ...currentConversation,
+        //                     messages: [...messages, newMessage],
+        //                 };
+        //             }
+
+        //             return currentConversation;
+        //         })
+        //     );
+        // };
+
         pusherClient?.bind("conversation:new", newHandler);
         pusherClient?.bind("conversation:update", updateHandler);
         pusherClient?.bind("conversation:deleteMessage", updateHandler);
         pusherClient?.bind("conversation:remove", removeHandler);
+        // pusherClient?.bind("message:update", updateMessageHandler);
 
         return () => {
             pusherClient?.unsubscribe(pusherKey);
@@ -95,8 +116,9 @@ const ConversationList: FC<ConversationListProps> = ({
             pusherClient?.unbind("conversation:update", updateHandler);
             pusherClient?.unbind("conversation:deleteMessage", updateHandler);
             pusherClient?.unbind("conversation:remove", removeHandler);
+            // pusherClient?.unbind("message:update", updateMessageHandler);
         };
-    }, [pusherKey, conversationId, router]);
+    }, [pusherKey, conversationId, router, pusherClient]);
 
     return (
         <>

@@ -36,15 +36,7 @@ export async function POST(request: Request) {
       return new NextResponse("Email not verified", { status: 401 });
     }
 
-    const login = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (login?.ok && !login?.error) {
-      return NextResponse.json(user);
-    }
+    return NextResponse.json(user);
   } catch (error) {
     console.log(error, "REGISTRATION_ERROR");
     return new NextResponse("Internal Error", { status: 500 });

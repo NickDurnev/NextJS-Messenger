@@ -59,13 +59,13 @@ const AuthForm = () => {
         ),
     });
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    const onSubmit: SubmitHandler<FieldValues> = (inputData) => {
         scrollTo();
         setIsLoading(true);
 
         if (variant === "REGISTER") {
             axios
-                .post("/api/register", data)
+                .post("/api/register", inputData)
                 .then(() => {
                     reset();
                     toast.success("Check your email for verification!");
@@ -79,10 +79,20 @@ const AuthForm = () => {
 
         if (variant === "LOGIN") {
             axios
-                .post("/api/login", data)
+                .post("/api/login", inputData)
                 .then(() => {
-                    toast.success("Successfully logged in");
-                    router.push("/users");
+                    const { email, password } = inputData;
+                    return signIn("credentials", {
+                        email,
+                        password,
+                        redirect: false,
+                    });
+                })
+                .then((callback) => {
+                    if (callback?.ok && !callback?.error) {
+                        toast.success("Successfully logged in");
+                        router.push("/users");
+                    }
                 })
                 .catch((error) => {
                     setError(error);
@@ -105,7 +115,7 @@ const AuthForm = () => {
                 }
             })
             .finally(() => {
-                setIsLoading(false)
+                setIsLoading(false);
             });
     };
 

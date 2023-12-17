@@ -1,9 +1,8 @@
 "use client";
 
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { formatRelative } from "date-fns";
-import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
@@ -22,7 +21,7 @@ interface ConversationBoxProps {
 const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
     const otherUser = useOtherUser(data);
     const router = useRouter();
-    const { newMessages, lastMessage, isOwn, lastMessageText } = useConversationInfo(data);
+    const { newMessagesCount, lastMessage, isOwn, lastMessageText } = useConversationInfo(data);
 
     const handleClick = useCallback(() => {
         router.push(`/conversations/${data.id}`);
@@ -73,8 +72,8 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                                 <IoCheckmark />
                             </div>
                         )}
-                        {newMessages.length > 0 && (
-                            <div className="flex justify-center items-center w-6 h-6 p-2 rounded-full text-skin-base bg-skin-bg-accent">{newMessages.length}</div>
+                        {!isOwn && newMessagesCount > 0 && (
+                            <div className="flex justify-center items-center w-6 h-6 p-2 rounded-full text-skin-base bg-skin-bg-accent">{newMessagesCount}</div>
                         )}
                     </div>
                 </div>
