@@ -1,6 +1,9 @@
+import currentUser from "@/middlewares/currentUser";
+import { stackMiddlewares } from "@/middlewares/stackHandler";
+
 import { withAuth } from "next-auth/middleware";
 
-export default withAuth({
+withAuth({
   pages: {
     signIn: "/auth",
   },
@@ -9,3 +12,6 @@ export default withAuth({
 export const config = {
   matcher: ["/conversations/:path*", "/users/:path*"],
 };
+
+const middlewares = [currentUser];
+export default stackMiddlewares(middlewares);

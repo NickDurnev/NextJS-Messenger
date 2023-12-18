@@ -56,7 +56,6 @@ const ConversationList: FC<ConversationListProps> = ({
         };
 
         const updateHandler = (conversation: FullConversationType) => {
-            console.log("CONVERSATION", conversation);
             setItems((current) =>
                 current.map((currentConversation) => {
                     if (currentConversation.id === conversation.id) {
@@ -85,9 +84,7 @@ const ConversationList: FC<ConversationListProps> = ({
             }
         };
 
-        //TODO Remove if works fine without it in production mode
         const updateMessageHandler = (newMessage: FullMessageType) => {
-            console.log('NEW MESSAGE', newMessage);
             setItems((current) =>
                 current.map((currentConversation) => {
                     if (currentConversation.id === newMessage.conversationId) {
