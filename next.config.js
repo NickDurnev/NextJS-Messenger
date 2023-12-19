@@ -4,6 +4,7 @@ const nextConfig = {
     appDir: true,
     swcPlugins: [["next-superjson-plugin", {}]],
   },
+  serverComponentsExternalPackages: ["bcrypt"],
   images: {
     domains: [
       "avatars.githubusercontent.com",
