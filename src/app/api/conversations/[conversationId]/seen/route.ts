@@ -2,6 +2,7 @@ import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import { pusherServer } from "@/app/libs/pusher";
+import { errors } from "@/helpers/responseVariants";
 
 interface IParams {
   conversationId?: string;
@@ -13,7 +14,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     const { conversationId } = params;
 
     if (!currentUser?.id || !currentUser?.email) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse(
+        errors.UNAUTHORIZED.message,
+        errors.UNAUTHORIZED.status
+      );
     }
 
     //Find conversation

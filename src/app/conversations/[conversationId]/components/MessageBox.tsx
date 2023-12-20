@@ -12,7 +12,7 @@ import { FullMessageType } from "@/app/types";
 import ImageModal from "./ImageModal";
 import MessageMenu from "./MessageMenu/MessageMenu";
 import useTheme from "@/app/hooks/useTheme";
-import { fadeVariant } from "@/helpers/framer_variants";
+import { fadeVariant } from "@/helpers/framerVariants";
 
 interface MessageBoxProps {
   data: FullMessageType;

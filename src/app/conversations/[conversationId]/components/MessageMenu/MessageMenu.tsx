@@ -9,7 +9,7 @@ import { CiEdit } from "react-icons/ci";
 
 import MessageMenuItem from "./MessageMenuItem";
 import { FullMessageType } from "@/app/types";
-import { fadeVariant } from "@/helpers/framer_variants";
+import { fadeVariant } from "@/helpers/framerVariants";
 
 interface MessageMenuProps {
   data: FullMessageType;
