@@ -1,6 +1,6 @@
 "use client";
 
-import stringAvatar from "@/services/avatarFormatter";
+import stringAvatar from "@/helpers/avatarFormatter";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC } from "react";

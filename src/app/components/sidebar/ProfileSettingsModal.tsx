@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
 
+import stringAvatar from "@/helpers/avatarFormatter";
 import Modal from "../Modal";
 import Input from "../inputs/Input";
 import Button from "../Button";
-import stringAvatar from "@/services/avatarFormatter";
 
 interface ProfileSettingsModalProps {
     isOpen?: boolean;

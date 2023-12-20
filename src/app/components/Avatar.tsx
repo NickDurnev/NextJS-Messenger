@@ -1,4 +1,4 @@
-import stringAvatar from "@/services/avatarFormatter";
+import stringAvatar from "@/helpers/avatarFormatter";
 import Image from "next/image";
 import { User } from "@prisma/client";
 import useActiveList from "../hooks/useActiveList";
