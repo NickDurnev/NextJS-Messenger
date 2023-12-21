@@ -10,6 +10,7 @@ import useConversation from "@/app/hooks/useConversation";
 import MessageBox from "./MessageBox";
 import usePusherClient from "@/app/hooks/usePusherClient";
 import scrollTo from "@/helpers/scrollTo";
+import { useSession } from "next-auth/react";
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -19,18 +20,22 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
+  const session = useSession();
   const { pusherClient } = usePusherClient();
   const currentDate = new Date();
 
-  useEffect(() => {
-    axios.post(`/api/conversations/${conversationId}/seen`);
-  }, [conversationId]);
+  // useEffect(() => {
+  //   axios.post(`/api/conversations/${conversationId}/seen`);
+  // }, [conversationId]);
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
-      axios.post(`/api/conversations/${conversationId}/seen`);
+      const currentUserEmail = session.data?.user?.email;
+      if (currentUserEmail !== message.sender.email) {
+        axios.post(`/api/conversations/${conversationId}/seen`);
+      }
 
       setMessages((current) => {
         if (find(current, { id: message.id })) {

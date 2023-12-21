@@ -21,7 +21,8 @@ interface ConversationBoxProps {
 const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
     const otherUser = useOtherUser(data);
     const router = useRouter();
-    const { newMessagesCount, lastMessage, isOwn, lastMessageText } = useConversationInfo(data);
+    const { newMessagesCount, lastMessage, isOwn, lastMessageText } =
+        useConversationInfo(data);
 
     const handleClick = useCallback(() => {
         router.push(`/conversations/${data.id}`);
@@ -49,7 +50,7 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                         </p>
                         {lastMessage?.createdAt && (
                             <p className="text-xs text-skin-additional font-light">
-                                {formatRelative(new Date(data.createdAt), currentDate)}
+                                {formatRelative(new Date(lastMessage.createdAt), currentDate)}
                             </p>
                         )}
                     </div>
@@ -62,18 +63,20 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                         >
                             {lastMessageText}
                         </p>
-                        {isOwn && lastMessage.seenIds.length > 1 && (
+                        {isOwn && lastMessage && lastMessage.seenIds.length > 1 && (
                             <div className="text-skin-mutated">
                                 <IoCheckmarkDone />
                             </div>
                         )}
-                        {isOwn && lastMessage.seenIds.length === 1 && (
+                        {isOwn && lastMessage?.seenIds.length === 1 && (
                             <div className="text-skin-additional pb-0.5">
                                 <IoCheckmark />
                             </div>
                         )}
                         {!isOwn && newMessagesCount > 0 && (
-                            <div className="flex justify-center items-center w-6 h-6 p-2 rounded-full text-skin-base bg-skin-bg-accent">{newMessagesCount}</div>
+                            <div className="flex justify-center items-center w-6 h-6 p-2 rounded-full text-skin-base bg-skin-bg-accent">
+                                {newMessagesCount}
+                            </div>
                         )}
                     </div>
                 </div>

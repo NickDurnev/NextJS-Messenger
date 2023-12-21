@@ -29,9 +29,11 @@ const useConversationInfo = (data: FullConversationType) => {
   }, [messages, userEmail]);
 
   const lastMessage = useMemo(() => {
-    const array = messages || [];
+    if (!messages?.length) {
+      return null;
+    }
 
-    return array[array.length - 1];
+    return messages[messages.length - 1];
   }, [messages]);
 
   const isOwn = useMemo(() => {
@@ -48,6 +50,8 @@ const useConversationInfo = (data: FullConversationType) => {
 
     return userID === lastMessage.senderId;
   }, [userEmail, lastMessage]);
+
+  console.log("lastMessage", lastMessage);
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
