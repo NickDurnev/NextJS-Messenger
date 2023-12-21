@@ -55,8 +55,6 @@ const Form = () => {
     setIsEmojiPickerOpen(true);
   };
 
-  console.log(errors);
-
   return (
     <div className="h-fitrelative py-4 px-4 bg-skin-main border-t flex items-center gap-2 lg:gap-4 w-full border-skin-main">
       <CldUploadButton

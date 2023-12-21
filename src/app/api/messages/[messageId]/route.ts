@@ -20,13 +20,12 @@ async function handler(request: Request, { params }: { params: IParams }) {
       );
     }
 
-    switch (request.method) {
-      case "DELETE":
-        await DELETE(request, { params });
-        break;
-      case "PATCH":
-        await PATCH(request, { params });
-        break;
+    if (request.method === "DELETE") {
+      return await DELETE(request, { params });
+    }
+
+    if (request.method === "PATCH") {
+      return await PATCH(request, { params });
     }
   } catch (error) {
     console.log(error, "ERROR_MESSAGE_DELETE");
@@ -38,7 +37,6 @@ async function handler(request: Request, { params }: { params: IParams }) {
 }
 
 async function DELETE(request: Request, { params }: { params: IParams }) {
-  console.log(params);
   const { messageId } = params;
 
   const existingMessage = await prisma.message.findUnique({
@@ -85,15 +83,11 @@ async function DELETE(request: Request, { params }: { params: IParams }) {
   const time2 = date2.getHours() + date2.getMinutes() + date2.getSeconds();
 
   const isLastMessage = Math.abs(time1 - time2) <= 1;
-  //TODO isLastMessage doesn't work correctly
 
-  console.log("IS LAST MESSAGE", isLastMessage);
+  const messages = await getMessages(existingConversation.id);
 
-  if (isLastMessage) {
-    const messages = await getMessages(existingConversation.id);
+  if (isLastMessage && messages.length > 1) {
     const lastMessage = messages[messages.length - 1];
-    console.log("LAST MESSAGE", lastMessage);
-    console.log("DELETED MESSAGE", deletedMessage);
     await prisma.conversation.update({
       where: {
         id: existingConversation.id,
