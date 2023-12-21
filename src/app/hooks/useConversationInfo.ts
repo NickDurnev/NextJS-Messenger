@@ -12,6 +12,9 @@ const useConversationInfo = (data: FullConversationType) => {
   }, [session.data?.user?.email]);
 
   useEffect(() => {
+    if (!messages || !userEmail) {
+      return;
+    }
     if (
       messages.length === 1 &&
       messages[messages.length - 1].seen.length === 1
