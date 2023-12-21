@@ -30,7 +30,10 @@ async function handler(request: Request, { params }: { params: IParams }) {
     }
   } catch (error) {
     console.log(error, "ERROR_MESSAGE_DELETE");
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse(
+      errors.INTERNAL_ERROR.message,
+      errors.INTERNAL_ERROR.status
+    );
   }
 }
 
@@ -45,7 +48,10 @@ async function DELETE(request: Request, { params }: { params: IParams }) {
   });
 
   if (!existingMessage) {
-    return new NextResponse("Invalid ID", { status: 400 });
+    return new NextResponse(
+      errors.INVALID_ID.message,
+      errors.INVALID_ID.status
+    );
   }
 
   const existingConversation = await prisma.conversation.findUnique({

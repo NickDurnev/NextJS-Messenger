@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
+import { errors } from "@/helpers/responseVariants";
 
 export async function PATCH(request: Request) {
   const body = await request.json();
@@ -18,7 +19,10 @@ export async function PATCH(request: Request) {
     });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse(
+        errors.USER_NOT_FOUND.message,
+        errors.USER_NOT_FOUND.status
+      );
     }
 
     const updatedUser = await prisma.user.update({

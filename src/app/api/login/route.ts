@@ -1,7 +1,7 @@
 import prisma from "@/app/libs/prismadb";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
-import { signIn } from "next-auth/react";
+import { errors } from "@/helpers/responseVariants";
 
 export async function POST(request: Request) {
   try {
@@ -9,7 +9,10 @@ export async function POST(request: Request) {
     const { email, password } = body;
 
     if (!email || !password) {
-      return new NextResponse("Missing info", { status: 400 });
+      return new NextResponse(
+        errors.MISSING_INFO.message,
+        errors.MISSING_INFO.status
+      );
     }
 
     const user = await prisma.user.findUnique({
@@ -19,7 +22,10 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse(
+        errors.USER_NOT_FOUND.message,
+        errors.USER_NOT_FOUND.status
+      );
     }
 
     const isMatchPassword = await bcrypt.compare(
@@ -39,6 +45,9 @@ export async function POST(request: Request) {
     return NextResponse.json(user);
   } catch (error) {
     console.log(error, "REGISTRATION_ERROR");
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse(
+      errors.INTERNAL_ERROR.message,
+      errors.INTERNAL_ERROR.status
+    );
   }
 }

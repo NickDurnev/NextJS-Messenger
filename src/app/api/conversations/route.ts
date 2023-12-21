@@ -18,7 +18,10 @@ export async function POST(request: Request) {
     }
 
     if (isGroup && (!members || members.length < 2 || !name)) {
-      return new NextResponse("Invalid data", { status: 400 });
+      return new NextResponse(
+        errors.INVALID_DATA.message,
+        errors.INVALID_DATA.status
+      );
     }
 
     if (isGroup) {
@@ -98,6 +101,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newConversation);
   } catch (error: any) {
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse(
+      error.INTERNAL_ERROR.message,
+      error.INTERNAL_ERROR.status
+    );
   }
 }

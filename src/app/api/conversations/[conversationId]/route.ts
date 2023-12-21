@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { pusherServer } from "@/app/libs/pusher";
+import { errors } from "@/helpers/responseVariants";
 
 interface IParams {
   conversationId?: string;
@@ -16,7 +17,10 @@ export async function DELETE(
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse(
+        errors.UNAUTHORIZED.message,
+        errors.UNAUTHORIZED.status
+      );
     }
 
     const existingConversation = await prisma.conversation.findUnique({
@@ -29,7 +33,10 @@ export async function DELETE(
     });
 
     if (!existingConversation) {
-      return new NextResponse("Invalid ID", { status: 400 });
+      return new NextResponse(
+        errors.INVALID_ID.message,
+        errors.INVALID_ID.status
+      );
     }
 
     const deletedConversation = await prisma.conversation.deleteMany({
@@ -54,6 +61,9 @@ export async function DELETE(
     return NextResponse.json(deletedConversation);
   } catch (error) {
     console.log(error, "ERROR_COMVERSATION_DELETE");
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse(
+      errors.INTERNAL_ERROR.message,
+      errors.INTERNAL_ERROR.status
+    );
   }
 }

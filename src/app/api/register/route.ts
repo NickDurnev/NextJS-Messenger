@@ -3,6 +3,7 @@ import { customAlphabet } from "nanoid";
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
 import { sendVerifyEmail } from "@/app/actions/sendEmail";
+import { errors } from "@/helpers/responseVariants";
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +11,10 @@ export async function POST(request: Request) {
     const { email, name, password } = body;
 
     if (!email || !name || !password) {
-      return new NextResponse("Missing info", { status: 400 });
+      return new NextResponse(
+        errors.MISSING_INFO.message,
+        errors.MISSING_INFO.status
+      );
     }
 
     const nanoid = customAlphabet("1234567890abcdef", 16);
@@ -31,6 +35,9 @@ export async function POST(request: Request) {
     return NextResponse.json(user);
   } catch (error) {
     console.log(error, "REGISTRATION_ERROR");
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse(
+      errors.INTERNAL_ERROR.message,
+      errors.INTERNAL_ERROR.status
+    );
   }
 }

@@ -36,7 +36,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     });
 
     if (!conversation) {
-      return new NextResponse("Invalid ID", { status: 400 });
+      return new NextResponse(
+        errors.INVALID_ID.message,
+        errors.INVALID_ID.status
+      );
     }
 
     //Find not seen messages
@@ -99,6 +102,9 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     return NextResponse.json(updatedMessages);
   } catch (error: any) {
     console.log(error, "ERROR_MESSAGES_SEEN");
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new NextResponse(
+      errors.INTERNAL_ERROR.message,
+      errors.INTERNAL_ERROR.status
+    );
   }
 }

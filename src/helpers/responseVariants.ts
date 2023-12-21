@@ -1,10 +1,8 @@
 export const errors = {
-  NOT_FOUND: "Not found",
+  INVALID_DATA: { message: "Invalid data", status: { status: 400 } },
+  INVALID_ID: { message: "Invalid ID", status: { status: 400 } },
+  MISSING_INFO: { message: "Missing info", status: { status: 400 } },
   UNAUTHORIZED: { message: "Unauthorized", status: { status: 401 } },
-  FORBIDDEN: "Forbidden",
-  CONFLICT: "Conflict",
-  TOO_MANY_REQUESTS: "Too many requests",
-  INTERNAL_SERVER_ERROR: "Internal server error",
-  BAD_REQUEST: "Bad request",
-  NOT_ACCEPTABLE: "Not acceptable",
+  USER_NOT_FOUND: { message: "User not found", status: { status: 404 } },
+  INTERNAL_ERROR: { message: "Internal Error", status: { status: 500 } },
 };
