@@ -9,12 +9,14 @@ import { GrEmoji } from "react-icons/gr";
 import { HiPhoto, HiPaperAirplane } from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 
+import useTheme from "@/app/hooks/useTheme";
+import useMessage from "@/app/hooks/useMessage";
 import MessageInput from "../components/MessageInput";
 import EmojiPicker from "./EmojiPicker";
-import useTheme from "@/app/hooks/useTheme";
 
 const Form = () => {
   const { conversationId } = useConversation();
+  const { selectedMessage, setSelectedMessage } = useMessage();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const { theme } = useTheme();
 
@@ -23,7 +25,6 @@ const Form = () => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
       message: "",
@@ -32,6 +33,7 @@ const Form = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setValue("message", "", { shouldValidate: true });
+    setSelectedMessage(null);
     axios.post("/api/messages", { ...data, conversationId });
   };
 
@@ -84,6 +86,7 @@ const Form = () => {
           handleSubmit={handleSubmit(onSubmit)}
           required
           placeholder="Write a message"
+          selectedMessage={selectedMessage}
         />
         <button
           type="submit"

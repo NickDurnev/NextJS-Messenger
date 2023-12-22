@@ -7,21 +7,25 @@ import axios from "axios";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 
+import useMessage from "@/app/hooks/useMessage";
 import MessageMenuItem from "./MessageMenuItem";
 import { FullMessageType } from "@/app/types";
 import { fadeVariant } from "@/helpers/framerVariants";
+import toast from "react-hot-toast";
 
 interface MessageMenuProps {
   data: FullMessageType;
   isOpen?: boolean;
+  isOwn: boolean;
   onClose: () => void;
   theme: string;
   messageRef?: React.RefObject<HTMLDivElement>;
 }
 
-const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, onClose, theme, messageRef }) => {
+const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn, onClose, theme, messageRef }) => {
   const menuRef = useRef<HTMLUListElement>(null);
   const [isUpLifted, setIsUpLifted] = useState(false);
+  const { setSelectedMessage } = useMessage();
 
   useEffect(() => {
     // Adjust the menu position when it's opened
@@ -42,6 +46,14 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, onClose, theme, messa
     onClose();
   }
 
+  const editMessage = () => {
+    if (!isOwn) {
+      return toast.error("You can edit only your own messages");
+    }
+    setSelectedMessage(data);
+    onClose();
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -59,7 +71,7 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, onClose, theme, messa
         >
           <MessageMenuItem
             icon={<CiEdit size={25} />}
-            onClick={() => console.log("EDIT")}
+            onClick={editMessage}
           >
             Edit
           </MessageMenuItem>

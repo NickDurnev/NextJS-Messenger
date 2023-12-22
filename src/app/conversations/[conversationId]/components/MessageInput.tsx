@@ -2,6 +2,7 @@
 
 import { FC, KeyboardEvent, useState } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
+import { FullMessageType } from "@/app/types";
 
 interface MessageInputProps {
     placeholder?: string;
@@ -9,6 +10,7 @@ interface MessageInputProps {
     required?: boolean;
     register: UseFormRegister<FieldValues>;
     handleSubmit: () => void;
+    selectedMessage: FullMessageType | null;
 }
 
 const MessageInput: FC<MessageInputProps> = ({
@@ -17,7 +19,9 @@ const MessageInput: FC<MessageInputProps> = ({
     required,
     register,
     handleSubmit,
+    selectedMessage
 }) => {
+    console.log('selectedMessage:', selectedMessage)
     const [rows, setRows] = useState(1);
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -42,6 +46,7 @@ const MessageInput: FC<MessageInputProps> = ({
                 rows={rows}
                 {...register(id, { required })}
                 placeholder={placeholder}
+                value={selectedMessage?.body ?? ''}
                 className="h-fit text-skin-base font-light py-2 px-4 bg-skin-additional w-full rounded-xl focus:outline-none resize-none"
             />
         </div>

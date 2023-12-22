@@ -10,19 +10,18 @@ import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import { FullMessageType } from "@/app/types";
 import ImageModal from "./ImageModal";
-import MessageMenu from "./MessageMenu/MessageMenu";
-import useTheme from "@/app/hooks/useTheme";
 import { fadeVariant } from "@/helpers/framerVariants";
+import MessageMenu from "./MessageMenu/MessageMenu";
 
 interface MessageBoxProps {
   data: FullMessageType;
   currentDate: Date;
+  currentUserEmail?: string | null;
   isGroup: boolean | null;
+  theme: string;
 }
 
-const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isGroup }) => {
-  const session = useSession();
-  const { theme } = useTheme();
+const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, currentUserEmail, isGroup, theme }) => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [messageMenuOpen, setMessageMenuOpen] = useState(false);
 
@@ -30,26 +29,11 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isGroup }) => {
 
   const { id, seen, sender, image, body, createdAt } = data;
 
-  const isOwn = session?.data?.user?.email === sender?.email;
+  const isOwn = currentUserEmail === sender?.email;
   const seenList = (seen || [])
     .filter((user) => user.email !== sender?.email)
     .map((user) => user.name)
     .join(",");
-
-  const container = clsx("relative flex gap-3 py-4 px-6", isOwn && "justify-end");
-
-  const bodyStyles = clsx("flex flex-col gap-2", isOwn && "items-end");
-
-  const message = clsx(
-    "max-w-[200px] xs:max-w-[70vw] lg:max-w-[50vw] text-sm break-words",
-    isOwn
-      ? "bg-skin-additional text-skin-base"
-      : "bg-skin-bg-accent text-skin-base",
-    image
-      ? "rounded-md p-0 bg-transparent"
-      : "rounded-tl-2xl rounded-tr-2xl py-2 px-3",
-    isOwn ? "rounded-bl-2xl" : "rounded-br-2xl"
-  );
 
   const showMessageMenu = (e: MouseEvent | TouchEvent) => {
     e.preventDefault();
@@ -63,12 +47,27 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isGroup }) => {
     setMessageMenuOpen(true);
   };
 
+  const containerStyles = clsx("relative flex gap-3 py-4 px-6", isOwn && "justify-end");
+
+  const bodyStyles = clsx("flex flex-col gap-2", isOwn && "items-end");
+
+  const messageStyles = clsx(
+    "max-w-[200px] xs:max-w-[70vw] lg:max-w-[50vw] text-sm break-words",
+    isOwn
+      ? "bg-skin-additional text-skin-base"
+      : "bg-skin-bg-accent text-skin-base",
+    image
+      ? "rounded-md p-0 bg-transparent"
+      : "rounded-tl-2xl rounded-tr-2xl py-2 px-3",
+    isOwn ? "rounded-bl-2xl" : "rounded-br-2xl"
+  );
+
   return (
     <>
       <motion.div
         onContextMenu={showMessageMenu}
         onTouchStart={showMessageMenu}
-        className={container}
+        className={containerStyles}
         ref={messageRef}
         key={id}
         variants={fadeVariant}
@@ -80,7 +79,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isGroup }) => {
           <div className="text-sm text-skin-additional">
             {isGroup && sender?.name}
           </div>
-          <div className={message}>
+          <div className={messageStyles}>
             <ImageModal
               src={image}
               isOpen={imageModalOpen}
@@ -115,6 +114,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, isGroup }) => {
                   <MessageMenu
                     data={data}
                     isOpen={messageMenuOpen}
+                    isOwn={isOwn}
                     onClose={() => setMessageMenuOpen(false)}
                     theme={theme}
                     messageRef={messageRef}

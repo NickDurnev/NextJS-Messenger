@@ -11,6 +11,7 @@ import MessageBox from "./MessageBox";
 import usePusherClient from "@/app/hooks/usePusherClient";
 import scrollTo from "@/helpers/scrollTo";
 import { useSession } from "next-auth/react";
+import useTheme from "@/app/hooks/useTheme";
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -22,8 +23,11 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
   const session = useSession();
+  const { theme } = useTheme();
   const { pusherClient } = usePusherClient();
+
   const currentDate = new Date();
+  const currentUserEmail = session.data?.user?.email;
 
   useEffect(() => {
     axios.post(`/api/conversations/${conversationId}/seen`);
@@ -33,7 +37,6 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
     pusherClient?.subscribe(conversationId);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
-      const currentUserEmail = session.data?.user?.email;
       if (currentUserEmail !== message.sender.email) {
         axios.post(`/api/conversations/${conversationId}/seen`);
       }
@@ -89,7 +92,9 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
             key={message.id}
             data={message}
             currentDate={currentDate}
+            currentUserEmail={currentUserEmail}
             isGroup={isGroup}
+            theme={theme}
           />
         ))}
         <div ref={bottomRef} className="pt-4" />
