@@ -42,7 +42,7 @@ const useActiveChannel = (pusherClient: PusherClient | null) => {
         setActiveChannel(null);
       }
     };
-  }, [activeChannel, set, add, remove]);
+  }, [activeChannel, set, add, remove, pusherClient]);
 };
 
 export default useActiveChannel;

@@ -24,9 +24,9 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
   const { pusherClient } = usePusherClient();
   const currentDate = new Date();
 
-  // useEffect(() => {
-  //   axios.post(`/api/conversations/${conversationId}/seen`);
-  // }, [conversationId]);
+  useEffect(() => {
+    axios.post(`/api/conversations/${conversationId}/seen`);
+  }, []);
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);
