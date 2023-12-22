@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 const useConversationInfo = (data: FullConversationType) => {
   const session = useSession();
   const [newMessagesCount, setNewMessagesCount] = useState<number>(0);
-  const { messages } = data;
+  const { messages, isGroup } = data;
 
   const userEmail = useMemo(() => {
     return session.data?.user?.email;
@@ -70,6 +70,7 @@ const useConversationInfo = (data: FullConversationType) => {
     lastMessage,
     isOwn,
     lastMessageText,
+    isGroup,
   };
 };
 

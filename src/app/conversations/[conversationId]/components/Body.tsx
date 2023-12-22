@@ -14,9 +14,10 @@ import { useSession } from "next-auth/react";
 
 interface BodyProps {
   initialMessages: FullMessageType[];
+  isGroup: boolean | null;
 }
 
-const Body: FC<BodyProps> = ({ initialMessages }) => {
+const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
@@ -88,6 +89,7 @@ const Body: FC<BodyProps> = ({ initialMessages }) => {
             key={message.id}
             data={message}
             currentDate={currentDate}
+            isGroup={isGroup}
           />
         ))}
         <div ref={bottomRef} className="pt-4" />
