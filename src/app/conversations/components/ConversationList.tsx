@@ -90,6 +90,7 @@ const ConversationList: FC<ConversationListProps> = ({
                     if (currentConversation.id === newMessage.conversationId) {
                         const messages = currentConversation.messages;
                         messages.pop();
+                        console.log('NEW MESSAGE', newMessage);
                         return {
                             ...currentConversation,
                             messages: [...messages, newMessage],

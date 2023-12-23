@@ -4,13 +4,23 @@ import { pusherServer } from "@/app/libs/pusher";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getMessages from "@/app/actions/getMessages";
 import { errors } from "@/helpers/responseVariants";
+import { User } from "@prisma/client";
 
 interface IParams {
   messageId?: string;
 }
 
+interface IArguments {
+  id: string;
+  lastMessageAt: Date;
+  users: User[];
+  messageId?: string;
+  currentUserId?: string;
+}
+
 async function handler(request: Request, { params }: { params: IParams }) {
   try {
+    const { messageId } = params;
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id || !currentUser?.email) {
@@ -20,12 +30,46 @@ async function handler(request: Request, { params }: { params: IParams }) {
       );
     }
 
+    const existingMessage = await prisma.message.findUnique({
+      where: {
+        id: messageId,
+      },
+    });
+
+    if (!existingMessage) {
+      return new NextResponse(
+        errors.INVALID_ID.message,
+        errors.INVALID_ID.status
+      );
+    }
+
+    const existingConversation = await prisma.conversation.findUnique({
+      where: {
+        id: existingMessage.conversationId!,
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    if (!existingConversation) {
+      return new NextResponse("Conversation not found", { status: 404 });
+    }
+
+    const { id, lastMessageAt, users } = existingConversation;
+
     if (request.method === "DELETE") {
-      return await DELETE(request, { params });
+      return await DELETE(request, { id, lastMessageAt, users, messageId });
     }
 
     if (request.method === "PATCH") {
-      return await PATCH(request, { params });
+      return await PATCH(request, {
+        id,
+        lastMessageAt,
+        users,
+        messageId,
+        currentUserId: currentUser.id,
+      });
     }
   } catch (error) {
     console.log(error, "ERROR_MESSAGE_DELETE");
@@ -36,70 +80,41 @@ async function handler(request: Request, { params }: { params: IParams }) {
   }
 }
 
-async function DELETE(request: Request, { params }: { params: IParams }) {
-  const { messageId } = params;
-
-  const existingMessage = await prisma.message.findUnique({
-    where: {
-      id: messageId,
-    },
-  });
-
-  if (!existingMessage) {
-    return new NextResponse(
-      errors.INVALID_ID.message,
-      errors.INVALID_ID.status
-    );
-  }
-
-  const existingConversation = await prisma.conversation.findUnique({
-    where: {
-      id: existingMessage.conversationId!,
-    },
-    include: {
-      users: true,
-    },
-  });
-
+async function DELETE(
+  request: Request,
+  { id, lastMessageAt, users, messageId }: IArguments
+) {
   const deletedMessage = await prisma.message.delete({
     where: {
       id: messageId,
     },
   });
 
-  if (!existingConversation) {
-    return new NextResponse("Conversation not found", { status: 404 });
-  }
+  await pusherServer.trigger(id, "message:delete", deletedMessage);
 
-  await pusherServer.trigger(
-    existingConversation.id,
-    "message:delete",
-    deletedMessage
-  );
-
-  const date1 = new Date(existingConversation.lastMessageAt);
+  const date1 = new Date(lastMessageAt);
   const date2 = new Date(deletedMessage.createdAt);
   const time1 = date1.getHours() + date1.getMinutes() + date1.getSeconds();
   const time2 = date2.getHours() + date2.getMinutes() + date2.getSeconds();
 
   const isLastMessage = Math.abs(time1 - time2) <= 1;
 
-  const messages = await getMessages(existingConversation.id);
+  const messages = await getMessages(id);
 
   if (isLastMessage && messages.length > 1) {
     const lastMessage = messages[messages.length - 1];
     await prisma.conversation.update({
       where: {
-        id: existingConversation.id,
+        id,
       },
       data: {
         lastMessageAt: lastMessage.createdAt,
       },
     });
-    existingConversation.users.forEach((user) => {
+    users.forEach((user) => {
       if (user.email) {
         pusherServer.trigger(user.email, "conversation:deleteMessage", {
-          id: existingConversation.id,
+          id,
           messages: [lastMessage],
         });
       }
@@ -109,13 +124,36 @@ async function DELETE(request: Request, { params }: { params: IParams }) {
   return NextResponse.json(deletedMessage);
 }
 
-async function PATCH(request: Request, { params }: { params: IParams }) {
+async function PATCH(
+  request: Request,
+  { id, messageId, currentUserId }: IArguments
+) {
   const body = await request.json();
-  const { message, image, conversationId } = body;
+  const { message, image } = body;
 
-  const { messageId } = params;
+  const updatedMessage = await prisma.message.update({
+    where: {
+      id: messageId,
+    },
+    include: {
+      sender: true,
+      seen: true,
+    },
+    data: {
+      body: message,
+      image: image,
+      editedAt: new Date().toISOString(),
+      seen: {
+        connect: {
+          id: currentUserId,
+        },
+      },
+    },
+  });
 
-  return NextResponse.json({ message: "PATCH request processed successfully" });
+  await pusherServer.trigger(id, "message:update", updatedMessage);
+
+  return NextResponse.json(updatedMessage);
 }
 
 export { handler as PATCH, handler as DELETE };

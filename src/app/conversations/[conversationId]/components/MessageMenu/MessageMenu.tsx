@@ -11,18 +11,18 @@ import useMessage from "@/app/hooks/useMessage";
 import MessageMenuItem from "./MessageMenuItem";
 import { FullMessageType } from "@/app/types";
 import { fadeVariant } from "@/helpers/framerVariants";
-import toast from "react-hot-toast";
 
 interface MessageMenuProps {
   data: FullMessageType;
   isOpen?: boolean;
   isOwn: boolean;
+  isLast: boolean;
   onClose: () => void;
   theme: string;
   messageRef?: React.RefObject<HTMLDivElement>;
 }
 
-const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn, onClose, theme, messageRef }) => {
+const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn,isLast, onClose, theme, messageRef }) => {
   const menuRef = useRef<HTMLUListElement>(null);
   const [isUpLifted, setIsUpLifted] = useState(false);
   const { setSelectedMessage } = useMessage();
@@ -47,9 +47,6 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn, onClose, theme
   }
 
   const editMessage = () => {
-    if (!isOwn) {
-      return toast.error("You can edit only your own messages");
-    }
     setSelectedMessage(data);
     onClose();
   }
@@ -69,12 +66,13 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn, onClose, theme
           animate={'open'}
           exit={'exit'}
         >
-          <MessageMenuItem
+          {isOwn && isLast && <MessageMenuItem
             icon={<CiEdit size={25} />}
             onClick={editMessage}
           >
             Edit
           </MessageMenuItem>
+          }
           <MessageMenuItem
             icon={<MdDeleteOutline size={25} />}
             danger

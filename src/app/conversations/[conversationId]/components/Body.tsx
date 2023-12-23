@@ -94,6 +94,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
             currentDate={currentDate}
             currentUserEmail={currentUserEmail}
             isGroup={isGroup}
+            isLast={message.id === messages[messages.length - 1].id}
             theme={theme}
           />
         ))}

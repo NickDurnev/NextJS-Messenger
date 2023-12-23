@@ -17,7 +17,7 @@ const useConversationInfo = (data: FullConversationType) => {
     }
     if (
       messages.length === 1 &&
-      messages[messages.length - 1].seen.length === 1
+      messages[messages.length - 1]?.seen?.length === 1
     ) {
       setNewMessagesCount((prevCount) => prevCount + 1);
       return;
@@ -50,8 +50,6 @@ const useConversationInfo = (data: FullConversationType) => {
 
     return userID === lastMessage.senderId;
   }, [userEmail, lastMessage]);
-
-  console.log("lastMessage", lastMessage);
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {

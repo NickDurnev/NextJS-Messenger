@@ -32,8 +32,17 @@ const Form = () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(1);
     setValue("message", "", { shouldValidate: true });
-    setSelectedMessage(null);
+    const trimmedMessage = data.message.trim();
+    if (!trimmedMessage) {
+      return;
+    }
+    if (selectedMessage) {
+      axios.patch(`/api/messages/${selectedMessage.id}`, data);
+      setSelectedMessage(null);
+      return;
+    }
     axios.post("/api/messages", { ...data, conversationId });
   };
 
@@ -77,7 +86,7 @@ const Form = () => {
         className="bottom-[525px] left-0 lg:left-[115%]"
       />
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(handleSubmit(onSubmit))}
         className="flex items-center gap-2 lg:gap-4 w-full"
       >
         <MessageInput
@@ -95,7 +104,7 @@ const Form = () => {
           <HiPaperAirplane size={18} className="text-skin-button-text" />
         </button>
       </form>
-    </div>
+    </div >
   );
 };
 

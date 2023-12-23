@@ -18,10 +18,18 @@ interface MessageBoxProps {
   currentDate: Date;
   currentUserEmail?: string | null;
   isGroup: boolean | null;
+  isLast: boolean;
   theme: string;
 }
 
-const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, currentUserEmail, isGroup, theme }) => {
+const MessageBox: FC<MessageBoxProps> = ({
+  data,
+  currentDate,
+  currentUserEmail,
+  isGroup,
+  isLast,
+  theme,
+}) => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [messageMenuOpen, setMessageMenuOpen] = useState(false);
 
@@ -47,7 +55,10 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, currentUserEmail, 
     setMessageMenuOpen(true);
   };
 
-  const containerStyles = clsx("relative flex gap-3 py-4 px-6", isOwn && "justify-end");
+  const containerStyles = clsx(
+    "relative flex gap-3 py-4 px-6",
+    isOwn && "justify-end"
+  );
 
   const bodyStyles = clsx("flex flex-col gap-2", isOwn && "items-end");
 
@@ -115,6 +126,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, currentDate, currentUserEmail, 
                     data={data}
                     isOpen={messageMenuOpen}
                     isOwn={isOwn}
+                    isLast={isLast}
                     onClose={() => setMessageMenuOpen(false)}
                     theme={theme}
                     messageRef={messageRef}
