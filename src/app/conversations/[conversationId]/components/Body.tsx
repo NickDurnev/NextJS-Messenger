@@ -1,10 +1,10 @@
 "use client";
 
 import { FC, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { find } from "lodash";
 import { AnimatePresence } from "framer-motion";
 
+import axiosInstance from "@/app/libs/axiosInstance";
 import { FullMessageType } from "@/app/types";
 import useConversation from "@/app/hooks/useConversation";
 import MessageBox from "./MessageBox";
@@ -30,7 +30,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const currentUserEmail = session.data?.user?.email;
 
   useEffect(() => {
-    axios.post(`/api/conversations/${conversationId}/seen`);
+    axiosInstance.post(`/api/conversations/${conversationId}/seen`);
   }, []);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
       if (currentUserEmail !== message.sender.email) {
-        axios.post(`/api/conversations/${conversationId}/seen`);
+        axiosInstance.post(`/api/conversations/${conversationId}/seen`);
       }
 
       setMessages((current) => {

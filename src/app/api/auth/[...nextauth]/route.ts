@@ -53,6 +53,18 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
+    maxAge: 30, // 4 hours
+  },
+  callbacks: {
+    // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
+    jwt({ token, trigger, session }) {
+      if (trigger === "update" && session?.name) {
+        console.log(session);
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.name = session.name;
+      }
+      return token;
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
