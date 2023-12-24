@@ -4,7 +4,6 @@ import { FC, useState, useRef, MouseEvent, TouchEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import clsx from "clsx";
-import { useSession } from "next-auth/react";
 import { formatRelative } from "date-fns";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
@@ -35,7 +34,7 @@ const MessageBox: FC<MessageBoxProps> = ({
 
   const messageRef = useRef<HTMLDivElement>(null);
 
-  const { id, seen, sender, image, body, createdAt } = data;
+  const { id, seen, sender, image, body, createdAt, editedAt } = data;
 
   const isOwn = currentUserEmail === sender?.email;
   const seenList = (seen || [])
@@ -76,8 +75,6 @@ const MessageBox: FC<MessageBoxProps> = ({
   return (
     <>
       <motion.div
-        onContextMenu={showMessageMenu}
-        onTouchStart={showMessageMenu}
         className={containerStyles}
         ref={messageRef}
         key={id}
@@ -86,7 +83,9 @@ const MessageBox: FC<MessageBoxProps> = ({
         animate={"open"}
         exit={"exit"}
       >
-        <div className={bodyStyles}>
+        <div className={bodyStyles} onContextMenu={showMessageMenu}
+          onTouchStart={showMessageMenu}
+        >
           <div className="text-sm text-skin-additional">
             {isGroup && sender?.name}
           </div>
@@ -109,8 +108,8 @@ const MessageBox: FC<MessageBoxProps> = ({
               <div className="relative">
                 <div>{body}</div>
                 <div className="flex justify-end items-end mt-1 gap-2">
-                  <div className="italic ml-auto text-xs text-skin-additional first-letter:capitalize">
-                    {formatRelative(new Date(createdAt), currentDate)}
+                  <div className="italic ml-auto text-xs text-skin-additional">
+                    {`${editedAt ? "edited " : ""}${formatRelative(new Date(createdAt), currentDate)}`}
                   </div>
                   {isOwn && seenList.length > 0 && (
                     <div className="text-skin-mutated">

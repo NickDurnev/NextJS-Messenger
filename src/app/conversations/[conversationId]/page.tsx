@@ -1,6 +1,7 @@
 import getConversationById from "@/app/actions/getConversationById";
 import getMessages from "@/app/actions/getMessages";
 import EmptyState from "@/app/components/EmptyState";
+
 import Header from "./components/Header";
 import Body from "./components/Body";
 import Form from "./components/Form";
@@ -20,7 +21,7 @@ const ConversationId = async ({ params }: { params: Iparams }) => {
                     <EmptyState />
                 </div>
             </div>
-        )
+        );
     }
     return (
         <div className="lg:pl-80 h-full">
@@ -30,7 +31,7 @@ const ConversationId = async ({ params }: { params: Iparams }) => {
                 <Form />
             </div>
         </div>
-    )
+    );
 };
 
 export default ConversationId;

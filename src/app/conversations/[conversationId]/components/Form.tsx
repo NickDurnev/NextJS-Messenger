@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import useConversation from "@/app/hooks/useConversation";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { EmojiClickData, Theme } from "emoji-picker-react";
 import { GrEmoji } from "react-icons/gr";
@@ -31,8 +31,14 @@ const Form = () => {
     },
   });
 
+  useEffect(() => {
+    if (!selectedMessage) {
+      return;
+    }
+    setValue("message", selectedMessage.body, { shouldValidate: true });
+  }, [selectedMessage, setValue]);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(1);
     setValue("message", "", { shouldValidate: true });
     const trimmedMessage = data.message.trim();
     if (!trimmedMessage) {
@@ -92,7 +98,7 @@ const Form = () => {
         <MessageInput
           id="message"
           register={register}
-          handleSubmit={handleSubmit(onSubmit)}
+          handleSubmit={(handleSubmit(onSubmit))}
           required
           placeholder="Write a message"
           selectedMessage={selectedMessage}

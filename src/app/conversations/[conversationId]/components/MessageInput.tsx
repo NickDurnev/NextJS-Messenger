@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { FC, KeyboardEvent, useEffect, useState } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 import { FullMessageType } from "@/app/types";
 
@@ -21,28 +21,20 @@ const MessageInput: FC<MessageInputProps> = ({
   handleSubmit,
   selectedMessage,
 }) => {
-  const [value, setValue] = useState("");
   const [rows, setRows] = useState(1);
-  // const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    if (!selectedMessage) {
-      return;
+    const textarea = document.querySelector(`#${id}`) as HTMLTextAreaElement | null;
+    if (textarea) {
+      textarea.focus();
     }
-    setValue(selectedMessage.body ?? "");
-    // if (textareaRef.current) {
-    //     textareaRef.current.focus();
-    // }
-  }, [selectedMessage]);
+  }, [id, selectedMessage])
 
-  //TODO: FIX bugs with enter submit and emoji picker.
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      console.log(e.key);
-      console.log(e.shiftKey);
-      handleSubmit();
       e.preventDefault();
+      handleSubmit();
       return;
     }
     if (e.key === "Enter" && e.shiftKey && rows < 10) {
@@ -62,9 +54,7 @@ const MessageInput: FC<MessageInputProps> = ({
         rows={rows}
         {...register(id, { required })}
         placeholder={placeholder}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        // ref={textareaRef}
+        autoFocus
         className="h-fit text-skin-base font-light py-2 px-4 bg-skin-additional w-full rounded-xl focus:outline-none resize-none"
       />
     </div>
