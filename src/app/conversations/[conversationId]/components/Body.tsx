@@ -1,16 +1,16 @@
 "use client";
 
 import { FC, useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import { find } from "lodash";
 import { AnimatePresence } from "framer-motion";
 
-import axiosInstance from "@/app/libs/axiosInstance";
 import { FullMessageType } from "@/app/types";
-import useConversation from "@/app/hooks/useConversation";
 import MessageBox from "./MessageBox";
-import usePusherClient from "@/app/hooks/usePusherClient";
 import scrollTo from "@/helpers/scrollTo";
-import { useSession } from "next-auth/react";
+import useAxiosInstance from "@/app/hooks/useAxiosInstance";
+import useConversation from "@/app/hooks/useConversation";
+import usePusherClient from "@/app/hooks/usePusherClient";
 import useTheme from "@/app/hooks/useTheme";
 
 interface BodyProps {
@@ -23,6 +23,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
   const session = useSession();
+  const axiosInstance = useAxiosInstance();
   const { theme } = useTheme();
   const { pusherClient } = usePusherClient();
 
@@ -31,7 +32,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
 
   useEffect(() => {
     axiosInstance.post(`/api/conversations/${conversationId}/seen`);
-  }, []);
+  }, [conversationId]);
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);
