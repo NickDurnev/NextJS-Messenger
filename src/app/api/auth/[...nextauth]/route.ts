@@ -1,11 +1,11 @@
 import NextAuth, { AuthOptions } from "next-auth";
-import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-
 import prisma from "@/app/libs/prismadb";
+
+const BASE_URL = process.env.BASE_APP_URL;
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -25,28 +25,26 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
-        }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+        const res = await fetch(`${BASE_URL}api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password,
+          }),
         });
 
-        if (!user || !user?.hashedPassword) {
-          throw new Error("Invalid credentials");
+        const user = await res.json();
+
+        if (user) {
+          // Any object returned will be saved in `user` property of the JWT
+          return user;
+        } else {
+          // If you return null then an error will be displayed advising the user to check their details.
+          return null;
         }
-
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.hashedPassword
-        );
-
-        if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
-        }
-
-        return user;
       },
     }),
   ],
@@ -55,16 +53,27 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
     maxAge: 30, // 4 hours
   },
+  // callbacks: {
+  //   // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
+  //   jwt({ token, user, trigger, session }) {
+  //     if (trigger === "update" && session?.name) {
+  //       console.log(session);
+  //       console.log(trigger);
+  //       // Note, that `session` can be any arbitrary object, remember to validate it!
+  //       return { ...token, ...session.user };
+  //     }
+  //     return { ...token, ...user };
+  //   },
+  // },
   callbacks: {
-    // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
-    async jwt({ token, trigger, session }) {
-      console.log("SESSION", session);
-      console.log(trigger);
-      if (trigger === "update" && session?.name) {
-        // Note, that `session` can be any arbitrary object, remember to validate it!
-        token.name = session.name;
-      }
-      return token;
+    async jwt({ token, user }) {
+      console.log(token);
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = token as any;
+
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

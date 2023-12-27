@@ -23,6 +23,7 @@
     "date-fns": "^2.30.0",
     "emoji-picker-react": "^4.5.15",
     "framer-motion": "^10.16.4",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.3",
     "next": "13.5.4",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.200",
     "@types/node": "^20",
     "@types/react": "^18",

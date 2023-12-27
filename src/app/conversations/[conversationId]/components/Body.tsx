@@ -4,14 +4,16 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { find } from "lodash";
 import { AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 import { FullMessageType } from "@/app/types";
 import MessageBox from "./MessageBox";
 import scrollTo from "@/helpers/scrollTo";
-import useAxiosInstance from "@/app/hooks/useAxiosInstance";
+//# HOOKS
 import useConversation from "@/app/hooks/useConversation";
 import usePusherClient from "@/app/hooks/usePusherClient";
 import useTheme from "@/app/hooks/useTheme";
+// import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -22,16 +24,29 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
-  const session = useSession();
-  const axiosInstance = useAxiosInstance();
+  const { data: session, update } = useSession();
+  // const axiosAuth = useAxiosAuth();
   const { theme } = useTheme();
   const { pusherClient } = usePusherClient();
+  console.log('SESSION', session);
 
   const currentDate = new Date();
-  const currentUserEmail = session.data?.user?.email;
+  const currentUserEmail = session?.user?.email;
 
   useEffect(() => {
-    axiosInstance.post(`/api/conversations/${conversationId}/seen`);
+    axios.post(`/api/conversations/${conversationId}/seen`).catch((error) => {
+      console.log(error);
+      if (error.response.status === 401) {
+        update({
+          ...session,
+          user: {
+            ...session?.user,
+            accessToken: 'aaa'
+          }
+        });
+        console.log(session);
+      }
+    });
   }, [conversationId]);
 
   useEffect(() => {
@@ -39,7 +54,21 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
       if (currentUserEmail !== message.sender.email) {
-        axiosInstance.post(`/api/conversations/${conversationId}/seen`);
+        axios
+          .post(`/api/conversations/${conversationId}/seen`)
+          .catch((error) => {
+            console.log(error);
+            if (error.response.status === 401) {
+              update({
+                ...session,
+                user: {
+                  ...session?.user,
+                  accessToken: 'aaa'
+                }
+              });
+              console.log(session);
+            }
+          });
       }
 
       setMessages((current) => {
