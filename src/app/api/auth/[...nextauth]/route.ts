@@ -53,18 +53,6 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
     maxAge: 30, // 4 hours
   },
-  // callbacks: {
-  //   // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
-  //   jwt({ token, user, trigger, session }) {
-  //     if (trigger === "update" && session?.name) {
-  //       console.log(session);
-  //       console.log(trigger);
-  //       // Note, that `session` can be any arbitrary object, remember to validate it!
-  //       return { ...token, ...session.user };
-  //     }
-  //     return { ...token, ...user };
-  //   },
-  // },
   callbacks: {
     async jwt({ token, user }) {
       console.log(token);

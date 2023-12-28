@@ -6,7 +6,7 @@ import { useRefreshToken } from "./useRefreshToken";
 
 const useAxiosAuth = () => {
   const { data: session, update } = useSession();
-  // const refreshToken = useRefreshToken();
+  const refreshToken = useRefreshToken();
 
   useEffect(() => {
     const requestIntercept = axiosAuth.interceptors.request.use(
@@ -27,8 +27,7 @@ const useAxiosAuth = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          update();
-          // await refreshToken();
+          await refreshToken();
           prevRequest.headers[
             "Authorization"
           ] = `Bearer ${session?.user.accessToken}`;

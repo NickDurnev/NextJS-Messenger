@@ -15,6 +15,7 @@ model User {
   name              String?
   email             String?  @unique
   verificationToken String?  @db.String
+  refreshToken      String?  @db.String
   accessToken       String?  @db.String
   emailVerified     Boolean  @default(false)
   image             String?

@@ -1,16 +1,29 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 interface SignOption {
   expiresIn?: string | number;
 }
 
-const DEFAULT_SIGN_OPTION: SignOption = {
+interface Payload {
+  id: string;
+  email: string;
+  name: string;
+}
+
+const DEFAULT_ACCESS_TOKEN_SIGN_OPTION: SignOption = {
   expiresIn: "1h",
 };
 
-export function signJwtAccessToken(
-  payload: JwtPayload,
-  options: SignOption = DEFAULT_SIGN_OPTION
+const DEFAULT_REFRESH_TOKEN_SIGN_OPTION: SignOption = {
+  expiresIn: "7d",
+};
+
+export function signJwtToken(
+  payload: Payload,
+  type: string,
+  options: SignOption = type === "access"
+    ? DEFAULT_ACCESS_TOKEN_SIGN_OPTION
+    : DEFAULT_REFRESH_TOKEN_SIGN_OPTION
 ) {
   const secret_key = process.env.SECRET_KEY;
   const token = jwt.sign(payload, secret_key!, options);
@@ -21,7 +34,7 @@ export function verifyJwt(token: string) {
   try {
     const secret_key = process.env.SECRET_KEY;
     const decoded = jwt.verify(token, secret_key!);
-    return decoded as JwtPayload;
+    return decoded as Payload;
   } catch (error) {
     console.log(error);
     return null;

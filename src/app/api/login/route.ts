@@ -2,7 +2,7 @@ import prisma from "@/app/libs/prismadb";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { errors } from "@/helpers/responseVariants";
-import { signJwtAccessToken } from "@/app/libs/jwt";
+import { signJwtToken } from "@/app/libs/jwt";
 
 export async function POST(request: Request) {
   try {
@@ -43,15 +43,26 @@ export async function POST(request: Request) {
       return new NextResponse("Email not verified", { status: 401 });
     }
 
-    const payload = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    if (user.email && user.name) {
+      const payload = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      };
 
-    const accessToken = signJwtAccessToken(payload);
-
-    return NextResponse.json({ ...payload, accessToken });
+      const accessToken = signJwtToken(payload, "access");
+      const refreshToken = signJwtToken(payload, "refresh");
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          refreshToken,
+          accessToken,
+        },
+      });
+      return NextResponse.json({ ...payload, accessToken, refreshToken });
+    }
   } catch (error) {
     console.log(error, "REGISTRATION_ERROR");
     return new NextResponse(
