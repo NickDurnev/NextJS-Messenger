@@ -4,7 +4,6 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { find } from "lodash";
 import { AnimatePresence } from "framer-motion";
-import axios from "axios";
 
 import { FullMessageType } from "@/app/types";
 import MessageBox from "./MessageBox";
@@ -30,10 +29,15 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
 
   const currentDate = new Date();
   const currentUserEmail = session?.user?.email;
+  const currentUserId = session?.user?.id?.toString();
+  const lastMessage = messages[messages.length - 1];
 
   useEffect(() => {
-    axiosAuth.post(`conversations/${conversationId}/seen`);
-  }, [axiosAuth, conversationId]);
+    const isLastMessageSeen = lastMessage?.seenIds.includes(currentUserId!);
+    if (!isLastMessageSeen || lastMessage?.senderId !== currentUserId) {
+      axiosAuth.post(`conversations/${conversationId}/seen`);
+    }
+  }, [axiosAuth, conversationId, currentUserEmail, currentUserId, messages]);
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);

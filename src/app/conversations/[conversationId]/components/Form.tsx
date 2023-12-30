@@ -2,15 +2,17 @@
 
 import axios from "axios";
 import useConversation from "@/app/hooks/useConversation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { EmojiClickData, Theme } from "emoji-picker-react";
 import { GrEmoji } from "react-icons/gr";
 import { HiPhoto, HiPaperAirplane } from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 
+//# HOOKS
 import useTheme from "@/app/hooks/useTheme";
 import useMessage from "@/app/hooks/useMessage";
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import MessageInput from "../components/MessageInput";
 import EmojiPicker from "./EmojiPicker";
 
@@ -19,6 +21,7 @@ const Form = () => {
   const { selectedMessage, setSelectedMessage } = useMessage();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const { theme } = useTheme();
+  const axiosAuth = useAxiosAuth();
 
   const {
     register,
@@ -45,15 +48,15 @@ const Form = () => {
       return;
     }
     if (selectedMessage) {
-      axios.patch(`/api/messages/${selectedMessage.id}`, data);
+      axiosAuth.patch(`/messages/${selectedMessage.id}`, data);
       setSelectedMessage(null);
       return;
     }
-    axios.post("/api/messages", { ...data, conversationId });
+    axiosAuth.post("/messages", { ...data, conversationId });
   };
 
   const handleUpload = (result: any) => {
-    axios.post("/api/messages", {
+    axiosAuth.post("/messages", {
       image: result?.info?.secure_url,
       conversationId,
     });

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
+import axios from '@/app/libs/axios';
 import Loader from "@/app/components/Loader";
 import { useEffect } from "react";
 
@@ -15,7 +15,7 @@ const VerifyEmail = () => {
     }
 
     useEffect(() => {
-        axios.patch("/api/verify", { verifyToken, id }).then((res) => {
+        axios.patch("/verify", { verifyToken, id }).then((res) => {
             if (res.status === 200) {
                 router.replace("/auth");
             }

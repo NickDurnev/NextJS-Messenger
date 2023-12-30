@@ -3,8 +3,8 @@
 import { FC, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@prisma/client";
-import axios from "axios";
 
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import Avatar from "@/app/components/Avatar";
 import LoadingModal from "@/app/components/LoadingModal";
 
@@ -14,12 +14,13 @@ interface UserBoxProps {
 const UserBox: FC<UserBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const axiosAuth = useAxiosAuth();
 
   const handleClick = useCallback(() => {
     setIsLoading(true);
 
-    axios
-      .post("/api/conversations", { userId: data.id })
+    axiosAuth
+      .post("/conversations", { userId: data.id })
       .then((data) => {
         router.push(`/conversations/${data.data.id}`);
       })

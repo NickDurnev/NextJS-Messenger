@@ -59,7 +59,6 @@ export async function POST(request: Request, { params }: { params: IParams }) {
             id: message.id,
           },
           include: {
-            sender: true,
             seen: true,
           },
           data: {

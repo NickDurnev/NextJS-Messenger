@@ -4,12 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { BsGithub, BsGoogle, BsFillArrowLeftCircleFill } from "react-icons/bs";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import axios from '@/app/libs/axios';
 import { LoginformSchema, RegisterformSchema } from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
@@ -65,7 +65,7 @@ const AuthForm = () => {
 
         if (variant === "REGISTER") {
             axios
-                .post("/api/register", inputData)
+                .post("/register", inputData)
                 .then(() => {
                     reset();
                     toast.success("Check your email for verification!");
@@ -79,7 +79,7 @@ const AuthForm = () => {
 
         if (variant === "LOGIN") {
             axios
-                .post("/api/login", inputData)
+                .post("/login", inputData)
                 .then(() => {
                     const { email, password } = inputData;
                     return signIn("credentials", {

@@ -6,7 +6,12 @@ const useLocalStorage = (key: string, defaultValue?: null | string) => {
   const [state, setState] = useState(() => {
     if (isClient) {
       const storedValue = window.localStorage.getItem(key);
-      return storedValue !== null ? JSON.parse(storedValue) : defaultValue;
+      if (!storedValue) {
+        return defaultValue;
+      }
+      if (storedValue !== "undefined") {
+        return JSON.parse(storedValue);
+      }
     } else {
       return defaultValue;
     }

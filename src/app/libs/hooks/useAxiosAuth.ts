@@ -25,8 +25,11 @@ const useAxiosAuth = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
+        if (error?.response?.status === 413) {
+          console.log("Pusher limit reached, try again later");
+          return Promise.reject(error);
+        }
         if (error?.response?.status === 401 && !prevRequest?.sent) {
-          console.log("ERROR");
           prevRequest.sent = true;
           await refreshToken();
           prevRequest.headers[

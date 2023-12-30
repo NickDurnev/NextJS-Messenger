@@ -4,11 +4,11 @@ import { FC, useState } from "react";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
 
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import stringAvatar from "@/helpers/avatarFormatter";
 import Modal from "../Modal";
 import Input from "../inputs/Input";
@@ -27,6 +27,7 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const axiosAuth = useAxiosAuth();
 
     const {
         register,
@@ -52,8 +53,8 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-        axios
-            .post("/api/settings", data)
+        axiosAuth
+            .post("/settings", data)
             .then(() => {
                 router.refresh();
                 onClose();

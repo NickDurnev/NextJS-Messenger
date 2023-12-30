@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyJwt } from "./app/libs/jwt";
 import { errors } from "./helpers/responseVariants";
 
+const pathList = [
+  "/api/conversations",
+  "/api/users",
+  "/api/messages",
+  "/api/settings",
+];
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/api/conversations")) {
+  if (pathList.some((path) => pathname.startsWith(path))) {
     const authHeader = request.headers.get("Authorization");
 
     if (!authHeader) {

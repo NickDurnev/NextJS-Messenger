@@ -7,6 +7,7 @@ import axios from "axios";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import useMessage from "@/app/hooks/useMessage";
 import MessageMenuItem from "./MessageMenuItem";
 import { FullMessageType } from "@/app/types";
@@ -22,10 +23,19 @@ interface MessageMenuProps {
   messageRef?: React.RefObject<HTMLDivElement>;
 }
 
-const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn,isLast, onClose, theme, messageRef }) => {
+const MessageMenu: FC<MessageMenuProps> = ({
+  data,
+  isOpen,
+  isOwn,
+  isLast,
+  onClose,
+  theme,
+  messageRef,
+}) => {
   const menuRef = useRef<HTMLUListElement>(null);
   const [isUpLifted, setIsUpLifted] = useState(false);
   const { setSelectedMessage } = useMessage();
+  const axiosAuth = useAxiosAuth();
 
   useEffect(() => {
     // Adjust the menu position when it's opened
@@ -42,14 +52,14 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn,isLast, onClose
   }, [isOpen, messageRef]);
 
   const deleteMessage = () => {
-    axios.delete(`/api/messages/${data.id}`);
+    axiosAuth.delete(`/messages/${data.id}`);
     onClose();
-  }
+  };
 
   const editMessage = () => {
     setSelectedMessage(data);
     onClose();
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -62,17 +72,15 @@ const MessageMenu: FC<MessageMenuProps> = ({ data, isOpen, isOwn,isLast, onClose
             isUpLifted ? "-top-32" : "top-6"
           )}
           variants={fadeVariant}
-          initial={'initial'}
-          animate={'open'}
-          exit={'exit'}
+          initial={"initial"}
+          animate={"open"}
+          exit={"exit"}
         >
-          {isOwn && isLast && <MessageMenuItem
-            icon={<CiEdit size={25} />}
-            onClick={editMessage}
-          >
-            Edit
-          </MessageMenuItem>
-          }
+          {isOwn && isLast && (
+            <MessageMenuItem icon={<CiEdit size={25} />} onClick={editMessage}>
+              Edit
+            </MessageMenuItem>
+          )}
           <MessageMenuItem
             icon={<MdDeleteOutline size={25} />}
             danger

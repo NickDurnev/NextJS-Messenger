@@ -1,9 +1,9 @@
 import { User } from "@prisma/client";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import Modal from "@/app/components/Modal";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
@@ -24,6 +24,7 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const axiosAuth = useAxiosAuth();
     useToast(error);
 
     const {
@@ -44,8 +45,8 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-        axios
-            .post("/api/conversations", { ...data, isGroup: true })
+        axiosAuth
+            .post("/conversations", { ...data, isGroup: true })
             .then(() => {
                 router.refresh();
                 onClose();

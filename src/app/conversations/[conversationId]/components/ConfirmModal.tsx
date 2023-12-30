@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
 import toast from "react-hot-toast";
@@ -8,6 +7,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 import { Dialog } from "@headlessui/react";
 
 import useConversation from "@/app/hooks/useConversation";
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 
@@ -20,12 +20,13 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
     const router = useRouter();
     const { conversationId } = useConversation();
     const [isLoading, setIsLoading] = useState(false);
+    const axiosAuth = useAxiosAuth();
 
     const onDelete = useCallback(() => {
         setIsLoading(true);
 
-        axios
-            .delete(`/api/conversations/${conversationId}`)
+        axiosAuth
+            .delete(`/conversations/${conversationId}`)
             .then(() => {
                 onClose();
                 router.push("/conversations");

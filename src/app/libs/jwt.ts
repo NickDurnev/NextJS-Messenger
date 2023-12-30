@@ -34,7 +34,6 @@ export async function signJwtToken(payload: Payload, type: string) {
 
 export async function verifyJwt(token: string) {
   try {
-    console.log(secret_key, "SECRET_KEY");
     const decoded = await jose.jwtVerify(token, secret_key, {
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,
