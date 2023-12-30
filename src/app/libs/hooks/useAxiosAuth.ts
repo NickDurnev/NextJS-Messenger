@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useRefreshToken } from "./useRefreshToken";
 
 const useAxiosAuth = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   const refreshToken = useRefreshToken();
 
   useEffect(() => {
@@ -26,6 +26,7 @@ const useAxiosAuth = () => {
       async (error) => {
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent) {
+          console.log("ERROR");
           prevRequest.sent = true;
           await refreshToken();
           prevRequest.headers[
@@ -41,7 +42,7 @@ const useAxiosAuth = () => {
       axiosAuth.interceptors.request.eject(requestIntercept);
       axiosAuth.interceptors.response.eject(responseIntercept);
     };
-  }, [session, update]);
+  }, [session]);
 
   return axiosAuth;
 };

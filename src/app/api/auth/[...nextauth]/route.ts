@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/app/libs/prismadb";
 
-const BASE_URL = process.env.BASE_APP_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_APP_URL;
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -51,11 +51,10 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
-    maxAge: 30, // 4 hours
+    // maxAge: 30, // 4 hours
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log(token);
       return { ...token, ...user };
     },
     async session({ session, token }) {

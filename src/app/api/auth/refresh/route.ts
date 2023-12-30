@@ -1,14 +1,12 @@
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
 import { errors } from "@/helpers/responseVariants";
-import { verifyJwt } from "@/app/libs/jwt";
+import { signJwtToken, verifyJwt } from "@/app/libs/jwt";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { refreshToken } = body;
-
-    console.log(refreshToken);
 
     if (!refreshToken) {
       return new NextResponse(
@@ -17,7 +15,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const verified = verifyJwt(refreshToken);
+    const verified = await verifyJwt(refreshToken);
 
     if (!verified) {
       return new NextResponse(
@@ -26,10 +24,12 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log(verified, "VERIFIED");
+
     if (verified) {
       const user = await prisma.user.findUnique({
         where: {
-          email: verified.email,
+          email: verified?.email as string,
         },
       });
 
@@ -40,7 +40,16 @@ export async function POST(request: Request) {
         );
       }
 
-      return NextResponse.json({ accessToken: user.accessToken });
+      if (user.email && user.name) {
+        const payload = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+
+        const accessToken = await signJwtToken(payload, "access");
+        return NextResponse.json({ accessToken });
+      }
     }
   } catch (error) {
     console.log(error, "REFRESH_ERROR");

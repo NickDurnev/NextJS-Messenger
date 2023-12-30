@@ -1,10 +1,11 @@
 import axios from "axios";
-const APP_BASE_URL = process.env.NEXTAUTH_URL;
+const BASE_APP_URL = process.env.NEXT_PUBLIC_BASE_APP_URL;
+console.log(BASE_APP_URL);
 export default axios.create({
-  baseURL: APP_BASE_URL,
+  baseURL: `${BASE_APP_URL}api/`,
   headers: { "Content-Type": "application/json" },
 });
 export const axiosAuth = axios.create({
-  baseURL: APP_BASE_URL,
+  baseURL: `${BASE_APP_URL}api/`,
   headers: { "Content-Type": "application/json" },
 });

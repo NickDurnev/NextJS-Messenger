@@ -50,8 +50,8 @@ export async function POST(request: Request) {
         name: user.name,
       };
 
-      const accessToken = signJwtToken(payload, "access");
-      const refreshToken = signJwtToken(payload, "refresh");
+      const accessToken = await signJwtToken(payload, "access");
+      const refreshToken = await signJwtToken(payload, "refresh");
       await prisma.user.update({
         where: {
           id: user.id,

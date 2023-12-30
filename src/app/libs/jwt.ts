@@ -1,8 +1,4 @@
-import jwt from "jsonwebtoken";
-
-interface SignOption {
-  expiresIn?: string | number;
-}
+import * as jose from "jose";
 
 interface Payload {
   id: string;
@@ -10,31 +6,39 @@ interface Payload {
   name: string;
 }
 
-const DEFAULT_ACCESS_TOKEN_SIGN_OPTION: SignOption = {
-  expiresIn: "1h",
-};
+const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
+const JWT_ISSUER = process.env.JWT_ISSUER;
 
-const DEFAULT_REFRESH_TOKEN_SIGN_OPTION: SignOption = {
-  expiresIn: "7d",
-};
+const DEFAULT_ACCESS_TOKEN_SIGN_OPTION = "10sec";
 
-export function signJwtToken(
-  payload: Payload,
-  type: string,
-  options: SignOption = type === "access"
-    ? DEFAULT_ACCESS_TOKEN_SIGN_OPTION
-    : DEFAULT_REFRESH_TOKEN_SIGN_OPTION
-) {
-  const secret_key = process.env.SECRET_KEY;
-  const token = jwt.sign(payload, secret_key!, options);
+const DEFAULT_REFRESH_TOKEN_SIGN_OPTION = "30sec";
+
+const secret_key = new TextEncoder().encode(process.env.SECRET_KEY);
+
+const alg = "HS256";
+
+export async function signJwtToken(payload: Payload, type: string) {
+  const token = await new jose.SignJWT({ ...payload })
+    .setProtectedHeader({ alg })
+    .setIssuedAt()
+    .setIssuer(JWT_ISSUER!)
+    .setAudience(JWT_AUDIENCE!)
+    .setExpirationTime(
+      type === "access"
+        ? DEFAULT_ACCESS_TOKEN_SIGN_OPTION
+        : DEFAULT_REFRESH_TOKEN_SIGN_OPTION
+    )
+    .sign(secret_key);
   return token;
 }
 
-export function verifyJwt(token: string) {
+export async function verifyJwt(token: string) {
   try {
-    const secret_key = process.env.SECRET_KEY;
-    const decoded = jwt.verify(token, secret_key!);
-    return decoded as Payload;
+    const decoded = await jose.jwtVerify(token, secret_key, {
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+    });
+    return decoded.payload;
   } catch (error) {
     console.log(error);
     return null;

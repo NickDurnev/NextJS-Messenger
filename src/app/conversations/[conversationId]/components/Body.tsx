@@ -13,8 +13,7 @@ import scrollTo from "@/helpers/scrollTo";
 import useConversation from "@/app/hooks/useConversation";
 import usePusherClient from "@/app/hooks/usePusherClient";
 import useTheme from "@/app/hooks/useTheme";
-// import useAxiosAuth from "@/app/hooks/useAxiosAuth";
-
+import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 interface BodyProps {
   initialMessages: FullMessageType[];
   isGroup: boolean | null;
@@ -24,51 +23,24 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversationId } = useConversation();
-  const { data: session, update } = useSession();
-  // const axiosAuth = useAxiosAuth();
+  const { data: session } = useSession();
+  const axiosAuth = useAxiosAuth();
   const { theme } = useTheme();
   const { pusherClient } = usePusherClient();
-  console.log('SESSION', session);
 
   const currentDate = new Date();
   const currentUserEmail = session?.user?.email;
 
   useEffect(() => {
-    axios.post(`/api/conversations/${conversationId}/seen`).catch((error) => {
-      console.log(error);
-      if (error.response.status === 401) {
-        update({
-          ...session,
-          user: {
-            ...session?.user,
-            accessToken: 'aaa'
-          }
-        });
-        console.log(session);
-      }
-    });
-  }, [conversationId]);
+    axiosAuth.post(`conversations/${conversationId}/seen`);
+  }, [axiosAuth, conversationId]);
 
   useEffect(() => {
     pusherClient?.subscribe(conversationId);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
       if (currentUserEmail !== message.sender.email) {
-        axios
-          .post(`/api/conversations/${conversationId}/seen`)
-          .catch((error) => {
-            console.log(error);
-            if (error.response.status === 401) {
-              update({
-                ...session,
-                user: {
-                  ...session?.user,
-                  accessToken: 'aaa'
-                }
-              });
-              console.log(session);
-            }
-          });
+        axiosAuth.post(`conversations/${conversationId}/seen`);
       }
 
       setMessages((current) => {

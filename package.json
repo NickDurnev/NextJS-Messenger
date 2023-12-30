@@ -23,6 +23,7 @@
     "date-fns": "^2.30.0",
     "emoji-picker-react": "^4.5.15",
     "framer-motion": "^10.16.4",
+    "jose": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.3",
