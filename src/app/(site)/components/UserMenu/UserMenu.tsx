@@ -4,8 +4,8 @@ import * as React from "react";
 import { useRef } from "react";
 import { motion, useCycle } from "framer-motion";
 
-import useDimensions from "@/app/hooks/useDimensions";
 import { userMenuSidebar } from "@/helpers/framerVariants";
+import useDimensions from "@/app/hooks/useDimensions";
 import MenuToggle from "./MenuToggle";
 import UserList from "./UserList";
 
