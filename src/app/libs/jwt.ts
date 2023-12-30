@@ -9,11 +9,11 @@ interface Payload {
 const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
 const JWT_ISSUER = process.env.JWT_ISSUER;
 
-const DEFAULT_ACCESS_TOKEN_SIGN_OPTION = "10sec";
+const secret_key = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
-const DEFAULT_REFRESH_TOKEN_SIGN_OPTION = "30sec";
+const DEFAULT_ACCESS_TOKEN_SIGN_OPTION = "3h"; // 3 hours
 
-const secret_key = new TextEncoder().encode(process.env.SECRET_KEY);
+const DEFAULT_REFRESH_TOKEN_SIGN_OPTION = "7d"; // 7 days
 
 const alg = "HS256";
 
@@ -34,6 +34,7 @@ export async function signJwtToken(payload: Payload, type: string) {
 
 export async function verifyJwt(token: string) {
   try {
+    console.log(secret_key, "SECRET_KEY");
     const decoded = await jose.jwtVerify(token, secret_key, {
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,

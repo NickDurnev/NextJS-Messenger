@@ -51,7 +51,7 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
-    // maxAge: 30, // 4 hours
+    maxAge: 60 * 60 * 24 * 7, // 7 days
   },
   callbacks: {
     async jwt({ token, user }) {

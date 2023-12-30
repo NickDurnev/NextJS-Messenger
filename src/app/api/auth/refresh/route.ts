@@ -24,8 +24,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log(verified, "VERIFIED");
-
     if (verified) {
       const user = await prisma.user.findUnique({
         where: {
