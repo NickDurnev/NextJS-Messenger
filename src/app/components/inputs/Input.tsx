@@ -9,6 +9,7 @@ interface InputProps {
     id: string;
     type?: string;
     required?: boolean;
+    isTrimmed?: boolean;
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
     disabled?: boolean;
@@ -19,6 +20,7 @@ const Input: FC<InputProps> = ({
     id,
     type,
     required,
+    isTrimmed,
     register,
     errors,
     disabled,
@@ -45,7 +47,9 @@ const Input: FC<InputProps> = ({
                         type={setInputType(type)}
                         autoComplete="off"
                         disabled={disabled}
-                        {...register(id, { required })}
+                        {...register(id, {
+                            required,
+                        })}
                         className={clsx(
                             `
             form-input

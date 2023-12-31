@@ -98,7 +98,7 @@ const Select: FC<SelectProps> = ({
                     }}
                 />
             </div>
-            {errors && id && (
+            {errors && id && errors[id] && (
                 <p className="mt-1 text-rose-500 text-sm">{`${errors[id]?.message}`}</p>
             )}
         </div>

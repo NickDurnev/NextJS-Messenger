@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
+    // appDir: true,
     swcPlugins: [["next-superjson-plugin", {}]],
   },
-  serverComponentsExternalPackages: ["bcrypt"],
+  // serverComponentsExternalPackages: ["bcrypt"],
   images: {
     domains: [
       "avatars.githubusercontent.com",

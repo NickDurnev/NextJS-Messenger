@@ -45,7 +45,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                 onClose={() => setDrawerOpen(false)}
             />
             <div className="bg-skin-main w-full flex border-b-[1px] sm:px-4 py-3 px-4 lg:px-6 justify-between shadow-sm border-skin-main">
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-3 items-center max-w-[90%]">
                     <Link
                         href="/conversations"
                         className="lg:hidden block text-skin-mutated hover:text-skin-mutated-hover transition cursor-pointer"
@@ -57,8 +57,8 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                     ) : (
                         <Avatar user={otherUser!} />
                     )}
-                    <div className="flex flex-col">
-                        <div className="text-skin-base">
+                    <div className="flex flex-col max-w-[50%] xs:max-w-[80%]">
+                        <div className="text-skin-base truncate md:text-clip">
                             {conversation.name ?? otherUser?.name}
                         </div>
                         <div className="text-sm font-light text-skin-additional">

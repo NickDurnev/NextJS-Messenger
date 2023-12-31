@@ -45,11 +45,11 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center mb-1">
-                        <p className="text-md font-medium text-skin-base">
+                        <p className="text-md font-medium text-skin-base truncate">
                             {data.name ?? otherUser?.name}
                         </p>
                         {lastMessage?.createdAt && (
-                            <p className="text-xs text-skin-additional font-light">
+                            <p className="px-1 text-xs text-skin-additional font-light">
                                 {formatRelative(new Date(lastMessage.createdAt), currentDate)}
                             </p>
                         )}

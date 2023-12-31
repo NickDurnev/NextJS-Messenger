@@ -9,7 +9,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import axios from '@/app/libs/axios';
+import axios from "@/app/libs/axios";
 import { LoginFormSchema, RegisterFormSchema } from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
@@ -167,6 +167,7 @@ const AuthForm = () => {
                             register={register}
                             errors={errors}
                             required
+                            isTrimmed
                             id="password"
                             label="Password"
                             type="password"
@@ -240,7 +241,7 @@ const AuthForm = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 };
