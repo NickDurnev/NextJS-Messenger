@@ -10,7 +10,7 @@ import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import axios from '@/app/libs/axios';
-import { LoginformSchema, RegisterformSchema } from "../validation";
+import { LoginFormSchema, RegisterFormSchema } from "../validation";
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
@@ -55,7 +55,7 @@ const AuthForm = () => {
         },
         mode: "onChange",
         resolver: yupResolver<FieldValues>(
-            variant === "LOGIN" ? LoginformSchema : RegisterformSchema
+            variant === "LOGIN" ? LoginFormSchema : RegisterFormSchema
         ),
     });
 

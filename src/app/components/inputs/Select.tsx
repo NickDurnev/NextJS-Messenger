@@ -2,11 +2,14 @@
 
 import useTheme from "@/app/hooks/useTheme";
 import { FC } from "react";
+import { FieldErrors } from "react-hook-form";
 import ReactSelect, { ActionMeta, MultiValue, SingleValue } from "react-select";
 
 interface SelectProps {
     label: string;
     value?: Record<string, any>;
+    errors?: FieldErrors;
+    id?: string;
     onChange: (
         newValue:
             | MultiValue<Record<string, any>>
@@ -21,6 +24,8 @@ interface SelectProps {
 const Select: FC<SelectProps> = ({
     label,
     value,
+    errors,
+    id,
     onChange,
     options,
     disabled,
@@ -93,6 +98,9 @@ const Select: FC<SelectProps> = ({
                     }}
                 />
             </div>
+            {errors && id && (
+                <p className="mt-1 text-rose-500 text-sm">{`${errors[id]?.message}`}</p>
+            )}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const LoginformSchema = Yup.object().shape({
+export const LoginFormSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
@@ -12,7 +12,7 @@ export const LoginformSchema = Yup.object().shape({
   email: Yup.string().email().required("Email is required"),
 });
 
-export const RegisterformSchema = Yup.object().shape({
+export const RegisterFormSchema = Yup.object().shape({
   name: Yup.string()
     .required("Name is required")
     .min(3, "Name length should be at least 3 characters")

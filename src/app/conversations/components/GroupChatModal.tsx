@@ -2,13 +2,18 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+//#HOOKS
 import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
+import useToast from "@/app/hooks/useToast";
+
+import { GroupChatSchema } from "@/app/conversations/validation";
+
 import Modal from "@/app/components/Modal";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import Button from "@/app/components/Button";
-import useToast from "@/app/hooks/useToast";
 
 interface GroupChatModelProps {
     users: User[];
@@ -38,15 +43,17 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
             name: "",
             members: [],
         },
+        mode: "onChange",
+        resolver: yupResolver<FieldValues>(GroupChatSchema),
     });
 
     const members = watch("members");
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    const onSubmit: SubmitHandler<FieldValues> = ({ members, name }) => {
         setIsLoading(true);
 
         axiosAuth
-            .post("/conversations", { ...data, isGroup: true })
+            .post("/conversations", { members, name, isGroup: true })
             .then(() => {
                 router.refresh();
                 onClose();
@@ -75,8 +82,11 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
                                 errors={errors}
                             />
                             <Select
-                                disabled={isLoading}
                                 label="Members"
+                                disabled={isLoading}
+                                value={members}
+                                errors={errors}
+                                id="members"
                                 options={users.map((user) => ({
                                     value: user.id,
                                     label: user.name,
@@ -84,7 +94,6 @@ const GroupChatModel: FC<GroupChatModelProps> = ({
                                 onChange={(value) =>
                                     setValue("members", value, { shouldValidate: true })
                                 }
-                                value={members}
                                 isMulti
                             />
                         </div>
