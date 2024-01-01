@@ -97,7 +97,7 @@ async function DELETE(
   const time1 = date1.getHours() + date1.getMinutes() + date1.getSeconds();
   const time2 = date2.getHours() + date2.getMinutes() + date2.getSeconds();
 
-  const isLastMessage = Math.abs(time1 - time2) <= 1;
+  const isLastMessage = Math.abs(time1 - time2) <= 5;
 
   const messages = await getMessages(id);
 

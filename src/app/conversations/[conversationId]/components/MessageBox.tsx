@@ -4,12 +4,12 @@ import { FC, useState, useRef, MouseEvent, TouchEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import clsx from "clsx";
-import { formatRelative } from "date-fns";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import { FullMessageType } from "@/app/types";
-import ImageModal from "./ImageModal";
 import { fadeVariant } from "@/helpers/framerVariants";
+import formatToRelative from "@/app/libs/date-fns";
+import ImageModal from "./ImageModal";
 import MessageMenu from "./MessageMenu/MessageMenu";
 
 interface MessageBoxProps {
@@ -83,7 +83,9 @@ const MessageBox: FC<MessageBoxProps> = ({
         animate={"open"}
         exit={"exit"}
       >
-        <div className={bodyStyles} onContextMenu={showMessageMenu}
+        <div
+          className={bodyStyles}
+          onContextMenu={showMessageMenu}
           onTouchStart={showMessageMenu}
         >
           <div className="text-sm text-skin-additional">
@@ -109,7 +111,10 @@ const MessageBox: FC<MessageBoxProps> = ({
                 <div>{body}</div>
                 <div className="flex justify-end items-end mt-1 gap-2">
                   <div className="italic ml-auto text-xs text-skin-additional">
-                    {`${editedAt ? "edited " : ""}${formatRelative(new Date(createdAt), currentDate)}`}
+                    {`${editedAt ? "edited " : ""}${formatToRelative(
+                      new Date(createdAt),
+                      currentDate
+                    )}`}
                   </div>
                   {isOwn && seenList.length > 0 && (
                     <div className="text-skin-mutated">

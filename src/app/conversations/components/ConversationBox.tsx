@@ -2,16 +2,16 @@
 
 import { FC, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { formatRelative } from "date-fns";
 import clsx from "clsx";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
-import { FullConversationType } from "@/app/types";
 import useOtherUser from "@/app/hooks/useOtherUser";
+import useConversationInfo from "@/app/hooks/useConversationInfo";
+import formatToRelative from "@/app/libs/date-fns";
+import { FullConversationType } from "@/app/types";
 import Avatar from "@/app/components/Avatar";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import ConversetionSkeleton from "./ConversationSkeleton";
-import useConversationInfo from "@/app/hooks/useConversationInfo";
 
 interface ConversationBoxProps {
     data: FullConversationType;
@@ -48,11 +48,13 @@ const ConversationBox: FC<ConversationBoxProps> = ({ data, currentDate }) => {
                         <p className="text-md font-medium text-skin-base truncate">
                             {data.name ?? otherUser?.name}
                         </p>
-                        {lastMessage?.createdAt && (
-                            <p className="px-1 text-xs text-skin-additional font-light">
-                                {formatRelative(new Date(lastMessage.createdAt), currentDate)}
-                            </p>
-                        )}
+                        <div className="max-w-[40%] px-1">
+                            {lastMessage?.createdAt && (
+                                <p className="text-xs text-skin-additional font-light">
+                                    {formatToRelative(new Date(lastMessage.createdAt), currentDate)}
+                                </p>
+                            )}
+                        </div>
                     </div>
                     <div className="flex items-center justify-between px-1">
                         <p
