@@ -39,6 +39,7 @@ export async function POST(request: Request) {
         status: 400,
       });
     }
+
     if (!user.emailVerified) {
       return new NextResponse("Email not verified", { status: 401 });
     }
