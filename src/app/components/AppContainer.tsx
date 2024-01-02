@@ -17,7 +17,6 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         savedTheme ? set(savedTheme) : setSavedTheme(theme);
-        console.log(pusherClient);
         if (!pusherClient) {
             console.log('creating pusher client');
             setPusherClient(newPusherInstance);
