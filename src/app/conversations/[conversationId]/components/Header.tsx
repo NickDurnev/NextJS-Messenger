@@ -66,11 +66,15 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
                         </div>
                     </div>
                 </div>
-                <HiEllipsisHorizontal
-                    size={32}
+                <div
                     onClick={() => setDrawerOpen(true)}
-                    className="text-skin-mutated hover:text-skin-mutated-hover transition cursor-pointer"
-                />
+                    className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover hover:scale-110 transition cursor-pointer"
+                >
+                    <HiEllipsisHorizontal
+                        size={32}
+                        className="text-skin-mutated hover:text-skin-mutated-hover transition cursor-pointer"
+                    />
+                </div>
             </div>
         </>
     );

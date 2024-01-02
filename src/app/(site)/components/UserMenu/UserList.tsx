@@ -2,7 +2,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 
-import AuthButton from "./AuthButton";
+import AuthButton from "./AuthButton/AuthButton";
 
 const listVariants = {
   open: {

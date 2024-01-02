@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { BsGithub, BsGoogle, BsFillArrowLeftCircleFill } from "react-icons/bs";
+import { BsGithub, BsGoogle } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import axios from "@/app/libs/axios";
@@ -15,16 +14,19 @@ import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
 import useToast from "@/app/hooks/useToast";
-import Loader from "@/app/components/Loader";
 import scrollTo from "@/helpers/scrollTo";
 
 type Variant = "LOGIN" | "REGISTER";
 
-const AuthForm = () => {
+interface IProps {
+    isLoading: boolean;
+    setIsLoading: (value: boolean) => void;
+}
+
+const AuthForm: FC<IProps> = ({ isLoading, setIsLoading }) => {
     const session = useSession();
     const router = useRouter();
     const [variant, setVariant] = useState<Variant>("LOGIN");
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     useToast(error);
 
@@ -125,12 +127,6 @@ const AuthForm = () => {
 
     return (
         <>
-            {isLoading && <Loader />}
-            <Link href="/">
-                <span className="absolute top-12 left-5">
-                    <BsFillArrowLeftCircleFill className="w-12 h-12 fill-sky-500 hover:fill-sky-600" />
-                </span>
-            </Link>
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div
                     className="
@@ -241,7 +237,7 @@ const AuthForm = () => {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     );
 };
