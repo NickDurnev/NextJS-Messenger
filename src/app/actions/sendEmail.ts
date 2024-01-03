@@ -21,7 +21,7 @@ export async function sendVerifyEmail(
     from: EMAIL_SENDER,
     to: email,
     subject: "Connectify email verification",
-    text: `${APP_BASE_URL}auth/verify?verifyToken=${verToken}&id=${id}`,
+    link: `${APP_BASE_URL}auth/verify?verifyToken=${verToken}&id=${id}`,
   };
 
   await new Promise((resolve, reject) => {
