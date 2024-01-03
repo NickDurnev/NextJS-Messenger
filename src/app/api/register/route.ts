@@ -17,6 +17,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const isUserExist = await prisma.user.findUnique({
+      where: {
+        email: email as string,
+      },
+    });
+
+    if (isUserExist) {
+      return new NextResponse(
+        errors.USER_EXIST.message,
+        errors.USER_EXIST.status
+      );
+    }
+
     const nanoid = customAlphabet("1234567890abcdef", 16);
     const verificationToken = nanoid();
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -30,7 +43,7 @@ export async function POST(request: Request) {
       },
     });
 
-    await sendVerifyEmail(email, verificationToken, user.id);
+    await sendVerifyEmail(email, verificationToken, user.id, name);
 
     return NextResponse.json(user);
   } catch (error) {
