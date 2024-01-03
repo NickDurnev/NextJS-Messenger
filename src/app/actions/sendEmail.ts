@@ -1,15 +1,17 @@
 import nodemailer from "nodemailer";
+import createEmail from "./createEmail";
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
-const APP_BASE_URL = process.env.BASE_APP_URL;
 const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD;
+const APP_BASE_URL = process.env.NEXT_PUBLIC_BASE_APP_URL;
 
 export async function sendVerifyEmail(
   email: string,
   verToken: string,
-  id: string
+  id: string,
+  name: string
 ) {
-  var transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
       user: EMAIL_SENDER,
@@ -17,11 +19,19 @@ export async function sendVerifyEmail(
     },
   });
 
-  var mailOptions = {
+  // Define the data to be passed to the template
+  const templateData = {
+    link: `${APP_BASE_URL}auth/verify?verifyToken=${verToken}&id=${id}`,
+    name,
+  };
+
+  const html = createEmail(templateData, "./src/app/templates/verifyEmail.hbs");
+
+  const mailOptions = {
     from: EMAIL_SENDER,
     to: email,
     subject: "Connectify email verification",
-    link: `${APP_BASE_URL}auth/verify?verifyToken=${verToken}&id=${id}`,
+    html: html,
   };
 
   await new Promise((resolve, reject) => {
