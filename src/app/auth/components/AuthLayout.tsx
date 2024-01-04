@@ -18,8 +18,8 @@ const AuthLayout = () => {
     return (
         <>
             <Link href="/">
-                <span className="absolute top-12 left-5">
-                    <BsFillArrowLeftCircleFill className="w-12 h-12 fill-sky-500 hover:fill-sky-600" />
+                <span className="absolute top-5 left-9">
+                    <BsFillArrowLeftCircleFill className="w-14 h-14 fill-sky-500 hover:fill-sky-600" />
                 </span>
             </Link>
             {isLoading && <Loader />}

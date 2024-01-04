@@ -8,6 +8,6 @@ export default function Home() {
         <UserMenu />
       </section>
       <Hero />
-    </main>
+    </main >
   )
 }

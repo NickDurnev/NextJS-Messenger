@@ -23,13 +23,3 @@ export const fadeVariant = {
   open: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.7 },
 };
-
-export const messageVariant = (custom = 0) => ({
-  open: { opacity: 1, y: 0, transition: { delay: custom + 0.5 } },
-  closed: { opacity: 0, y: "50%" },
-  exit: {
-    opacity: 0,
-    y: 0,
-    transition: { duration: 0.3, delay: custom + 0.3 },
-  },
-});

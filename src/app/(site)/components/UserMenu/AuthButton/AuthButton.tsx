@@ -1,13 +1,18 @@
-import { signOut, useSession } from "next-auth/react";
+import { FC } from "react";
+import { signOut } from "next-auth/react";
+import { Session } from "next-auth";
 import Link from "next/link";
-import styles from "./AuthButton.module.css";
+import styles from "../styles.module.css";
 
-const AuthButton = () => {
-    const { data: session } = useSession();
+interface IProps {
+    session: Session | null;
+}
+
+const AuthButton: FC<IProps> = ({ session }) => {
 
     if (session?.user) {
         return (
-            <button className={styles.authBtn} onClick={() => signOut()}>
+            <button className={styles.btn} onClick={() => signOut()}>
                 Sign out
                 <div className={styles.arrow_Wrapper}>
                     <div className={styles.arrow}></div>
@@ -16,7 +21,7 @@ const AuthButton = () => {
         );
     }
     return (
-        <Link className={styles.authBtn} href="/auth">
+        <Link className={styles.btn} href="/auth">
             Sign up
             <div className={styles.arrow_Wrapper}>
                 <div className={styles.arrow}></div>
