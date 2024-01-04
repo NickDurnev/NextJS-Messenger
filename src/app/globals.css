@@ -95,6 +95,33 @@ li {
   }
 }
 
+/* Hero title styles */
+
+.title {
+  background: #bbb2cf;
+  background: linear-gradient(to bottom right, #bbb2cf 10%, #0a3428 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 75px;
+  line-height: normal;
+}
+
+.title > span {
+  font-size: 90px;
+  font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+  .title {
+    font-size: 50px;
+  }
+
+  .title > span {
+    font-size: 60px;
+  }
+}
+
 /* UserMenu styles */
 
 .background {
