@@ -126,98 +126,97 @@ const AuthForm: FC<IProps> = ({ isLoading, setIsLoading }) => {
     };
 
     return (
-        <>
-            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div
-                    className="
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md rounded-md">
+            <div
+                className="
         bg-skin-main
           px-4
           py-8
           border-[1px]
           border-skin-main
-          sm:rounded-lg
+          rounded-lg
           sm:px-10
         "
-                >
-                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                        {variant === "REGISTER" && (
-                            <Input
-                                disabled={isLoading}
-                                register={register}
-                                errors={errors}
-                                required
-                                id="name"
-                                label="Name"
-                            />
-                        )}
+            >
+                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                    {variant === "REGISTER" && (
                         <Input
                             disabled={isLoading}
                             register={register}
                             errors={errors}
                             required
-                            id="email"
-                            label="Email address"
+                            id="name"
+                            label="Name"
                         />
+                    )}
+                    <Input
+                        disabled={isLoading}
+                        register={register}
+                        errors={errors}
+                        required
+                        id="email"
+                        label="Email address"
+                    />
+                    <Input
+                        disabled={isLoading}
+                        register={register}
+                        errors={errors}
+                        required
+                        isTrimmed
+                        id="password"
+                        label="Password"
+                        type="password"
+                    />
+                    {variant === "REGISTER" && (
                         <Input
                             disabled={isLoading}
                             register={register}
                             errors={errors}
                             required
-                            isTrimmed
-                            id="password"
-                            label="Password"
+                            id="confirmPassword"
+                            label="Confirm password"
                             type="password"
                         />
-                        {variant === "REGISTER" && (
-                            <Input
-                                disabled={isLoading}
-                                register={register}
-                                errors={errors}
-                                required
-                                id="confirmPassword"
-                                label="Confirm password"
-                                type="password"
-                            />
-                        )}
-                        <div>
-                            <Button disabled={isLoading} fullWidth type="submit">
-                                {variant === "LOGIN" ? "Sign in" : "Register"}
-                            </Button>
-                        </div>
-                    </form>
+                    )}
+                    <div>
+                        <Button disabled={isLoading} fullWidth type="submit">
+                            {variant === "LOGIN" ? "Sign in" : "Register"}
+                        </Button>
+                    </div>
+                </form>
 
-                    <div className="mt-6">
-                        <div className="relative">
-                            <div
-                                className="
+                <div className="mt-6">
+                    <div className="relative">
+                        <div
+                            className="
                 absolute 
                 inset-0 
                 flex 
                 items-center
               "
-                            >
-                                <div className="w-full border-t border-skin-main" />
-                            </div>
-                            <div className="relative flex justify-center text-sm">
-                                <span className="bg-skin-main px-2 text-skin-base">
-                                    Or continue with
-                                </span>
-                            </div>
+                        >
+                            <div className="w-full border-t border-skin-main" />
                         </div>
-
-                        <div className="mt-6 flex gap-2">
-                            <AuthSocialButton
-                                icon={BsGithub}
-                                onClick={() => socialAction("github")}
-                            />
-                            <AuthSocialButton
-                                icon={BsGoogle}
-                                onClick={() => socialAction("google")}
-                            />
+                        <div className="relative flex justify-center text-sm">
+                            <span className="bg-skin-main px-2 text-skin-base">
+                                Or continue with
+                            </span>
                         </div>
                     </div>
-                    <div
-                        className="
+
+                    <div className="mt-6 flex gap-2">
+                        <AuthSocialButton
+                            icon={BsGithub}
+                            onClick={() => socialAction("github")}
+                        />
+                        <AuthSocialButton
+                            icon={BsGoogle}
+                            onClick={() => socialAction("google")}
+                        />
+                    </div>
+                </div>
+                <div
+                    className="
             flex 
             gap-2 
             justify-center 
@@ -226,19 +225,18 @@ const AuthForm: FC<IProps> = ({ isLoading, setIsLoading }) => {
             px-2 
             text-skin-additional
           "
-                    >
-                        <div>
-                            {variant === "LOGIN"
-                                ? "New to Messenger?"
-                                : "Already have an account?"}
-                        </div>
-                        <div onClick={toggleVariant} className="underline cursor-pointer">
-                            {variant === "LOGIN" ? "Create an account" : "Login"}
-                        </div>
+                >
+                    <div>
+                        {variant === "LOGIN"
+                            ? "New to Messenger?"
+                            : "Already have an account?"}
+                    </div>
+                    <div onClick={toggleVariant} className="underline cursor-pointer">
+                        {variant === "LOGIN" ? "Create an account" : "Login"}
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

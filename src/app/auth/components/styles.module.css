@@ -2,6 +2,8 @@
   @apply bg-gradient-to-r  rounded-l-md;
   position: relative;
   overflow: hidden;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
 }
 
 .cartoonImg {

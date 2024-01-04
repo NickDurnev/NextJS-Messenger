@@ -23,12 +23,12 @@ const AuthLayout = () => {
                 </span>
             </Link>
             {isLoading && <Loader />}
-            <div className="m-auto xl:w-3/5 xl:h-3/4 grid xl:grid-cols-2">
+            <div className="m-auto xl:w-3/5 xl:h-[80vh] grid xl:grid-cols-2">
                 <div
                     className={clsx(
                         styles.imgStyle,
                         theme === "dark"
-                            ? "from-zinc-700 to-violet-900"
+                            ? "from-zinc-700 to-violet-950"
                             : "from-sky-500 to-blue-500"
                     )}
                 >
@@ -46,8 +46,8 @@ const AuthLayout = () => {
             py-12 
             sm:px-6 
             lg:px-8
-            rounded-md
-            xl:rounded-none 
+            xl:rounded-tr-lg
+            xl:rounded-br-lg
             bg-skin-main
           "
                 >

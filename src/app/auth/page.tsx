@@ -2,7 +2,7 @@ import AuthLayout from "./components/AuthLayout";
 
 const Auth = () => {
     return (
-        <div className="flex h-screen bg-skin-additional">
+        <div className="flex min-h-screen xl:bg-skin-additional">
             <AuthLayout />
         </div >
     );
