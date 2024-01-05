@@ -32,10 +32,12 @@ const itemVariants = {
   },
 };
 
+const itemStyles = "mb-5 flex items-center justify-center cursor-pointer";
+
 const UserList = () => {
   const { data: session } = useSession();
   return (
-    <motion.ul variants={listVariants} className="p-6 absolute top-24 w-80">
+    <motion.ul variants={listVariants} className="p-6 absolute top-24 z-10 w-80">
       {session?.user?.name && (
         <motion.li
           variants={itemVariants}
@@ -49,7 +51,7 @@ const UserList = () => {
           variants={itemVariants}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="mb-5 flex items-center justify-center cursor-pointer"
+          className={itemStyles}
         >
           <Link className={styles.btn} href="/users">
             Go to app
@@ -63,7 +65,7 @@ const UserList = () => {
         variants={itemVariants}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="mb-5 flex items-center justify-center cursor-pointer"
+        className={itemStyles}
       >
         <AuthButton session={session} />
       </motion.li>

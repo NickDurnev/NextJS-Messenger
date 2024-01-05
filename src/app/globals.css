@@ -122,6 +122,20 @@ li {
   }
 }
 
+/* Spline container */
+
+.spline-container {
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  transition-delay: 2s;
+  transform: translateY(100%);
+}
+
+.spline-container.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* UserMenu styles */
 
 .background {

@@ -20,7 +20,7 @@ const UserMenu = () => {
             animate={isOpen ? "open" : "closed"}
             custom={height}
             ref={containerRef}
-            className="absolute top-2.5 left-8 bottom-0 w-80"
+            className="absolute top-2.5 left-8 z-10 bottom-0 w-80"
         >
             <motion.div className="background" variants={userMenuSidebar} />
             <UserList />
