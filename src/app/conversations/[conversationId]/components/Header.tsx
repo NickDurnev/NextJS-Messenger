@@ -23,13 +23,13 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
   const otherUser = useOtherUser(conversation);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userWasOnline, setUserWasOnline] = useState(
-    formatToDistance(new Date(otherUser?.wasOnlineAt), new Date())
+    formatToDistance(new Date(otherUser?.wasOnlineAt!), new Date())
   );
   const { members } = useActiveList();
   const { pusherClient } = usePusherClient();
   const [conversationId, setConversationId] = useLocalStorage("conversationId");
 
-  const isActive = members.indexOf(otherUser?.email) !== -1;
+  const isActive = members.indexOf(otherUser?.email!) !== -1;
 
   useEffect(() => {
     setConversationId(conversation?.id);
