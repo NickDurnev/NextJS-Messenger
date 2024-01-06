@@ -89,6 +89,7 @@ const ConversationList: FC<ConversationListProps> = ({
         current.map((currentConversation) => {
           if (currentConversation.id === newMessage.conversationId) {
             console.log("NEW MESSAGE", newMessage);
+            //TODO Test behavior
             const messages = currentConversation.messages;
             messages.pop();
             return {
@@ -102,11 +103,32 @@ const ConversationList: FC<ConversationListProps> = ({
       );
     };
 
+    const deleteMessageHandler = (deletedMessage: FullMessageType) => {
+      setItems((current) =>
+        current.map((currentConversation) => {
+          if (currentConversation.id === newMessage.conversationId) {
+            console.log("DELETED MESSAGE", deletedMessage);
+            //TODO Test behavior
+            const messages = currentConversation.messages.filter(
+              ({ id }) => deletedMessage.id !== id
+            );
+            return {
+              ...currentConversation,
+              messages: [...messages],
+            };
+          }
+
+          return currentConversation;
+        })
+      );
+    };
+
     pusherClient?.bind("conversation:new", newHandler);
     pusherClient?.bind("conversation:update", updateHandler);
     pusherClient?.bind("conversation:deleteMessage", updateHandler);
     pusherClient?.bind("conversation:remove", removeHandler);
     pusherClient?.bind("message:update", updateMessageHandler);
+    pusherClient?.bind("message:delete", deleteMessageHandler);
 
     return () => {
       pusherClient?.unsubscribe(pusherKey);
@@ -115,6 +137,7 @@ const ConversationList: FC<ConversationListProps> = ({
       pusherClient?.unbind("conversation:deleteMessage", updateHandler);
       pusherClient?.unbind("conversation:remove", removeHandler);
       pusherClient?.unbind("message:update", updateMessageHandler);
+      pusherClient?.unbind("message:delete", deleteMessageHandler);
     };
   }, [pusherKey, conversationId, router, pusherClient]);
 
