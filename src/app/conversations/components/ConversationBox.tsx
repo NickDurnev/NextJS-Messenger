@@ -7,7 +7,7 @@ import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import useOtherUser from "@/app/hooks/useOtherUser";
 import useConversationInfo from "@/app/hooks/useConversationInfo";
-import formatToRelative from "@/app/libs/date-fns";
+import {formatToRelative} from "@/app/libs/date-fns";
 import { FullConversationType } from "@/app/types";
 import Avatar from "@/app/components/Avatar";
 import AvatarGroup from "@/app/components/AvatarGroup";

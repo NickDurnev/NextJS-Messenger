@@ -127,7 +127,7 @@ li {
 .spline-container {
   opacity: 0;
   transition: all 300ms ease-in-out;
-  transition-delay: 2s;
+  transition-delay: 3s;
   transform: translateY(100%);
 }
 

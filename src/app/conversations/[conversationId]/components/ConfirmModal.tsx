@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
-import toast from "react-hot-toast";
 import { FiAlertTriangle } from "react-icons/fi";
 import { Dialog } from "@headlessui/react";
-
+//#HOOKS
 import useConversation from "@/app/hooks/useConversation";
 import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
+import useToast from "@/app/hooks/useToast";
+//#COMPONENTS
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 
@@ -20,6 +21,8 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
     const router = useRouter();
     const { conversationId } = useConversation();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    useToast(error);
     const axiosAuth = useAxiosAuth();
 
     const onDelete = useCallback(() => {
@@ -32,8 +35,8 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
                 router.push("/conversations");
                 router.refresh();
             })
-            .catch(() => toast.error("Something went wrong!"));
-    }, [conversationId, router, onClose]);
+            .catch((error) => setError(error));
+    }, [axiosAuth, conversationId, onClose, router]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -49,15 +52,21 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
                         Delete conversation
                     </Dialog.Title>
                     <div className="mt-2">
-                        <p className="text-sm text-skin-additional">Are you sure you want delete this conversation?</p>
+                        <p className="text-sm text-skin-additional">
+                            Are you sure you want delete this conversation?
+                        </p>
                     </div>
                 </div>
             </div>
             <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <Button disabled={isLoading} danger onClick={onDelete}>Delete</Button>
-                <Button disabled={isLoading} secondary onClick={onClose}>Cancel</Button>
+                <Button disabled={isLoading} danger onClick={onDelete}>
+                    Delete
+                </Button>
+                <Button disabled={isLoading} secondary onClick={onClose}>
+                    Cancel
+                </Button>
             </div>
-        </Modal >
+        </Modal>
     );
 };
 

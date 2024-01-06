@@ -8,7 +8,7 @@ import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 
 import { FullMessageType } from "@/app/types";
 import { fadeVariant } from "@/helpers/framerVariants";
-import formatToRelative from "@/app/libs/date-fns";
+import {formatToRelative} from "@/app/libs/date-fns";
 import ImageModal from "./ImageModal";
 import MessageMenu from "./MessageMenu/MessageMenu";
 

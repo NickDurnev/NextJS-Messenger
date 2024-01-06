@@ -1,13 +1,13 @@
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
+import { pusherServer } from "@/app/libs/pusher";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { errors } from "@/helpers/responseVariants";
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { name, image } = body;
 
     if (!currentUser?.id) {
       return new NextResponse(
@@ -21,10 +21,17 @@ export async function POST(request: Request) {
         id: currentUser.id,
       },
       data: {
-        image: image,
-        name: name,
+        ...body,
       },
     });
+
+    await Promise.all(
+      updatedUser.conversationIds.map(async (conversationId) => {
+        await pusherServer.trigger(conversationId, "user:update", {
+          wasOnlineAt: updatedUser.wasOnlineAt,
+        });
+      })
+    );
 
     return NextResponse.json(updatedUser);
   } catch (error) {

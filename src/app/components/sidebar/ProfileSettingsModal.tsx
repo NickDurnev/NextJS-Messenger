@@ -4,12 +4,13 @@ import { FC, useState } from "react";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
-
+//#HOOKS and HELPERS
+import useToast from "@/app/hooks/useToast";
 import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import stringAvatar from "@/helpers/avatarFormatter";
+//#COMPONENTS
 import Modal from "../Modal";
 import Input from "../inputs/Input";
 import Button from "../Button";
@@ -27,6 +28,8 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    useToast(error);
     const axiosAuth = useAxiosAuth();
 
     const {
@@ -54,12 +57,12 @@ const ProfileSettingsModal: FC<ProfileSettingsModalProps> = ({
         setIsLoading(true);
 
         axiosAuth
-            .post("/settings", data)
+            .patch("/user", data)
             .then(() => {
                 router.refresh();
                 onClose();
             })
-            .catch(() => toast.error("Something went wrong!"))
+            .catch((error) => setError(error))
             .finally(() => setIsLoading(false));
     };
     return (

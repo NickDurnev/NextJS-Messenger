@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyJwt } from "./app/libs/jwt";
 import { errors } from "./helpers/responseVariants";
 
-const pathList = [
-  "/api/conversations",
-  "/api/users",
-  "/api/messages",
-  "/api/settings",
-];
+const pathList = ["/api/conversations", "/api/user", "/api/messages"];
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

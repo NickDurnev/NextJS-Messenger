@@ -87,8 +87,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
       pusherClient?.unbind("message:update", updateMessageHandler);
       pusherClient?.unbind("message:delete", deleteMessageHandler);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationId]);
+  }, [axiosAuth, conversationId, currentUserEmail, pusherClient]);
 
   return (
     <AnimatePresence>
