@@ -15,143 +15,143 @@ import { find } from "lodash";
 import usePusherClient from "@/app/hooks/usePusherClient";
 
 interface ConversationListProps {
-    initialItems: FullConversationType[];
-    users: User[];
+  initialItems: FullConversationType[];
+  users: User[];
 }
 
 const ConversationList: FC<ConversationListProps> = ({
-    initialItems,
-    users,
+  initialItems,
+  users,
 }) => {
-    const session = useSession();
-    const [items, setItems] = useState(initialItems);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const session = useSession();
+  const [items, setItems] = useState(initialItems);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const router = useRouter();
-    const { pusherClient } = usePusherClient();
+  const router = useRouter();
+  const { pusherClient } = usePusherClient();
 
-    const { conversationId, isOpen } = useConversation();
+  const { conversationId, isOpen } = useConversation();
 
-    const pusherKey = useMemo(() => {
-        return session.data?.user?.email;
-    }, [session.data?.user?.email]);
+  const pusherKey = useMemo(() => {
+    return session.data?.user?.email;
+  }, [session.data?.user?.email]);
 
-    const currentDate = new Date();
+  const currentDate = new Date();
 
-    useEffect(() => {
-        if (!pusherKey) {
-            return;
+  useEffect(() => {
+    if (!pusherKey) {
+      return;
+    }
+
+    pusherClient?.subscribe(pusherKey);
+
+    const newHandler = (conversation: FullConversationType) => {
+      setItems((current) => {
+        if (find(current, { id: conversation.id })) {
+          return current;
         }
 
-        pusherClient?.subscribe(pusherKey);
+        return [conversation, ...current];
+      });
+    };
 
-        const newHandler = (conversation: FullConversationType) => {
-            setItems((current) => {
-                if (find(current, { id: conversation.id })) {
-                    return current;
-                }
+    const updateHandler = (conversation: FullConversationType) => {
+      setItems((current) =>
+        current.map((currentConversation) => {
+          if (currentConversation.id === conversation.id) {
+            return {
+              ...currentConversation,
+              messages: conversation.messages,
+            };
+          }
 
-                return [conversation, ...current];
-            });
-        };
+          return currentConversation;
+        })
+      );
+    };
 
-        const updateHandler = (conversation: FullConversationType) => {
-            setItems((current) =>
-                current.map((currentConversation) => {
-                    if (currentConversation.id === conversation.id) {
-                        return {
-                            ...currentConversation,
-                            messages: conversation.messages,
-                        };
-                    }
+    const removeHandler = (conversation: FullConversationType) => {
+      setItems((current) => {
+        return [
+          ...current.filter(
+            (currentConversation) => currentConversation.id !== conversation.id
+          ),
+        ];
+      });
 
-                    return currentConversation;
-                })
-            );
-        };
+      if (conversation.id === conversationId) {
+        router.push("/conversations");
+      }
+    };
 
-        const removeHandler = (conversation: FullConversationType) => {
-            setItems((current) => {
-                return [
-                    ...current.filter(
-                        (currentConversation) => currentConversation.id !== conversation.id
-                    ),
-                ];
-            });
+    const updateMessageHandler = (newMessage: FullMessageType) => {
+      setItems((current) =>
+        current.map((currentConversation) => {
+          if (currentConversation.id === newMessage.conversationId) {
+            console.log("NEW MESSAGE", newMessage);
+            const messages = currentConversation.messages;
+            messages.pop();
+            return {
+              ...currentConversation,
+              messages: [...messages, newMessage],
+            };
+          }
 
-            if (conversation.id === conversationId) {
-                router.push("/conversations");
-            }
-        };
+          return currentConversation;
+        })
+      );
+    };
 
-        const updateMessageHandler = (newMessage: FullMessageType) => {
-            setItems((current) =>
-                current.map((currentConversation) => {
-                    if (currentConversation.id === newMessage.conversationId) {
-                        const messages = currentConversation.messages;
-                        messages.pop();
-                        console.log('NEW MESSAGE', newMessage);
-                        return {
-                            ...currentConversation,
-                            messages: [...messages, newMessage],
-                        };
-                    }
+    pusherClient?.bind("conversation:new", newHandler);
+    pusherClient?.bind("conversation:update", updateHandler);
+    pusherClient?.bind("conversation:deleteMessage", updateHandler);
+    pusherClient?.bind("conversation:remove", removeHandler);
+    pusherClient?.bind("message:update", updateMessageHandler);
 
-                    return currentConversation;
-                })
-            );
-        };
+    return () => {
+      pusherClient?.unsubscribe(pusherKey);
+      pusherClient?.unbind("conversation:new", newHandler);
+      pusherClient?.unbind("conversation:update", updateHandler);
+      pusherClient?.unbind("conversation:deleteMessage", updateHandler);
+      pusherClient?.unbind("conversation:remove", removeHandler);
+      pusherClient?.unbind("message:update", updateMessageHandler);
+    };
+  }, [pusherKey, conversationId, router, pusherClient]);
 
-        pusherClient?.bind("conversation:new", newHandler);
-        pusherClient?.bind("conversation:update", updateHandler);
-        pusherClient?.bind("conversation:deleteMessage", updateHandler);
-        pusherClient?.bind("conversation:remove", removeHandler);
-        pusherClient?.bind("message:update", updateMessageHandler);
-
-        return () => {
-            pusherClient?.unsubscribe(pusherKey);
-            pusherClient?.unbind("conversation:new", newHandler);
-            pusherClient?.unbind("conversation:update", updateHandler);
-            pusherClient?.unbind("conversation:deleteMessage", updateHandler);
-            pusherClient?.unbind("conversation:remove", removeHandler);
-            pusherClient?.unbind("message:update", updateMessageHandler);
-        };
-    }, [pusherKey, conversationId, router, pusherClient]);
-
-    return (
-        <>
-            <GroupChatModal
-                users={users}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-            />
-            <aside
-                className={clsx(
-                    `fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto bg-skin-main border-r border-skin-main`,
-                    isOpen ? "hidden" : "block w-full left-0"
-                )}
+  return (
+    <>
+      <GroupChatModal
+        users={users}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <aside
+        className={clsx(
+          `fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto bg-skin-main border-r border-skin-main`,
+          isOpen ? "hidden" : "block w-full left-0"
+        )}
+      >
+        <div className="px-5">
+          <div className="flex justify-between mb-4 pt-4">
+            <div className="text-2xl font-bold text-skin-base">Messages</div>
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover hover:scale-125 transition cursor-pointer"
             >
-                <div className="px-5">
-                    <div className="flex justify-between mb-4 pt-4">
-                        <div className="text-2xl font-bold text-skin-base">Messages</div>
-                        <div
-                            onClick={() => setIsModalOpen(true)}
-                            className="rounded-full p-2 text-skin-mutated hover:text-skin-mutated-hover hover:bg-skin-hover hover:scale-125 transition cursor-pointer"
-                        >
-                            <MdOutlineGroupAdd size={20} />
-                        </div>
-                    </div>
-                    {items.map((item) => (
-                        <ConversationBox
-                            key={item.id}
-                            data={item}
-                            currentDate={currentDate}
-                        />
-                    ))}
-                </div>
-            </aside>
-        </>
-    );
+              <MdOutlineGroupAdd size={20} />
+            </div>
+          </div>
+          {items.map((item) => (
+            <ConversationBox
+              key={item.id}
+              data={item}
+              currentDate={currentDate}
+            />
+          ))}
+        </div>
+      </aside>
+    </>
+  );
 };
 
 export default ConversationList;

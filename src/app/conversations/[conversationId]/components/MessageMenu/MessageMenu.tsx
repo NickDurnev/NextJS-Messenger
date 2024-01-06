@@ -68,8 +68,9 @@ const MessageMenu: FC<MessageMenuProps> = ({
           ref={menuRef}
           className={clsx(
             theme === "dark" ? "bg-[#3e3d3d]" : "bg-[#f7f7f7]",
-            "absolute right-2 z-50 space-y-2 drop-shadow-md rounded-lg p-4",
-            isUpLifted ? "-top-32" : "top-6"
+            "absolute z-50 space-y-2 drop-shadow-md rounded-lg p-4",
+            isUpLifted ? "-top-20" : "top-6",
+            isOwn ? "right-2" : "left-2"
           )}
           variants={fadeVariant}
           initial={"initial"}
