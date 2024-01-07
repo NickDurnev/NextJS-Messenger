@@ -62,6 +62,28 @@ export const authOptions: AuthOptions = {
 
       return session;
     },
+    async signIn({ account, profile }) {
+      const res = await fetch(`${BASE_URL}api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: profile?.email,
+          providerAccountId: account?.providerAccountId,
+        }),
+      });
+
+      const user = await res.json();
+
+      if (user) {
+        // Any object returned will be saved in `user` property of the JWT
+        return user;
+      } else {
+        // If you return null then an error will be displayed advising the user to check their details.
+        return null;
+      }
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

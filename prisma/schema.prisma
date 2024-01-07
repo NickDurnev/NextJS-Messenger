@@ -39,7 +39,7 @@ model Account {
   userId            String  @db.ObjectId
   type              String
   provider          String
-  providerAccountId String
+  providerAccountId String  @unique
   refresh_token     String? @db.String
   access_token      String? @db.String
   expires_at        Int?
