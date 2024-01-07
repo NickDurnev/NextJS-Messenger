@@ -28,7 +28,14 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       include: {
         messages: {
           include: {
-            seen: true,
+            seen: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
           },
         },
         users: true,
@@ -59,7 +66,14 @@ export async function POST(request: Request, { params }: { params: IParams }) {
             id: message.id,
           },
           include: {
-            seen: true,
+            seen: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
           },
           data: {
             seen: {

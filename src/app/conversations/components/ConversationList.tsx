@@ -4,11 +4,10 @@ import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useMemo, useState } from "react";
 import { MdOutlineGroupAdd } from "react-icons/md";
-import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { find } from "lodash";
 
-import { FullConversationType, FullMessageType } from "@/app/types";
+import { FullConversationType, FullMessageType, PartialUser } from "@/app/types";
 //#HOOKS and HELPERS
 import useConversation from "@/app/hooks/useConversation";
 import usePusherClient from "@/app/hooks/usePusherClient";
@@ -19,7 +18,7 @@ import GroupChatModal from "./GroupChatModal";
 
 interface ConversationListProps {
   initialItems: FullConversationType[];
-  users: User[];
+  users: PartialUser[];
 }
 
 const ConversationList: FC<ConversationListProps> = ({

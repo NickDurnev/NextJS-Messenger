@@ -28,6 +28,7 @@ export async function PATCH(request: Request) {
     await Promise.all(
       updatedUser.conversationIds.map(async (conversationId) => {
         await pusherServer.trigger(conversationId, "user:update", {
+          userId: updatedUser.id,
           wasOnlineAt: updatedUser.wasOnlineAt,
         });
       })

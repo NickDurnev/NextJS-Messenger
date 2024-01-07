@@ -38,8 +38,22 @@ export async function POST(request: Request) {
         },
       },
       include: {
-        seen: true,
-        sender: true,
+        seen: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            email: true,
+          },
+        },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            email: true,
+          },
+        },
       },
     });
 
@@ -59,7 +73,14 @@ export async function POST(request: Request) {
         users: true,
         messages: {
           include: {
-            seen: true,
+            seen: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
           },
         },
       },
@@ -69,6 +90,8 @@ export async function POST(request: Request) {
 
     const lastMessage =
       updatedConversation.messages[updatedConversation.messages.length - 1];
+
+    console.log(lastMessage);
 
     await Promise.all(
       updatedConversation.users.map(async (user) => {

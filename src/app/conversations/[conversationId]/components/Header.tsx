@@ -22,9 +22,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ conversation }) => {
   const otherUser = useOtherUser(conversation);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [userWasOnline, setUserWasOnline] = useState(
-    formatToDistance(new Date(otherUser?.wasOnlineAt!), new Date())
-  );
+  const [userWasOnline, setUserWasOnline] = useState("");
   const { members } = useActiveList();
   const { pusherClient } = usePusherClient();
   const [conversationId, setConversationId] = useLocalStorage("conversationId");
@@ -32,11 +30,28 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
   const isActive = members.indexOf(otherUser?.email!) !== -1;
 
   useEffect(() => {
+    if (otherUser?.wasOnlineAt) {
+      setUserWasOnline(
+        formatToDistance(new Date(otherUser?.wasOnlineAt), new Date())
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     setConversationId(conversation?.id);
     pusherClient?.subscribe(conversationId);
 
-    const updateUserHandler = ({ wasOnlineAt }: { wasOnlineAt: Date }) => {
-      setUserWasOnline(formatToDistance(new Date(wasOnlineAt), new Date()));
+    const updateUserHandler = ({
+      userId,
+      wasOnlineAt,
+    }: {
+      userId: string;
+      wasOnlineAt: Date;
+    }) => {
+      if (userId === otherUser?.id) {
+        setUserWasOnline(formatToDistance(new Date(wasOnlineAt), new Date()));
+      }
     };
 
     pusherClient?.bind("user:update", updateUserHandler);
@@ -44,10 +59,9 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
     return () => {
       pusherClient?.unbind("user:update", updateUserHandler);
     };
-  }, [conversation, conversationId, pusherClient, setConversationId]);
+  }, [conversation, conversationId, otherUser?.id, pusherClient, setConversationId]);
 
   const statusText = useMemo(() => {
-    console.log('TRIGGER');
     if (conversation.isGroup) {
       return `${conversation.users.length} members`;
     }

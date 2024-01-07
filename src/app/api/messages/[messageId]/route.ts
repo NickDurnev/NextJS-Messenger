@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
-import { User } from "@prisma/client";
+
+import { PartialUser } from "@/app/types";
 //#ACTIONS and HELPERS
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getMessages from "@/app/actions/getMessages";
@@ -15,7 +16,7 @@ interface IParams {
 interface IArguments {
   id: string;
   lastMessageAt: Date;
-  users: User[];
+  users: PartialUser[];
   messageId?: string;
   currentUserId?: string;
 }
@@ -50,7 +51,14 @@ async function handler(request: Request, { params }: { params: IParams }) {
         id: existingMessage.conversationId!,
       },
       include: {
-        users: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            email: true,
+          },
+        },
       },
     });
 
@@ -133,8 +141,22 @@ async function PATCH(
       id: messageId,
     },
     include: {
-      sender: true,
-      seen: true,
+      sender: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          email: true,
+        },
+      },
+      seen: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          email: true,
+        },
+      },
     },
     data: {
       body: message,

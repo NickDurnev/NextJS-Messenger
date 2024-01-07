@@ -9,3 +9,5 @@ export type FullConversationType = Conversation & {
   users: User[];
   messages: FullMessageType[];
 };
+
+export type PartialUser = Pick<User, "id" | "name" | "email" | "image">;

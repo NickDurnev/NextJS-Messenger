@@ -38,15 +38,14 @@ const useActiveChannel = (pusherClient: PusherClient | null) => {
     });
 
     return () => {
-      console.log("DISCONNECTED FROM ACTIVE CHANNEL");
+      if (activeChannel) {
+        pusherClient?.unsubscribe("presence-messenger");
+        return setActiveChannel(null);
+      }
       const currentDate = new Date();
       axiosAuth
         .patch("/user", { wasOnlineAt: currentDate })
         .catch((error) => console.log(error));
-      if (activeChannel) {
-        pusherClient?.unsubscribe("presence-messenger");
-        setActiveChannel(null);
-      }
     };
   }, [activeChannel, set, add, remove, pusherClient]);
 };

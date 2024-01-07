@@ -7,8 +7,22 @@ const getMessages = async (conversationId: string) => {
         conversationId: conversationId,
       },
       include: {
-        sender: true,
-        seen: true,
+        seen: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            email: true,
+          },
+        },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            email: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "asc",

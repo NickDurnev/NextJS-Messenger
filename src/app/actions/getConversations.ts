@@ -22,8 +22,22 @@ const getConversations = async () => {
         users: true,
         messages: {
           include: {
-            sender: true,
-            seen: true,
+            seen: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
           },
         },
       },

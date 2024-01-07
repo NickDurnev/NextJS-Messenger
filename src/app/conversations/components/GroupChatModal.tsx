@@ -1,22 +1,23 @@
-import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { PartialUser } from "@/app/types";
+import { GroupChatSchema } from "@/app/conversations/validation";
+
 //#HOOKS
 import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
 import useToast from "@/app/hooks/useToast";
 
-import { GroupChatSchema } from "@/app/conversations/validation";
-
+//#COMPONENTS
 import Modal from "@/app/components/Modal";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import Button from "@/app/components/Button";
 
 interface GroupChatModelProps {
-    users: User[];
+    users: PartialUser[];
     isOpen?: boolean;
     onClose: () => void;
 }
