@@ -47,17 +47,13 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
   }, [conversation, conversationId, pusherClient, setConversationId]);
 
   const statusText = useMemo(() => {
+    console.log('TRIGGER');
     if (conversation.isGroup) {
       return `${conversation.users.length} members`;
     }
 
-    return isActive ? "Active" : userWasOnline;
-  }, [
-    conversation.isGroup,
-    conversation.users.length,
-    isActive,
-    userWasOnline,
-  ]);
+    return isActive ? "Active" : null;
+  }, [conversation.isGroup, conversation.users.length, isActive]);
   return (
     <>
       <ProfileDrawer
@@ -83,7 +79,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
               {conversation.name ?? otherUser?.name}
             </div>
             <div className="text-sm font-light text-skin-additional">
-              {statusText}
+              {statusText ?? userWasOnline}
             </div>
           </div>
         </div>

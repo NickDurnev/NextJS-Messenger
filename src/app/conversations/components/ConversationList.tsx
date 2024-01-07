@@ -6,13 +6,16 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { find } from "lodash";
 
 import { FullConversationType, FullMessageType } from "@/app/types";
+//#HOOKS and HELPERS
 import useConversation from "@/app/hooks/useConversation";
+import usePusherClient from "@/app/hooks/usePusherClient";
+import { isLastMessage } from "@/helpers/dateCheckers";
+//#COMPONENTS
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
-import { find } from "lodash";
-import usePusherClient from "@/app/hooks/usePusherClient";
 
 interface ConversationListProps {
   initialItems: FullConversationType[];
@@ -106,12 +109,18 @@ const ConversationList: FC<ConversationListProps> = ({
     const deleteMessageHandler = (deletedMessage: FullMessageType) => {
       setItems((current) =>
         current.map((currentConversation) => {
-          if (currentConversation.id === newMessage.conversationId) {
-            console.log("DELETED MESSAGE", deletedMessage);
-            //TODO Test behavior
-            const messages = currentConversation.messages.filter(
-              ({ id }) => deletedMessage.id !== id
+          if (currentConversation.id === deletedMessage.conversationId) {
+            const isLast = isLastMessage(
+              deletedMessage.createdAt,
+              currentConversation.lastMessageAt
             );
+            console.log(isLast);
+            if (!isLast) {
+              return currentConversation;
+            }
+
+            const messages = currentConversation.messages;
+            messages.pop();
             return {
               ...currentConversation,
               messages: [...messages],

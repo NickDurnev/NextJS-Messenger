@@ -6,13 +6,15 @@ import { find } from "lodash";
 import { AnimatePresence } from "framer-motion";
 
 import { FullMessageType } from "@/app/types";
-import MessageBox from "./MessageBox";
-import scrollTo from "@/helpers/scrollTo";
-//# HOOKS
+//# HOOKS and HELPERS
 import useConversation from "@/app/hooks/useConversation";
 import usePusherClient from "@/app/hooks/usePusherClient";
 import useTheme from "@/app/hooks/useTheme";
 import useAxiosAuth from "@/app/libs/hooks/useAxiosAuth";
+import scrollTo from "@/helpers/scrollTo";
+
+import MessageBox from "./MessageBox";
+
 interface BodyProps {
   initialMessages: FullMessageType[];
   isGroup: boolean | null;
@@ -37,9 +39,17 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
     if (!isLastMessageSeen || lastMessage?.senderId !== currentUserId) {
       axiosAuth.post(`conversations/${conversationId}/seen`);
     }
-  }, [axiosAuth, conversationId, currentUserEmail, currentUserId, messages]);
+  }, [
+    axiosAuth,
+    conversationId,
+    currentUserEmail,
+    currentUserId,
+    lastMessage,
+    messages,
+  ]);
 
   useEffect(() => {
+    console.log('TRIGGER');
     pusherClient?.subscribe(conversationId);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {

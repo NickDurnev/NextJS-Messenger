@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
+import { User } from "@prisma/client";
+//#ACTIONS and HELPERS
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getMessages from "@/app/actions/getMessages";
 import { errors } from "@/helpers/responseVariants";
-import { User } from "@prisma/client";
+import { isLastMessage } from "@/helpers/dateCheckers";
 
 interface IParams {
   messageId?: string;
@@ -92,16 +94,11 @@ async function DELETE(
 
   await pusherServer.trigger(id, "message:delete", deletedMessage);
 
-  const date1 = new Date(lastMessageAt);
-  const date2 = new Date(deletedMessage.createdAt);
-  const time1 = date1.getHours() + date1.getMinutes() + date1.getSeconds();
-  const time2 = date2.getHours() + date2.getMinutes() + date2.getSeconds();
-
-  const isLastMessage = Math.abs(time1 - time2) <= 5;
+  const isLast = isLastMessage(lastMessageAt, deletedMessage.createdAt);
 
   const messages = await getMessages(id);
 
-  if (isLastMessage && messages.length > 1) {
+  if (isLast && messages.length > 1) {
     const lastMessage = messages[messages.length - 1];
     await prisma.conversation.update({
       where: {
