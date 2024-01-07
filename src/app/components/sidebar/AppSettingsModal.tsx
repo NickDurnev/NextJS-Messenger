@@ -27,6 +27,7 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({
 }) => {
     const { set } = useTheme();
     const [savedTheme, setSavedTheme] = useLocalStorage("theme");
+    const [conversationId, setConversationId] = useLocalStorage("conversationId");
     const [isLoading, setIsLoading] = useState(false);
 
     const {
@@ -60,6 +61,11 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({
         reset({ theme: { label: savedTheme, value: savedTheme } });
     };
 
+    const handleSignOut = () => {
+        signOut();
+        setConversationId("");
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,7 +97,7 @@ const AppSettingsModal: FC<AppSettingsModalProps> = ({
                                 </TextButton>
                             </li>
                             <li>
-                                <TextButton onClick={() => signOut()}>Logout</TextButton>
+                                <TextButton onClick={handleSignOut}>Logout</TextButton>
                             </li>
                         </ul>
                     </div>

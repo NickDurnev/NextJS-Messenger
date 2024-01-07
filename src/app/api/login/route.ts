@@ -7,12 +7,10 @@ import { signJwtToken } from "@/app/libs/jwt";
 async function handler(request: Request) {
   try {
     const body = await request.json();
-
-    if (body.providerAccountId) {
-      const { email, providerAccountId } = body;
+    const { email, password, providerAccountId } = body;
+    if (providerAccountId) {
       return await handlerWithProvider(email, providerAccountId);
     }
-    const { email, password } = body;
     return await handlerWithCredentials(email, password);
   } catch (error) {}
 }

@@ -39,12 +39,9 @@ export const authOptions: AuthOptions = {
         const user = await res.json();
 
         if (user) {
-          // Any object returned will be saved in `user` property of the JWT
           return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
         }
+        return null;
       },
     }),
   ],
@@ -62,7 +59,10 @@ export const authOptions: AuthOptions = {
 
       return session;
     },
-    async signIn({ account, profile }) {
+    async signIn({ user, account, profile }) {
+      if (user) {
+        return user;
+      }
       const res = await fetch(`${BASE_URL}api/login`, {
         method: "POST",
         headers: {
@@ -74,15 +74,12 @@ export const authOptions: AuthOptions = {
         }),
       });
 
-      const user = await res.json();
+      const newUser = await res.json();
 
-      if (user) {
-        // Any object returned will be saved in `user` property of the JWT
-        return user;
-      } else {
-        // If you return null then an error will be displayed advising the user to check their details.
-        return null;
+      if (newUser) {
+        return newUser;
       }
+      return null;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

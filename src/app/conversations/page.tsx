@@ -16,7 +16,6 @@ const Home = () => {
   useEffect(() => {
     const isMobile = window.matchMedia("(max-width: 1024px)").matches;
     if (conversationId && !isMobile) {
-      console.log('PUSH');
       router.push(`/conversations/${conversationId}`);
     }
   }, [conversationId, router]);
