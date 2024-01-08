@@ -57,6 +57,7 @@ model Conversation {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime @default(now())
   lastMessageAt DateTime @default(now())
+  lastMessageId String?  @db.ObjectId
   name          String?
   isGroup       Boolean?
 

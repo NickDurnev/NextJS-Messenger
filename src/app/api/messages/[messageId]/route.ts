@@ -8,7 +8,6 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import getMessages from "@/app/actions/getMessages";
 import { UserSelector } from "@/app/libs/prismaSelectors";
 import { errors } from "@/helpers/responseVariants";
-import { isLastMessage } from "@/helpers/dateCheckers";
 
 interface IParams {
   messageId?: string;
@@ -16,7 +15,7 @@ interface IParams {
 
 interface IArguments {
   id: string;
-  lastMessageAt: Date;
+  lastMessageId: string;
   users: PartialUser[];
   messageId?: string;
   currentUserId?: string;
@@ -62,16 +61,21 @@ async function handler(request: Request, { params }: { params: IParams }) {
       return new NextResponse("Conversation not found", { status: 404 });
     }
 
-    const { id, lastMessageAt, users } = existingConversation;
+    const { id, lastMessageId, users } = existingConversation;
 
     if (request.method === "DELETE") {
-      return await DELETE(request, { id, lastMessageAt, users, messageId });
+      return await DELETE(request, {
+        id,
+        lastMessageId,
+        users,
+        messageId,
+      });
     }
 
     if (request.method === "PATCH") {
       return await PATCH(request, {
         id,
-        lastMessageAt,
+        lastMessageId,
         users,
         messageId,
         currentUserId: currentUser.id,
@@ -88,7 +92,7 @@ async function handler(request: Request, { params }: { params: IParams }) {
 
 async function DELETE(
   request: Request,
-  { id, lastMessageAt, users, messageId }: IArguments
+  { id, lastMessageId, users, messageId }: IArguments
 ) {
   const deletedMessage = await prisma.message.delete({
     where: {
@@ -98,7 +102,7 @@ async function DELETE(
 
   await pusherServer.trigger(id, "message:delete", deletedMessage);
 
-  const isLast = isLastMessage(lastMessageAt, deletedMessage.createdAt);
+  const isLast = lastMessageId === deletedMessage.id;
 
   const messages = await getMessages(id);
 
@@ -110,6 +114,7 @@ async function DELETE(
       },
       data: {
         lastMessageAt: lastMessage.createdAt,
+        lastMessageId: lastMessage.id,
       },
     });
     users.forEach((user) => {

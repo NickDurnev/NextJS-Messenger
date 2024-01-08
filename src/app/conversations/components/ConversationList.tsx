@@ -7,11 +7,14 @@ import { MdOutlineGroupAdd } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { find } from "lodash";
 
-import { FullConversationType, FullMessageType, PartialUser } from "@/app/types";
+import {
+  FullConversationType,
+  FullMessageType,
+  PartialUser,
+} from "@/app/types";
 //#HOOKS and HELPERS
 import useConversation from "@/app/hooks/useConversation";
 import usePusherClient from "@/app/hooks/usePusherClient";
-import { isLastMessage } from "@/helpers/dateCheckers";
 //#COMPONENTS
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
@@ -40,6 +43,8 @@ const ConversationList: FC<ConversationListProps> = ({
 
   const currentDate = new Date();
 
+  console.log(items);
+
   useEffect(() => {
     if (!pusherKey) {
       return;
@@ -63,7 +68,10 @@ const ConversationList: FC<ConversationListProps> = ({
           if (currentConversation.id === conversation.id) {
             return {
               ...currentConversation,
-              messages: conversation.messages,
+              messages: [
+                ...currentConversation.messages,
+                ...conversation.messages,
+              ],
             };
           }
 
@@ -109,16 +117,16 @@ const ConversationList: FC<ConversationListProps> = ({
       setItems((current) =>
         current.map((currentConversation) => {
           if (currentConversation.id === deletedMessage.conversationId) {
-            const isLast = isLastMessage(
-              deletedMessage.createdAt,
-              currentConversation.lastMessageAt
-            );
-            console.log(isLast);
+            const isLast =
+              deletedMessage.id === currentConversation.lastMessageId;
+            const messages = currentConversation.messages;
             if (!isLast) {
-              return currentConversation;
+              const updatedMessages = messages.filter(
+                ({ id }) => id !== deletedMessage.id
+              );
+              return { ...currentConversation, messages: updatedMessages };
             }
 
-            const messages = currentConversation.messages;
             messages.pop();
             return {
               ...currentConversation,
