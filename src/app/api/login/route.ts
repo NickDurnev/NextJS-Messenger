@@ -15,7 +15,7 @@ async function handler(request: Request) {
   } catch (error) {}
 }
 
-export async function handlerWithCredentials(email: string, password: string) {
+async function handlerWithCredentials(email: string, password: string) {
   try {
     if (!email || !password) {
       return new NextResponse(
@@ -81,10 +81,7 @@ export async function handlerWithCredentials(email: string, password: string) {
   }
 }
 
-export async function handlerWithProvider(
-  email: string,
-  providerAccountId: string
-) {
+async function handlerWithProvider(email: string, providerAccountId: string) {
   try {
     if (!email || !providerAccountId) {
       return new NextResponse(

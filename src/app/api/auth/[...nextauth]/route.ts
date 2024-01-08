@@ -74,10 +74,10 @@ export const authOptions: AuthOptions = {
         }),
       });
 
-      const newUser = await res.json();
+      const userData = await res.json();
 
-      if (newUser) {
-        return newUser;
+      if (userData) {
+        return userData;
       }
       return null;
     },
