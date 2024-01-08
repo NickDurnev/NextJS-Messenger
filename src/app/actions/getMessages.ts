@@ -1,4 +1,5 @@
 import prisma from "@/app/libs/prismadb";
+import { UserSelector } from "../libs/prismaSelectors";
 
 const getMessages = async (conversationId: string) => {
   try {
@@ -8,20 +9,10 @@ const getMessages = async (conversationId: string) => {
       },
       include: {
         seen: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
         sender: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
       },
       orderBy: {

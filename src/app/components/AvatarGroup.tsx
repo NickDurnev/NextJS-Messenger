@@ -1,12 +1,13 @@
 "use client";
 
-import stringAvatar from "@/helpers/avatarFormatter";
-import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC } from "react";
 
+import { PartialUser } from "../types";
+import stringAvatar from "@/helpers/avatarFormatter";
+
 interface AvatarGroupProps {
-    users?: User[];
+    users?: PartialUser[];
 }
 
 const AvatarGroup: FC<AvatarGroupProps> = ({ users = [] }) => {

@@ -6,6 +6,7 @@ import { PartialUser } from "@/app/types";
 //#ACTIONS and HELPERS
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getMessages from "@/app/actions/getMessages";
+import { UserSelector } from "@/app/libs/prismaSelectors";
 import { errors } from "@/helpers/responseVariants";
 import { isLastMessage } from "@/helpers/dateCheckers";
 
@@ -52,12 +53,7 @@ async function handler(request: Request, { params }: { params: IParams }) {
       },
       include: {
         users: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
       },
     });
@@ -142,20 +138,10 @@ async function PATCH(
     },
     include: {
       sender: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          email: true,
-        },
+        ...UserSelector,
       },
       seen: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          email: true,
-        },
+        ...UserSelector,
       },
     },
     data: {

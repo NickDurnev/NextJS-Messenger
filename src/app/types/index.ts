@@ -1,13 +1,16 @@
 import { Conversation, Message, User } from "@prisma/client";
 
+export type PartialUser = Pick<
+  User,
+  "id" | "name" | "email" | "image" | "wasOnlineAt" | "createdAt"
+>;
+
 export type FullMessageType = Message & {
-  sender: User;
-  seen: User[];
+  sender: PartialUser;
+  seen: PartialUser[];
 };
 
 export type FullConversationType = Conversation & {
-  users: User[];
+  users: PartialUser[];
   messages: FullMessageType[];
 };
-
-export type PartialUser = Pick<User, "id" | "name" | "email" | "image">;

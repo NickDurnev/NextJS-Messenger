@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { UserSelector } from "@/app/libs/prismaSelectors";
 import { errors } from "@/helpers/responseVariants";
 export async function POST(request: Request) {
   try {
@@ -39,20 +40,10 @@ export async function POST(request: Request) {
       },
       include: {
         seen: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
         sender: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
       },
     });
@@ -74,12 +65,7 @@ export async function POST(request: Request) {
         messages: {
           include: {
             seen: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-                email: true,
-              },
+              ...UserSelector,
             },
           },
         },

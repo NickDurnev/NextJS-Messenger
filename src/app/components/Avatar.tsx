@@ -1,10 +1,10 @@
 import stringAvatar from "@/helpers/avatarFormatter";
 import Image from "next/image";
-import { User } from "@prisma/client";
+import { PartialUser } from "@/app/types";
 import useActiveList from "../hooks/useActiveList";
 
 interface IProps {
-  user?: User;
+  user?: PartialUser;
 }
 
 const Avatar = ({ user }: IProps) => {

@@ -3,6 +3,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
 import { errors } from "@/helpers/responseVariants";
+import { UserSelector } from "@/app/libs/prismaSelectors";
 
 export async function POST(request: Request) {
   try {
@@ -42,12 +43,7 @@ export async function POST(request: Request) {
         },
         include: {
           users: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-              email: true,
-            },
+            ...UserSelector,
           },
         },
       });
@@ -97,12 +93,7 @@ export async function POST(request: Request) {
       },
       include: {
         users: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
+          ...UserSelector,
         },
       },
     });

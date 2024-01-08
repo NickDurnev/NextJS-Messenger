@@ -49,7 +49,6 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   ]);
 
   useEffect(() => {
-    // console.log('TRIGGER');
     pusherClient?.subscribe(conversationId);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {

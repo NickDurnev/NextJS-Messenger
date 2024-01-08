@@ -1,7 +1,9 @@
 import prisma from "@/app/libs/prismadb";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
+
+import getCurrentUser from "@/app/actions/getCurrentUser";
 import { pusherServer } from "@/app/libs/pusher";
+import { UserSelector } from "@/app/libs/prismaSelectors";
 import { errors } from "@/helpers/responseVariants";
 
 interface IParams {
@@ -29,12 +31,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
         messages: {
           include: {
             seen: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-                email: true,
-              },
+              ...UserSelector,
             },
           },
         },
@@ -67,12 +64,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
           },
           include: {
             seen: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-                email: true,
-              },
+              ...UserSelector,
             },
           },
           data: {

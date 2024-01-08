@@ -1,5 +1,6 @@
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "./getCurrentUser";
+import { UserSelector } from "../libs/prismaSelectors";
 
 const getConversations = async () => {
   const currentUser = await getCurrentUser();
@@ -23,20 +24,10 @@ const getConversations = async () => {
         messages: {
           include: {
             seen: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-                email: true,
-              },
+              ...UserSelector,
             },
             sender: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-                email: true,
-              },
+              ...UserSelector,
             },
           },
         },
