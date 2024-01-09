@@ -43,9 +43,7 @@ export async function POST(request: Request) {
       },
     });
 
-    console.log(1);
     await sendVerifyEmail(email, verificationToken, user.id, name);
-    console.log(2);
 
     return NextResponse.json(user);
   } catch (error) {

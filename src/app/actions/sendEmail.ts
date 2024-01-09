@@ -27,6 +27,8 @@ export async function sendVerifyEmail(
 
   const html = createEmail(templateData, "./src/app/templates/verifyEmail.hbs");
 
+  console.log(html);
+
   const mailOptions = {
     from: EMAIL_SENDER,
     to: email,
@@ -38,6 +40,7 @@ export async function sendVerifyEmail(
     // send mail
     transporter.sendMail(mailOptions, (err, response) => {
       if (err) {
+        console.log(err);
         reject(err);
       } else {
         resolve(response);
