@@ -15,7 +15,7 @@ interface IParams {
 
 interface IArguments {
   id: string;
-  lastMessageId: string;
+  lastMessageId: string | null;
   users: PartialUser[];
   messageId?: string;
   currentUserId?: string;

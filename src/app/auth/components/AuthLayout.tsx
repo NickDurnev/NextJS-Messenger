@@ -23,7 +23,7 @@ const AuthLayout = () => {
         </span>
       </Link>
       {isLoading && <Loader />}
-      <div className="m-auto xl:w-3/5 xl:h-[95vh] 2xl:h-[80vh] grid xl:grid-cols-2">
+      <div className="m-auto xl:w-3/5 xl:h-[95svh] 2xl:h-[80svh] grid xl:grid-cols-2">
         <div
           className={clsx(
             styles.imgStyle,
