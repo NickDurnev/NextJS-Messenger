@@ -25,7 +25,7 @@ export async function sendVerifyEmail(
     name,
   };
 
-  const html = createEmail(templateData, "../templates/verifyEmail.hbs");
+  const html = createEmail(templateData, "/templates/verifyEmail.hbs");
 
   console.log(html);
 
