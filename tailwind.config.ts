@@ -32,7 +32,7 @@ const config: Config = {
           danger: "var(--color-danger)",
           "danger-hover": "var(--color-danger-hover)",
           "bg-accent": "var(--color-bg-accent)",
-          "bg-accent-hover": "var(--color-bg-button-hover)",
+          "bg-accent-hover": "var(--color-bg-accent-hover)",
         },
       },
       borderColor: {
