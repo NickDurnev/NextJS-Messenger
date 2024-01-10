@@ -53,9 +53,9 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       if (!account?.provider) {
-        console.log(2);
         return user;
       }
+      console.log(2, account);
       const res = await fetch(`${BASE_URL}api/login`, {
         method: "POST",
         headers: {
