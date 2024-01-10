@@ -3,15 +3,23 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { errors } from "@/helpers/responseVariants";
 import { signJwtToken } from "@/app/libs/jwt";
+import { Account } from "@prisma/client";
+
+interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+}
 
 async function handler(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, providerAccountId } = body;
-    if (providerAccountId) {
-      return await handlerWithProvider(email, providerAccountId);
+    const { user, account, password } = body;
+    if (account?.providerAccountId) {
+      return await handlerWithProvider(user, account);
     }
-    return await handlerWithCredentials(email, password);
+    return await handlerWithCredentials(user.email, password);
   } catch (error) {}
 }
 
@@ -87,50 +95,60 @@ async function handlerWithCredentials(email: string, password: string) {
   }
 }
 
-async function handlerWithProvider(email: string, providerAccountId: string) {
+async function handlerWithProvider(user: IUser, account: Account) {
   try {
-    if (!email || !providerAccountId) {
+    if (!user || !account) {
       return new NextResponse(
         errors.MISSING_INFO.message,
         errors.MISSING_INFO.status
       );
     }
 
-    const account = await prisma.account.findUnique({
-      where: {
-        providerAccountId,
+    const newUser = await prisma.user.create({
+      data: {
+        name: user.name,
+        email: user.email,
+        image: user.image,
       },
     });
 
-    console.log(account, "ACCOUNT");
-
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
+    const newAccount = await prisma.account.create({
+      data: {
+        provider: account.provider,
+        type: account.type,
+        providerAccountId: account.providerAccountId,
+        access_token: account.access_token,
+        expires_at: account.expires_at,
+        scope: account.scope,
+        token_type: account.token_type,
+        id_token: account.id_token,
+        user: {
+          connect: {
+            id: newUser.id,
+          },
+        },
       },
     });
 
-    console.log(user, "USER");
-
-    if (!account || !user) {
+    if (!newAccount || !newUser) {
       return new NextResponse(
         errors.USER_NOT_FOUND.message,
         errors.USER_NOT_FOUND.status
       );
     }
 
-    if (user.email && user.name) {
+    if (newUser.email && newUser.name) {
       const payload = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
       };
 
       const accessToken = await signJwtToken(payload, "access");
       const refreshToken = await signJwtToken(payload, "refresh");
       await prisma.user.update({
         where: {
-          id: user.id,
+          id: newUser.id,
         },
         data: {
           refreshToken,
