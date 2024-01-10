@@ -117,14 +117,16 @@ async function DELETE(
         lastMessageId: lastMessage.id,
       },
     });
-    users.forEach((user) => {
-      if (user.email) {
-        pusherServer.trigger(user.email, "conversation:deleteMessage", {
-          id,
-          messages: [lastMessage],
-        });
-      }
-    });
+    await Promise.all(
+      users.map(async (user) => {
+        if (user.email) {
+          await pusherServer.trigger(user.email, "conversation:deleteMessage", {
+            id,
+            messages: [lastMessage],
+          });
+        }
+      })
+    );
   }
 
   return NextResponse.json(deletedMessage);

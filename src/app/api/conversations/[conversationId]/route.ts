@@ -52,15 +52,17 @@ export async function DELETE(
       },
     });
 
-    existingConversation.users.forEach((user) => {
-      if (user.email) {
-        pusherServer.trigger(
-          user.email,
-          "conversation:remove",
-          existingConversation
-        );
-      }
-    });
+    await Promise.all(
+      existingConversation.users.map(async (user) => {
+        if (user.email) {
+          await pusherServer.trigger(
+            user.email,
+            "conversation:remove",
+            existingConversation
+          );
+        }
+      })
+    );
 
     return NextResponse.json(deletedConversation);
   } catch (error) {
