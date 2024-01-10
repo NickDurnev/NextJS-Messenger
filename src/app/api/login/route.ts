@@ -102,11 +102,15 @@ async function handlerWithProvider(email: string, providerAccountId: string) {
       },
     });
 
+    console.log(account, "ACCOUNT");
+
     const user = await prisma.user.findUnique({
       where: {
         email,
       },
     });
+
+    console.log(user, "USER");
 
     if (!account || !user) {
       return new NextResponse(
