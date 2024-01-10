@@ -52,7 +52,7 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (!account?.provider) {
+      if (account?.provider === "credentials") {
         return user;
       }
       const res = await fetch(`${BASE_URL}api/login`, {
