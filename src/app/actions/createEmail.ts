@@ -2,10 +2,10 @@ import path from "path";
 import fs from "fs";
 import hbs from "handlebars";
 
-const createEmail = (templateData: object, pathFile: string) => {
+const createEmail = (templateData: object) => {
   // Read the Handlebars template
   const source = fs.readFileSync(
-    path.join(process.cwd(), `${pathFile}`),
+    path.join(process.cwd(), "/src/templates/verifyEmail.hbs"),
     "utf-8"
   );
 
