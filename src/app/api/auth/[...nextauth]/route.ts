@@ -52,9 +52,12 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log(1);
       if (!account?.provider) {
+        console.log(2);
         return user;
       }
+      console.log(3);
       const res = await fetch(`${BASE_URL}api/login`, {
         method: "POST",
         headers: {
