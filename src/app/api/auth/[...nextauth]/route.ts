@@ -51,29 +51,30 @@ export const authOptions: AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, // 7 days
   },
   callbacks: {
-    // async signIn({ user, account, profile }) {
-    //   if (!account?.provider) {
-    //     return user;
-    //   }
-    //   console.log(2, account);
-    //   const res = await fetch(`${BASE_URL}api/login`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       email: profile?.email,
-    //       providerAccountId: account?.providerAccountId,
-    //     }),
-    //   });
+    async signIn({ user, account, profile }) {
+      if (!account?.provider) {
+        return user;
+      }
+      console.log(user);
+      console.log(2, account);
+      const res = await fetch(`${BASE_URL}api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: profile?.email,
+          providerAccountId: account?.providerAccountId,
+        }),
+      });
 
-    //   const userData = await res.json();
+      const userData = await res.json();
 
-    //   if (userData) {
-    //     return userData;
-    //   }
-    //   return null;
-    // },
+      if (userData) {
+        return userData;
+      }
+      return null;
+    },
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
