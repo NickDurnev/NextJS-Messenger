@@ -51,16 +51,8 @@ export const authOptions: AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, // 7 days
   },
   callbacks: {
-    async jwt({ token, user }) {
-      return { ...token, ...user };
-    },
-    async session({ session, token }) {
-      session.user = token as any;
-
-      return session;
-    },
     async signIn({ user, account, profile }) {
-      if (user) {
+      if (!account?.provider) {
         return user;
       }
       const res = await fetch(`${BASE_URL}api/login`, {
@@ -80,6 +72,14 @@ export const authOptions: AuthOptions = {
         return userData;
       }
       return null;
+    },
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = token as any;
+
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

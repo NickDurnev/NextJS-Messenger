@@ -27,8 +27,6 @@ export async function sendVerifyEmail(
 
   const html = createEmail(templateData);
 
-  console.log(html);
-
   const mailOptions = {
     from: EMAIL_SENDER,
     to: email,

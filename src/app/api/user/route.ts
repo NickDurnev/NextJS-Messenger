@@ -9,6 +9,8 @@ export async function PATCH(request: Request) {
     const currentUser = await getCurrentUser();
     const body = await request.json();
 
+    console.log(currentUser);
+
     if (!currentUser?.id) {
       return new NextResponse(
         errors.UNAUTHORIZED.message,

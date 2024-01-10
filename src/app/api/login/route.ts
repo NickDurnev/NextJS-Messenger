@@ -37,6 +37,12 @@ async function handlerWithCredentials(email: string, password: string) {
       );
     }
 
+    if (!user.hashedPassword) {
+      return new NextResponse("User exists, use Google or GitHub providers", {
+        status: 400,
+      });
+    }
+
     const isMatchPassword = await bcrypt.compare(
       password,
       user.hashedPassword!

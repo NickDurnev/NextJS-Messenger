@@ -98,8 +98,6 @@ const ConversationList: FC<ConversationListProps> = ({
       setItems((current) =>
         current.map((currentConversation) => {
           if (currentConversation.id === newMessage.conversationId) {
-            console.log("NEW MESSAGE", newMessage);
-            //TODO Test behavior
             const messages = currentConversation.messages;
             messages.pop();
             return {
