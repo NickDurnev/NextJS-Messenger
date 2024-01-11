@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { errors } from "@/helpers/responseVariants";
 import { signJwtToken } from "@/app/libs/jwt";
-import { Account } from "@prisma/client";
+import { Account, User } from "@prisma/client";
 
 interface IUser {
   id: string;
@@ -11,6 +11,28 @@ interface IUser {
   name: string;
   image: string;
 }
+
+const updateUser = async (user: User) => {
+  const payload = {
+    id: user.id,
+    email: user.email!,
+    name: user.name!,
+  };
+
+  const accessToken = await signJwtToken(payload, "access");
+  const refreshToken = await signJwtToken(payload, "refresh");
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      refreshToken,
+      accessToken,
+      emailVerified: true,
+    },
+  });
+  return NextResponse.json({ ...payload, accessToken, refreshToken });
+};
 
 async function handler(request: Request) {
   try {
@@ -97,6 +119,17 @@ async function handlerWithProvider(user: IUser, account: Account) {
       errors.MISSING_INFO.status
     );
   }
+
+  const registeredUser = await prisma.user.findUnique({
+    where: {
+      email: user.email,
+    },
+  });
+
+  if (registeredUser?.email && registeredUser?.name) {
+    return await updateUser(registeredUser);
+  }
+
   const newUser = await prisma.user.create({
     data: {
       name: user.name,
@@ -131,26 +164,7 @@ async function handlerWithProvider(user: IUser, account: Account) {
   }
 
   if (newUser.email && newUser.name) {
-    const payload = {
-      id: newUser.id,
-      email: newUser.email,
-      name: newUser.name,
-    };
-
-    const accessToken = await signJwtToken(payload, "access");
-    const refreshToken = await signJwtToken(payload, "refresh");
-    await prisma.user.update({
-      where: {
-        id: newUser.id,
-      },
-      data: {
-        refreshToken,
-        accessToken,
-        emailVerified: true,
-      },
-    });
-    return NextResponse.json({ ...payload, accessToken, refreshToken });
+    return await updateUser(newUser);
   }
 }
-
 export { handler as POST };
