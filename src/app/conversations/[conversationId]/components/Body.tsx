@@ -49,9 +49,7 @@ const Body: FC<BodyProps> = ({ initialMessages, isGroup }) => {
   ]);
 
   useEffect(() => {
-    console.log(conversationId);
     pusherClient?.subscribe(conversationId);
-    console.log(2);
     scrollTo(bottomRef);
     const messageHandler = (message: FullMessageType) => {
       if (currentUserEmail !== message.sender.email) {

@@ -40,9 +40,7 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
 
   useEffect(() => {
     setConversationId(conversation?.id);
-    console.log(conversationId);
-    pusherClient?.subscribe(conversationId);
-    console.log(2);
+    pusherClient?.subscribe(conversation?.id);
 
     const updateUserHandler = ({
       userId,
