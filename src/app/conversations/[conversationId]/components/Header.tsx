@@ -26,8 +26,8 @@ const Header: FC<HeaderProps> = ({ conversation }) => {
   const { members } = useActiveList();
   const { pusherClient } = usePusherClient();
   const [conversationId, setConversationId] = useLocalStorage("conversationId");
-
-  const isActive = members.indexOf(otherUser?.email!) !== -1;
+  console.log(members);
+  const isActive = members?.indexOf(otherUser?.email!) !== -1;
 
   useEffect(() => {
     if (otherUser?.wasOnlineAt) {
