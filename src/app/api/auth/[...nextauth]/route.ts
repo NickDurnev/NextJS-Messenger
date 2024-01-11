@@ -78,7 +78,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       session.user = token as any;
-
+      console.log("SESSION CALLBACK", session);
       return session;
     },
   },
