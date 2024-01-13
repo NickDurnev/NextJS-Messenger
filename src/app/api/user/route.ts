@@ -6,7 +6,7 @@ import { errors } from "@/helpers/responseVariants";
 
 export async function PATCH(request: Request) {
   try {
-    const currentUser = await getCurrentUser();
+    const currentUser = await getCurrentUser(request);
     const body = await request.json();
 
     if (!currentUser?.id) {
