@@ -74,11 +74,13 @@ export const authOptions: AuthOptions = {
       return null;
     },
     async jwt({ token, user }) {
+      console.log("JWT CALLED TOKEN", token);
+      console.log("JWT CALLED USER", user);
       return { ...token, ...user };
     },
     async session({ session, token }) {
+      console.log("SESSION CALLED USER", token);
       session.user = token as any;
-      console.log("SESSION CALLBACK", session);
       return session;
     },
   },
