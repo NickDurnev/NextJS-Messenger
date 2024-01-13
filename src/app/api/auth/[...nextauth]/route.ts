@@ -4,6 +4,7 @@ import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/app/libs/prismadb";
+import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_APP_URL;
 
@@ -25,21 +26,19 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const res = await fetch(`${BASE_URL}api/login`, {
-          method: "POST",
+        const loginData = {
+          email: credentials?.email,
+          password: credentials?.password,
+        };
+
+        const { data } = await axios.post(`${BASE_URL}api/login`, loginData, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
         });
 
-        const user = await res.json();
-
-        if (user) {
-          return user;
+        if (data) {
+          return data;
         }
         return null;
       },
@@ -55,26 +54,23 @@ export const authOptions: AuthOptions = {
       if (account?.provider === "credentials") {
         return user;
       }
-      const res = await fetch(`${BASE_URL}api/login`, {
-        method: "POST",
+      const loginData = {
+        user: user,
+        account: account,
+      };
+
+      const { data } = await axios.post(`${BASE_URL}api/login`, loginData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          user: user,
-          account: account,
-        }),
       });
 
-      const userData = await res.json();
-
-      if (userData) {
-        return userData;
+      if (data) {
+        return data;
       }
       return null;
     },
     async jwt({ token, user }) {
-      console.log(token);
       return { ...token, ...user };
     },
     async session({ session, token }) {
