@@ -2,7 +2,7 @@ import prisma from "@/app/libs/prismadb";
 
 import getSession from "./getSession";
 
-const getCurrentUser = async (request: Request) => {
+const getCurrentUser = async (request?: Request) => {
   try {
     const session = await getSession(request);
     if (!session?.user?.email) {
