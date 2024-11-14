@@ -9,7 +9,6 @@ import AppContainer from "./components/AppContainer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  manifest: "/manifest.json",
   title: "Connectify",
   description: "Messenger",
 };
